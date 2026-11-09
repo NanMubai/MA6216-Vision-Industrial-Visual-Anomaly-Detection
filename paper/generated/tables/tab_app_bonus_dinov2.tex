@@ -1,0 +1,41 @@
+\begin{tabular}{@{}llrrr@{}}
+\toprule
+Category & Variant & \shortstack{Image\\AUROC} & \shortstack{Image F1\\(val thr)} & AU-PRO \\
+\midrule
+bottle & WRN50 baseline (Eq.~7) & 1.000 & 1.000 & 0.949 \\
+bottle & DINOv2 ViT-B/14 & 1.000 & 0.992 & 0.962 \\
+bottle & DINOv2 ViT-S/14 & 1.000 & 1.000 & 0.965 \\
+bottle & WRN50 + DINOv2-B & 1.000 & 1.000 & 0.956 \\
+bottle & DINOv2-B no-LN\posthoc & 1.000 & 1.000 & 0.926 \\
+\midrule
+capsule & WRN50 baseline (Eq.~7) & 0.978 & 0.836 & 0.931 \\
+capsule & DINOv2 ViT-B/14 & 0.971 & 0.860 & 0.945 \\
+capsule & DINOv2 ViT-S/14 & 0.990 & 0.853 & 0.940 \\
+capsule & WRN50 + DINOv2-B & 0.979 & 0.802 & 0.940 \\
+capsule & DINOv2-B no-LN\posthoc & 0.960 & 0.713 & 0.942 \\
+\midrule
+screw & WRN50 baseline (Eq.~7) & 0.970 & 0.884 & 0.963 \\
+screw & DINOv2 ViT-B/14 & 0.879 & 0.674 & 0.845 \\
+screw & DINOv2 ViT-S/14 & 0.822 & 0.738 & 0.836 \\
+screw & WRN50 + DINOv2-B & 0.809 & 0.663 & 0.768 \\
+screw & DINOv2-B no-LN\posthoc & 0.960 & 0.767 & 0.890 \\
+\midrule
+carpet & WRN50 baseline (Eq.~7) & 0.987 & 0.935 & 0.950 \\
+carpet & DINOv2 ViT-B/14 & 1.000 & 0.978 & 0.980 \\
+carpet & DINOv2 ViT-S/14 & 1.000 & 0.983 & 0.984 \\
+carpet & WRN50 + DINOv2-B & 1.000 & 0.989 & 0.976 \\
+carpet & DINOv2-B no-LN\posthoc & 0.997 & 0.962 & 0.944 \\
+\midrule
+tile & WRN50 baseline (Eq.~7) & 0.989 & 0.895 & 0.819 \\
+tile & DINOv2 ViT-B/14 & 0.999 & 0.982 & 0.878 \\
+tile & DINOv2 ViT-S/14 & 0.995 & 0.994 & 0.865 \\
+tile & WRN50 + DINOv2-B & 0.999 & 0.982 & 0.870 \\
+tile & DINOv2-B no-LN\posthoc & 1.000 & 1.000 & 0.800 \\
+\midrule
+leather & WRN50 baseline (Eq.~7) & 1.000 & 0.963 & 0.972 \\
+leather & DINOv2 ViT-B/14 & 1.000 & 1.000 & 0.977 \\
+leather & DINOv2 ViT-S/14 & 1.000 & 1.000 & 0.984 \\
+leather & WRN50 + DINOv2-B & 1.000 & 1.000 & 0.975 \\
+leather & DINOv2-B no-LN\posthoc & 1.000 & 0.989 & 0.945 \\
+\bottomrule
+\end{tabular}
