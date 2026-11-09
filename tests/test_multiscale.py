@@ -116,6 +116,20 @@ def test_zmean_reference_excludes_source_rows_and_uses_only_fit(fake_backbone):
     assert all(m.reference_count == 3 for m in model.models)
 
 
+def test_zmean_searches_full_training_bank_not_only_coreset(fake_backbone, monkeypatch):
+    monkeypatch.setattr("ad.multiscale.greedy_coreset", lambda features, **kwargs:
+                        torch.tensor([0, 2], device=features.device))
+    model = MultiResPatchCore(device="cpu", scales=[1.0], fusion="zmean",
+                             layers=["layer1"], target_dim=1, patch_size=1)
+    train = torch.tensor([0., 2., 5.]).view(1, 1, 1, 3).expand(1, 3, 1, 3)
+    model.fit(batches(train))
+    # Selected rows [0, 5] have distances [2, 3] to the full bank without self;
+    # searching only the coreset would incorrectly produce [5, 5].
+    assert model.normalization == ((2.5, 0.5),)
+    assert model.models[0].reference_count == 2
+    torch.testing.assert_close(model.models[0].memory_bank[:, 0], torch.tensor([0., 5.]))
+
+
 def test_constant_reference_is_finite_and_empty_prediction(fake_backbone):
     model = MultiResPatchCore(scales=[1.0], fusion="zmean", **options())
     model.fit(batches(torch.zeros(2, 3, 8, 8)))
