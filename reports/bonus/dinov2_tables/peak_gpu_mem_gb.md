@@ -1,0 +1,27 @@
+| category | patchcore_wrn50 | patchcore_dinov2_vitb14 | patchcore_dinov2_vits14 | patchcore_wrn50_dinov2 |
+| --- | ---: | ---: | ---: | ---: |
+| bottle | 1.3169 | 3.1432 | 2.0281 | 2.9382 |
+| capsule | 1.4204 | 3.2680 | 2.1531 | 3.0324 |
+| screw | 1.8252 | 3.6430 | 2.5281 | 3.3195 |
+| carpet | 1.6101 | 3.3930 | 2.2781 | 3.1281 |
+| tile | 1.4204 | 3.2680 | 2.1531 | 3.0324 |
+| leather | 1.4204 | 3.2680 | 2.1531 | 3.0324 |
+| mean (objects) | 1.5208 [n=3] | 3.3514 [n=3] | 2.2364 [n=3] | 3.0967 [n=3] |
+| mean (textures) | 1.4837 [n=3] | 3.3096 [n=3] | 2.1947 [n=3] | 3.0643 [n=3] |
+| mean (all) | 1.5023 [n=6] | 3.3305 [n=6] | 2.2156 [n=6] | 3.0805 [n=6] |
+
+## Post-hoc sensitivity (not used for selection)
+
+**patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)**
+
+| category | patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic) |
+| --- | ---: |
+| bottle | 3.1432 |
+| capsule | 3.2680 |
+| screw | 3.6431 |
+| carpet | 3.3930 |
+| tile | 3.2680 |
+| leather | 3.2680 |
+| mean (objects) | 3.3514 [n=3] |
+| mean (textures) | 3.3096 [n=3] |
+| mean (all) | 3.3305 [n=6] |

@@ -1,0 +1,15 @@
+# Only the feature backbone changes from patchcore_wrn50.
+# DINOv2 resizes the normalised 224 crop to 448 internally; evaluation stays 224.
+name: patchcore_dinov2_vits14
+method: patchcore
+model:
+  backbone: dinov2_vits14
+  layers: [block5, block8, block11]
+  patch_size: 3
+  target_dim: 1024
+  coreset_ratio: 0.1
+  proj_dim: 128
+  num_neighbors: 9
+scoring:
+  sigma: 4.0
+  image_score: model

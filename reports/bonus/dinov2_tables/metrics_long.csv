@@ -1,0 +1,481 @@
+run,category,is_texture,metric,value
+patchcore_wrn50,bottle,False,aupro,0.9493286645911153
+patchcore_wrn50,bottle,False,fit_seconds,2.6881099860183895
+patchcore_wrn50,bottle,False,image_accuracy,1.0
+patchcore_wrn50,bottle,False,image_auroc,1.0
+patchcore_wrn50,bottle,False,image_f1,1.0
+patchcore_wrn50,bottle,False,image_f1_max_oracle,1.0
+patchcore_wrn50,bottle,False,image_precision,1.0
+patchcore_wrn50,bottle,False,image_recall,1.0
+patchcore_wrn50,bottle,False,image_threshold,1.488857626914978
+patchcore_wrn50,bottle,False,infer_ms_per_image,2.5288655551666595
+patchcore_wrn50,bottle,False,infer_ms_per_image_e2e,9.384136627349688
+patchcore_wrn50,bottle,False,peak_gpu_mem_gb,1.3169102668762207
+patchcore_wrn50,bottle,False,pixel_auroc,0.9867199445093779
+patchcore_wrn50,bottle,False,pixel_f1,0.6764016724428826
+patchcore_wrn50,bottle,False,pixel_iou,0.5110324320908405
+patchcore_wrn50,bottle,False,pixel_threshold,1.2660369873046875
+patchcore_wrn50,capsule,False,aupro,0.9313037986438332
+patchcore_wrn50,capsule,False,fit_seconds,3.45260096504353
+patchcore_wrn50,capsule,False,image_accuracy,0.7651515151515151
+patchcore_wrn50,capsule,False,image_auroc,0.9776625448743518
+patchcore_wrn50,capsule,False,image_f1,0.8359788359788359
+patchcore_wrn50,capsule,False,image_f1_max_oracle,0.9771689497716896
+patchcore_wrn50,capsule,False,image_precision,0.9875
+patchcore_wrn50,capsule,False,image_recall,0.7247706422018348
+patchcore_wrn50,capsule,False,image_threshold,1.3311392068862915
+patchcore_wrn50,capsule,False,infer_ms_per_image,2.63708720519913
+patchcore_wrn50,capsule,False,infer_ms_per_image_e2e,10.170808871573007
+patchcore_wrn50,capsule,False,peak_gpu_mem_gb,1.4204258918762207
+patchcore_wrn50,capsule,False,pixel_auroc,0.9887591836428712
+patchcore_wrn50,capsule,False,pixel_f1,0.45041868664609963
+patchcore_wrn50,capsule,False,pixel_iou,0.2906712172923777
+patchcore_wrn50,capsule,False,pixel_threshold,1.056372046470642
+patchcore_wrn50,carpet,True,aupro,0.9503004388529718
+patchcore_wrn50,carpet,True,fit_seconds,4.367670068982989
+patchcore_wrn50,carpet,True,image_accuracy,0.8974358974358975
+patchcore_wrn50,carpet,True,image_auroc,0.9871589085072232
+patchcore_wrn50,carpet,True,image_f1,0.9354838709677419
+patchcore_wrn50,carpet,True,image_f1_max_oracle,0.9770114942528736
+patchcore_wrn50,carpet,True,image_precision,0.8969072164948454
+patchcore_wrn50,carpet,True,image_recall,0.9775280898876404
+patchcore_wrn50,carpet,True,image_threshold,1.1775676012039185
+patchcore_wrn50,carpet,True,infer_ms_per_image,2.9399883336363692
+patchcore_wrn50,carpet,True,infer_ms_per_image_e2e,10.256547385301346
+patchcore_wrn50,carpet,True,peak_gpu_mem_gb,1.6101231575012207
+patchcore_wrn50,carpet,True,pixel_auroc,0.9898104912733283
+patchcore_wrn50,carpet,True,pixel_f1,0.27968471844842124
+patchcore_wrn50,carpet,True,pixel_iou,0.16257759344913178
+patchcore_wrn50,carpet,True,pixel_threshold,1.1480698585510254
+patchcore_wrn50,leather,True,aupro,0.9721510706153715
+patchcore_wrn50,leather,True,fit_seconds,3.519460849929601
+patchcore_wrn50,leather,True,image_accuracy,0.9435483870967742
+patchcore_wrn50,leather,True,image_auroc,1.0
+patchcore_wrn50,leather,True,image_f1,0.9633507853403142
+patchcore_wrn50,leather,True,image_f1_max_oracle,1.0
+patchcore_wrn50,leather,True,image_precision,0.9292929292929293
+patchcore_wrn50,leather,True,image_recall,1.0
+patchcore_wrn50,leather,True,image_threshold,1.099655270576477
+patchcore_wrn50,leather,True,infer_ms_per_image,2.7679401138166506
+patchcore_wrn50,leather,True,infer_ms_per_image_e2e,9.163726250746198
+patchcore_wrn50,leather,True,peak_gpu_mem_gb,1.4204258918762207
+patchcore_wrn50,leather,True,pixel_auroc,0.9930370612867927
+patchcore_wrn50,leather,True,pixel_f1,0.12005106464639137
+patchcore_wrn50,leather,True,pixel_iou,0.06385868381249961
+patchcore_wrn50,leather,True,pixel_threshold,1.0813825130462646
+patchcore_wrn50,screw,False,aupro,0.9626727589439575
+patchcore_wrn50,screw,False,fit_seconds,4.62659639492631
+patchcore_wrn50,screw,False,image_accuracy,0.84375
+patchcore_wrn50,screw,False,image_auroc,0.9704857552777209
+patchcore_wrn50,screw,False,image_f1,0.8837209302325582
+patchcore_wrn50,screw,False,image_f1_max_oracle,0.963265306122449
+patchcore_wrn50,screw,False,image_precision,0.9895833333333334
+patchcore_wrn50,screw,False,image_recall,0.7983193277310925
+patchcore_wrn50,screw,False,image_threshold,1.3165967464447021
+patchcore_wrn50,screw,False,infer_ms_per_image,3.2213143873377703
+patchcore_wrn50,screw,False,infer_ms_per_image_e2e,8.471838850528002
+patchcore_wrn50,screw,False,peak_gpu_mem_gb,1.8252110481262207
+patchcore_wrn50,screw,False,pixel_auroc,0.9931959097359011
+patchcore_wrn50,screw,False,pixel_f1,0.32111643442999993
+patchcore_wrn50,screw,False,pixel_iou,0.1912678407337779
+patchcore_wrn50,screw,False,pixel_threshold,1.2046966552734375
+patchcore_wrn50,tile,True,aupro,0.8192091095059073
+patchcore_wrn50,tile,True,fit_seconds,3.157453291816637
+patchcore_wrn50,tile,True,image_accuracy,0.8632478632478633
+patchcore_wrn50,tile,True,image_auroc,0.9891774891774892
+patchcore_wrn50,tile,True,image_f1,0.8947368421052632
+patchcore_wrn50,tile,True,image_f1_max_oracle,0.9879518072289156
+patchcore_wrn50,tile,True,image_precision,1.0
+patchcore_wrn50,tile,True,image_recall,0.8095238095238095
+patchcore_wrn50,tile,True,image_threshold,1.6474798917770386
+patchcore_wrn50,tile,True,infer_ms_per_image,2.6476987016697726
+patchcore_wrn50,tile,True,infer_ms_per_image_e2e,8.130315828543061
+patchcore_wrn50,tile,True,peak_gpu_mem_gb,1.4204258918762207
+patchcore_wrn50,tile,True,pixel_auroc,0.9602321911267737
+patchcore_wrn50,tile,True,pixel_f1,0.6719858959348275
+patchcore_wrn50,tile,True,pixel_iou,0.5060081017798059
+patchcore_wrn50,tile,True,pixel_threshold,1.5294461250305176
+patchcore_dinov2_vitb14,bottle,False,aupro,0.9619768277773705
+patchcore_dinov2_vitb14,bottle,False,fit_seconds,5.197304541012272
+patchcore_dinov2_vitb14,bottle,False,image_accuracy,0.9879518072289156
+patchcore_dinov2_vitb14,bottle,False,image_auroc,1.0
+patchcore_dinov2_vitb14,bottle,False,image_f1,0.9921259842519685
+patchcore_dinov2_vitb14,bottle,False,image_f1_max_oracle,1.0
+patchcore_dinov2_vitb14,bottle,False,image_precision,0.984375
+patchcore_dinov2_vitb14,bottle,False,image_recall,1.0
+patchcore_dinov2_vitb14,bottle,False,image_threshold,21.642234802246094
+patchcore_dinov2_vitb14,bottle,False,infer_ms_per_image,12.47422948356224
+patchcore_dinov2_vitb14,bottle,False,infer_ms_per_image_e2e,19.506021941372428
+patchcore_dinov2_vitb14,bottle,False,peak_gpu_mem_gb,3.1432294845581055
+patchcore_dinov2_vitb14,bottle,False,pixel_auroc,0.991512226975296
+patchcore_dinov2_vitb14,bottle,False,pixel_f1,0.6959108176668238
+patchcore_dinov2_vitb14,bottle,False,pixel_iou,0.5336374437381297
+patchcore_dinov2_vitb14,bottle,False,pixel_threshold,17.445377349853516
+patchcore_dinov2_vitb14,capsule,False,aupro,0.9453528162517938
+patchcore_dinov2_vitb14,capsule,False,fit_seconds,5.661848216084763
+patchcore_dinov2_vitb14,capsule,False,image_accuracy,0.7954545454545454
+patchcore_dinov2_vitb14,capsule,False,image_auroc,0.9712804148384524
+patchcore_dinov2_vitb14,capsule,False,image_f1,0.8601036269430051
+patchcore_dinov2_vitb14,capsule,False,image_f1_max_oracle,0.9819819819819819
+patchcore_dinov2_vitb14,capsule,False,image_precision,0.9880952380952381
+patchcore_dinov2_vitb14,capsule,False,image_recall,0.7614678899082569
+patchcore_dinov2_vitb14,capsule,False,image_threshold,21.84395980834961
+patchcore_dinov2_vitb14,capsule,False,infer_ms_per_image,12.536294521961475
+patchcore_dinov2_vitb14,capsule,False,infer_ms_per_image_e2e,20.040728658028513
+patchcore_dinov2_vitb14,capsule,False,peak_gpu_mem_gb,3.267958641052246
+patchcore_dinov2_vitb14,capsule,False,pixel_auroc,0.9904955834687245
+patchcore_dinov2_vitb14,capsule,False,pixel_f1,0.519924865027566
+patchcore_dinov2_vitb14,capsule,False,pixel_iou,0.351282750951187
+patchcore_dinov2_vitb14,capsule,False,pixel_threshold,16.577173233032227
+patchcore_dinov2_vitb14,carpet,True,aupro,0.9800533381422238
+patchcore_dinov2_vitb14,carpet,True,fit_seconds,7.807399614946917
+patchcore_dinov2_vitb14,carpet,True,image_accuracy,0.9658119658119658
+patchcore_dinov2_vitb14,carpet,True,image_auroc,0.9995987158908507
+patchcore_dinov2_vitb14,carpet,True,image_f1,0.978021978021978
+patchcore_dinov2_vitb14,carpet,True,image_f1_max_oracle,0.9944134078212291
+patchcore_dinov2_vitb14,carpet,True,image_precision,0.956989247311828
+patchcore_dinov2_vitb14,carpet,True,image_recall,1.0
+patchcore_dinov2_vitb14,carpet,True,image_threshold,20.97514533996582
+patchcore_dinov2_vitb14,carpet,True,infer_ms_per_image,13.225649385991641
+patchcore_dinov2_vitb14,carpet,True,infer_ms_per_image_e2e,20.64477876186944
+patchcore_dinov2_vitb14,carpet,True,peak_gpu_mem_gb,3.392958641052246
+patchcore_dinov2_vitb14,carpet,True,pixel_auroc,0.9956002550988381
+patchcore_dinov2_vitb14,carpet,True,pixel_f1,0.30015827041094006
+patchcore_dinov2_vitb14,carpet,True,pixel_iou,0.17658012812963705
+patchcore_dinov2_vitb14,carpet,True,pixel_threshold,18.498802185058594
+patchcore_dinov2_vitb14,leather,True,aupro,0.9774657422424181
+patchcore_dinov2_vitb14,leather,True,fit_seconds,6.368150995112956
+patchcore_dinov2_vitb14,leather,True,image_accuracy,1.0
+patchcore_dinov2_vitb14,leather,True,image_auroc,1.0
+patchcore_dinov2_vitb14,leather,True,image_f1,1.0
+patchcore_dinov2_vitb14,leather,True,image_f1_max_oracle,1.0
+patchcore_dinov2_vitb14,leather,True,image_precision,1.0
+patchcore_dinov2_vitb14,leather,True,image_recall,1.0
+patchcore_dinov2_vitb14,leather,True,image_threshold,24.335546493530273
+patchcore_dinov2_vitb14,leather,True,infer_ms_per_image,12.859378081385888
+patchcore_dinov2_vitb14,leather,True,infer_ms_per_image_e2e,19.335517194122076
+patchcore_dinov2_vitb14,leather,True,peak_gpu_mem_gb,3.267958641052246
+patchcore_dinov2_vitb14,leather,True,pixel_auroc,0.9923481075749556
+patchcore_dinov2_vitb14,leather,True,pixel_f1,0.1490573137546328
+patchcore_dinov2_vitb14,leather,True,pixel_iou,0.08053048582341316
+patchcore_dinov2_vitb14,leather,True,pixel_threshold,19.33992576599121
+patchcore_dinov2_vitb14,screw,False,aupro,0.8451870279335557
+patchcore_dinov2_vitb14,screw,False,fit_seconds,9.047454752959311
+patchcore_dinov2_vitb14,screw,False,image_accuracy,0.63125
+patchcore_dinov2_vitb14,screw,False,image_auroc,0.8790735806517729
+patchcore_dinov2_vitb14,screw,False,image_f1,0.6740331491712708
+patchcore_dinov2_vitb14,screw,False,image_f1_max_oracle,0.9105691056910569
+patchcore_dinov2_vitb14,screw,False,image_precision,0.9838709677419355
+patchcore_dinov2_vitb14,screw,False,image_recall,0.5126050420168067
+patchcore_dinov2_vitb14,screw,False,image_threshold,23.901742935180664
+patchcore_dinov2_vitb14,screw,False,infer_ms_per_image,13.631391887611244
+patchcore_dinov2_vitb14,screw,False,infer_ms_per_image_e2e,18.90350383182522
+patchcore_dinov2_vitb14,screw,False,peak_gpu_mem_gb,3.642958641052246
+patchcore_dinov2_vitb14,screw,False,pixel_auroc,0.968784493074724
+patchcore_dinov2_vitb14,screw,False,pixel_f1,0.37274041937816343
+patchcore_dinov2_vitb14,screw,False,pixel_iou,0.22906020884247946
+patchcore_dinov2_vitb14,screw,False,pixel_threshold,19.008033752441406
+patchcore_dinov2_vitb14,tile,True,aupro,0.8782005313179599
+patchcore_dinov2_vitb14,tile,True,fit_seconds,5.802051486913115
+patchcore_dinov2_vitb14,tile,True,image_accuracy,0.9743589743589743
+patchcore_dinov2_vitb14,tile,True,image_auroc,0.9992784992784993
+patchcore_dinov2_vitb14,tile,True,image_f1,0.9824561403508771
+patchcore_dinov2_vitb14,tile,True,image_f1_max_oracle,0.9940828402366864
+patchcore_dinov2_vitb14,tile,True,image_precision,0.9655172413793104
+patchcore_dinov2_vitb14,tile,True,image_recall,1.0
+patchcore_dinov2_vitb14,tile,True,image_threshold,23.307924270629883
+patchcore_dinov2_vitb14,tile,True,infer_ms_per_image,12.742911137115115
+patchcore_dinov2_vitb14,tile,True,infer_ms_per_image_e2e,18.375684889272236
+patchcore_dinov2_vitb14,tile,True,peak_gpu_mem_gb,3.267958641052246
+patchcore_dinov2_vitb14,tile,True,pixel_auroc,0.9785714387219294
+patchcore_dinov2_vitb14,tile,True,pixel_f1,0.3781312867191512
+patchcore_dinov2_vitb14,tile,True,pixel_iou,0.23314543502984053
+patchcore_dinov2_vitb14,tile,True,pixel_threshold,19.699134826660156
+patchcore_dinov2_vits14,bottle,False,aupro,0.9650181195103421
+patchcore_dinov2_vits14,bottle,False,fit_seconds,3.974320324836299
+patchcore_dinov2_vits14,bottle,False,image_accuracy,1.0
+patchcore_dinov2_vits14,bottle,False,image_auroc,1.0
+patchcore_dinov2_vits14,bottle,False,image_f1,1.0
+patchcore_dinov2_vits14,bottle,False,image_f1_max_oracle,1.0
+patchcore_dinov2_vits14,bottle,False,image_precision,1.0
+patchcore_dinov2_vits14,bottle,False,image_recall,1.0
+patchcore_dinov2_vits14,bottle,False,image_threshold,39.295631408691406
+patchcore_dinov2_vits14,bottle,False,infer_ms_per_image,5.906923300956926
+patchcore_dinov2_vits14,bottle,False,infer_ms_per_image_e2e,12.814093529841447
+patchcore_dinov2_vits14,bottle,False,peak_gpu_mem_gb,2.028083324432373
+patchcore_dinov2_vits14,bottle,False,pixel_auroc,0.9919573688226372
+patchcore_dinov2_vits14,bottle,False,pixel_f1,0.6450800470183107
+patchcore_dinov2_vits14,bottle,False,pixel_iou,0.47610196129942767
+patchcore_dinov2_vits14,bottle,False,pixel_threshold,29.03032684326172
+patchcore_dinov2_vits14,capsule,False,aupro,0.9398132880501724
+patchcore_dinov2_vits14,capsule,False,fit_seconds,4.659926549065858
+patchcore_dinov2_vits14,capsule,False,image_accuracy,0.7878787878787878
+patchcore_dinov2_vits14,capsule,False,image_auroc,0.9900279218189071
+patchcore_dinov2_vits14,capsule,False,image_f1,0.8526315789473684
+patchcore_dinov2_vits14,capsule,False,image_f1_max_oracle,0.9819819819819819
+patchcore_dinov2_vits14,capsule,False,image_precision,1.0
+patchcore_dinov2_vits14,capsule,False,image_recall,0.7431192660550459
+patchcore_dinov2_vits14,capsule,False,image_threshold,41.56177520751953
+patchcore_dinov2_vits14,capsule,False,infer_ms_per_image,5.9718559319717865
+patchcore_dinov2_vits14,capsule,False,infer_ms_per_image_e2e,13.45269250768152
+patchcore_dinov2_vits14,capsule,False,peak_gpu_mem_gb,2.153083324432373
+patchcore_dinov2_vits14,capsule,False,pixel_auroc,0.9906310995637093
+patchcore_dinov2_vits14,capsule,False,pixel_f1,0.5275706844945833
+patchcore_dinov2_vits14,capsule,False,pixel_iou,0.3582994979378638
+patchcore_dinov2_vits14,capsule,False,pixel_threshold,31.013519287109375
+patchcore_dinov2_vits14,carpet,True,aupro,0.9839924034476368
+patchcore_dinov2_vits14,carpet,True,fit_seconds,6.377348061883822
+patchcore_dinov2_vits14,carpet,True,image_accuracy,0.9743589743589743
+patchcore_dinov2_vits14,carpet,True,image_auroc,0.9995987158908507
+patchcore_dinov2_vits14,carpet,True,image_f1,0.9834254143646409
+patchcore_dinov2_vits14,carpet,True,image_f1_max_oracle,0.9944134078212291
+patchcore_dinov2_vits14,carpet,True,image_precision,0.967391304347826
+patchcore_dinov2_vits14,carpet,True,image_recall,1.0
+patchcore_dinov2_vits14,carpet,True,image_threshold,34.64861297607422
+patchcore_dinov2_vits14,carpet,True,infer_ms_per_image,6.625711555696196
+patchcore_dinov2_vits14,carpet,True,infer_ms_per_image_e2e,14.023423811786959
+patchcore_dinov2_vits14,carpet,True,peak_gpu_mem_gb,2.278083324432373
+patchcore_dinov2_vits14,carpet,True,pixel_auroc,0.9961821445045582
+patchcore_dinov2_vits14,carpet,True,pixel_f1,0.2808388230075964
+patchcore_dinov2_vits14,carpet,True,pixel_iou,0.16335805319831123
+patchcore_dinov2_vits14,carpet,True,pixel_threshold,28.70558738708496
+patchcore_dinov2_vits14,leather,True,aupro,0.984323669590589
+patchcore_dinov2_vits14,leather,True,fit_seconds,5.066426278091967
+patchcore_dinov2_vits14,leather,True,image_accuracy,1.0
+patchcore_dinov2_vits14,leather,True,image_auroc,1.0
+patchcore_dinov2_vits14,leather,True,image_f1,1.0
+patchcore_dinov2_vits14,leather,True,image_f1_max_oracle,1.0
+patchcore_dinov2_vits14,leather,True,image_precision,1.0
+patchcore_dinov2_vits14,leather,True,image_recall,1.0
+patchcore_dinov2_vits14,leather,True,image_threshold,39.465362548828125
+patchcore_dinov2_vits14,leather,True,infer_ms_per_image,6.272580515923759
+patchcore_dinov2_vits14,leather,True,infer_ms_per_image_e2e,12.66281815215705
+patchcore_dinov2_vits14,leather,True,peak_gpu_mem_gb,2.153083324432373
+patchcore_dinov2_vits14,leather,True,pixel_auroc,0.9947080375389713
+patchcore_dinov2_vits14,leather,True,pixel_f1,0.12173289858993161
+patchcore_dinov2_vits14,leather,True,pixel_iou,0.06481128189837498
+patchcore_dinov2_vits14,leather,True,pixel_threshold,30.439571380615234
+patchcore_dinov2_vits14,screw,False,aupro,0.8356212955509387
+patchcore_dinov2_vits14,screw,False,fit_seconds,7.1492952960543334
+patchcore_dinov2_vits14,screw,False,image_accuracy,0.68125
+patchcore_dinov2_vits14,screw,False,image_auroc,0.8222996515679444
+patchcore_dinov2_vits14,screw,False,image_f1,0.7384615384615385
+patchcore_dinov2_vits14,screw,False,image_f1_max_oracle,0.8676470588235294
+patchcore_dinov2_vits14,screw,False,image_precision,0.9473684210526315
+patchcore_dinov2_vits14,screw,False,image_recall,0.6050420168067226
+patchcore_dinov2_vits14,screw,False,image_threshold,42.10501480102539
+patchcore_dinov2_vits14,screw,False,infer_ms_per_image,7.047583919484168
+patchcore_dinov2_vits14,screw,False,infer_ms_per_image_e2e,12.25665796227986
+patchcore_dinov2_vits14,screw,False,peak_gpu_mem_gb,2.528083324432373
+patchcore_dinov2_vits14,screw,False,pixel_auroc,0.9670377603811751
+patchcore_dinov2_vits14,screw,False,pixel_f1,0.3828746022287866
+patchcore_dinov2_vits14,screw,False,pixel_iou,0.23676246922871882
+patchcore_dinov2_vits14,screw,False,pixel_threshold,34.70130920410156
+patchcore_dinov2_vits14,tile,True,aupro,0.8653765762860068
+patchcore_dinov2_vits14,tile,True,fit_seconds,4.49093074304983
+patchcore_dinov2_vits14,tile,True,image_accuracy,0.9914529914529915
+patchcore_dinov2_vits14,tile,True,image_auroc,0.9949494949494949
+patchcore_dinov2_vits14,tile,True,image_f1,0.9940119760479041
+patchcore_dinov2_vits14,tile,True,image_f1_max_oracle,0.9940119760479043
+patchcore_dinov2_vits14,tile,True,image_precision,1.0
+patchcore_dinov2_vits14,tile,True,image_recall,0.9880952380952381
+patchcore_dinov2_vits14,tile,True,image_threshold,45.52634048461914
+patchcore_dinov2_vits14,tile,True,infer_ms_per_image,6.1363984361036215
+patchcore_dinov2_vits14,tile,True,infer_ms_per_image_e2e,11.58425072606048
+patchcore_dinov2_vits14,tile,True,peak_gpu_mem_gb,2.153083324432373
+patchcore_dinov2_vits14,tile,True,pixel_auroc,0.9756179732832255
+patchcore_dinov2_vits14,tile,True,pixel_f1,0.4506662377437396
+patchcore_dinov2_vits14,tile,True,pixel_iou,0.29087743953081124
+patchcore_dinov2_vits14,tile,True,pixel_threshold,37.481353759765625
+patchcore_wrn50_dinov2,bottle,False,aupro,0.9556818420818682
+patchcore_wrn50_dinov2,bottle,False,fit_seconds,4.608974321978167
+patchcore_wrn50_dinov2,bottle,False,image_accuracy,1.0
+patchcore_wrn50_dinov2,bottle,False,image_auroc,1.0
+patchcore_wrn50_dinov2,bottle,False,image_f1,1.0
+patchcore_wrn50_dinov2,bottle,False,image_f1_max_oracle,1.0
+patchcore_wrn50_dinov2,bottle,False,image_precision,1.0
+patchcore_wrn50_dinov2,bottle,False,image_recall,1.0
+patchcore_wrn50_dinov2,bottle,False,image_threshold,11.781392097473145
+patchcore_wrn50_dinov2,bottle,False,infer_ms_per_image,13.494616060192326
+patchcore_wrn50_dinov2,bottle,False,infer_ms_per_image_e2e,20.378918782527368
+patchcore_wrn50_dinov2,bottle,False,peak_gpu_mem_gb,2.938167095184326
+patchcore_wrn50_dinov2,bottle,False,pixel_auroc,0.9906278953693481
+patchcore_wrn50_dinov2,bottle,False,pixel_f1,0.6918663524317498
+patchcore_wrn50_dinov2,bottle,False,pixel_iou,0.5288957697234468
+patchcore_wrn50_dinov2,bottle,False,pixel_threshold,9.796126365661621
+patchcore_wrn50_dinov2,capsule,False,aupro,0.9399893501918835
+patchcore_wrn50_dinov2,capsule,False,fit_seconds,4.993937661172822
+patchcore_wrn50_dinov2,capsule,False,image_accuracy,0.7272727272727273
+patchcore_wrn50_dinov2,capsule,False,image_auroc,0.9792580773833267
+patchcore_wrn50_dinov2,capsule,False,image_f1,0.8021978021978022
+patchcore_wrn50_dinov2,capsule,False,image_f1_max_oracle,0.9729729729729731
+patchcore_wrn50_dinov2,capsule,False,image_precision,1.0
+patchcore_wrn50_dinov2,capsule,False,image_recall,0.6697247706422018
+patchcore_wrn50_dinov2,capsule,False,image_threshold,11.514220237731934
+patchcore_wrn50_dinov2,capsule,False,infer_ms_per_image,13.608459697217878
+patchcore_wrn50_dinov2,capsule,False,infer_ms_per_image_e2e,21.208227560926
+patchcore_wrn50_dinov2,capsule,False,peak_gpu_mem_gb,3.032409191131592
+patchcore_wrn50_dinov2,capsule,False,pixel_auroc,0.9901406193758903
+patchcore_wrn50_dinov2,capsule,False,pixel_f1,0.4808198801839545
+patchcore_wrn50_dinov2,capsule,False,pixel_iou,0.3164995867917071
+patchcore_wrn50_dinov2,capsule,False,pixel_threshold,8.615579605102539
+patchcore_wrn50_dinov2,carpet,True,aupro,0.9764841186464844
+patchcore_wrn50_dinov2,carpet,True,fit_seconds,6.567672493169084
+patchcore_wrn50_dinov2,carpet,True,image_accuracy,0.9829059829059829
+patchcore_wrn50_dinov2,carpet,True,image_auroc,1.0
+patchcore_wrn50_dinov2,carpet,True,image_f1,0.9888888888888889
+patchcore_wrn50_dinov2,carpet,True,image_f1_max_oracle,1.0
+patchcore_wrn50_dinov2,carpet,True,image_precision,0.978021978021978
+patchcore_wrn50_dinov2,carpet,True,image_recall,1.0
+patchcore_wrn50_dinov2,carpet,True,image_threshold,11.61097240447998
+patchcore_wrn50_dinov2,carpet,True,infer_ms_per_image,13.932042743246525
+patchcore_wrn50_dinov2,carpet,True,infer_ms_per_image_e2e,21.407552640566713
+patchcore_wrn50_dinov2,carpet,True,peak_gpu_mem_gb,3.128112316131592
+patchcore_wrn50_dinov2,carpet,True,pixel_auroc,0.9952388984653612
+patchcore_wrn50_dinov2,carpet,True,pixel_f1,0.28397305145722673
+patchcore_wrn50_dinov2,carpet,True,pixel_iou,0.16548286243311783
+patchcore_wrn50_dinov2,carpet,True,pixel_threshold,10.33668327331543
+patchcore_wrn50_dinov2,leather,True,aupro,0.9749032904061088
+patchcore_wrn50_dinov2,leather,True,fit_seconds,5.458144881064072
+patchcore_wrn50_dinov2,leather,True,image_accuracy,1.0
+patchcore_wrn50_dinov2,leather,True,image_auroc,1.0
+patchcore_wrn50_dinov2,leather,True,image_f1,1.0
+patchcore_wrn50_dinov2,leather,True,image_f1_max_oracle,1.0
+patchcore_wrn50_dinov2,leather,True,image_precision,1.0
+patchcore_wrn50_dinov2,leather,True,image_recall,1.0
+patchcore_wrn50_dinov2,leather,True,image_threshold,13.57270622253418
+patchcore_wrn50_dinov2,leather,True,infer_ms_per_image,13.751443774033818
+patchcore_wrn50_dinov2,leather,True,infer_ms_per_image_e2e,20.265421039620115
+patchcore_wrn50_dinov2,leather,True,peak_gpu_mem_gb,3.032409191131592
+patchcore_wrn50_dinov2,leather,True,pixel_auroc,0.9915981175613854
+patchcore_wrn50_dinov2,leather,True,pixel_f1,0.12870302187911228
+patchcore_wrn50_dinov2,leather,True,pixel_iou,0.06877744333684162
+patchcore_wrn50_dinov2,leather,True,pixel_threshold,10.616743087768555
+patchcore_wrn50_dinov2,screw,False,aupro,0.7676643076231474
+patchcore_wrn50_dinov2,screw,False,fit_seconds,7.400813838001341
+patchcore_wrn50_dinov2,screw,False,image_accuracy,0.61875
+patchcore_wrn50_dinov2,screw,False,image_auroc,0.8093871695019471
+patchcore_wrn50_dinov2,screw,False,image_f1,0.6629834254143646
+patchcore_wrn50_dinov2,screw,False,image_f1_max_oracle,0.8623188405797102
+patchcore_wrn50_dinov2,screw,False,image_precision,0.967741935483871
+patchcore_wrn50_dinov2,screw,False,image_recall,0.5042016806722689
+patchcore_wrn50_dinov2,screw,False,image_threshold,12.760356903076172
+patchcore_wrn50_dinov2,screw,False,infer_ms_per_image,14.20192555669928
+patchcore_wrn50_dinov2,screw,False,infer_ms_per_image_e2e,19.481446981080808
+patchcore_wrn50_dinov2,screw,False,peak_gpu_mem_gb,3.319518566131592
+patchcore_wrn50_dinov2,screw,False,pixel_auroc,0.9509930418810888
+patchcore_wrn50_dinov2,screw,False,pixel_f1,0.3295815621866659
+patchcore_wrn50_dinov2,screw,False,pixel_iou,0.19730479185688682
+patchcore_wrn50_dinov2,screw,False,pixel_threshold,10.688066482543945
+patchcore_wrn50_dinov2,tile,True,aupro,0.8701127682134191
+patchcore_wrn50_dinov2,tile,True,fit_seconds,5.044739271979779
+patchcore_wrn50_dinov2,tile,True,image_accuracy,0.9743589743589743
+patchcore_wrn50_dinov2,tile,True,image_auroc,0.9989177489177489
+patchcore_wrn50_dinov2,tile,True,image_f1,0.9822485207100592
+patchcore_wrn50_dinov2,tile,True,image_f1_max_oracle,0.9940119760479043
+patchcore_wrn50_dinov2,tile,True,image_precision,0.9764705882352941
+patchcore_wrn50_dinov2,tile,True,image_recall,0.9880952380952381
+patchcore_wrn50_dinov2,tile,True,image_threshold,12.455432891845703
+patchcore_wrn50_dinov2,tile,True,infer_ms_per_image,13.632864349036135
+patchcore_wrn50_dinov2,tile,True,infer_ms_per_image_e2e,19.374176589214905
+patchcore_wrn50_dinov2,tile,True,peak_gpu_mem_gb,3.032409191131592
+patchcore_wrn50_dinov2,tile,True,pixel_auroc,0.9783959465299478
+patchcore_wrn50_dinov2,tile,True,pixel_f1,0.3508501768252812
+patchcore_wrn50_dinov2,tile,True,pixel_iou,0.21274609007317005
+patchcore_wrn50_dinov2,tile,True,pixel_threshold,10.701329231262207
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",bottle,False,aupro,0.9256096639751196
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",bottle,False,fit_seconds,5.179366688942537
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",bottle,False,image_accuracy,1.0
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",bottle,False,image_auroc,1.0
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",bottle,False,image_f1,1.0
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",bottle,False,image_f1_max_oracle,1.0
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",bottle,False,image_precision,1.0
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",bottle,False,image_recall,1.0
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",bottle,False,image_threshold,8.489255905151367
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",bottle,False,infer_ms_per_image,12.412819433508508
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",bottle,False,infer_ms_per_image_e2e,19.318210132173206
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",bottle,False,peak_gpu_mem_gb,3.1432294845581055
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",bottle,False,pixel_auroc,0.9826685871487341
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",bottle,False,pixel_f1,0.5474317995855085
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",bottle,False,pixel_iou,0.3768716673195092
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",bottle,False,pixel_threshold,7.5536980628967285
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",capsule,False,aupro,0.9417042352979131
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",capsule,False,fit_seconds,5.656069093151018
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",capsule,False,image_accuracy,0.6287878787878788
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",capsule,False,image_auroc,0.9601116872756282
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",capsule,False,image_f1,0.7134502923976608
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",capsule,False,image_f1_max_oracle,0.9727272727272728
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",capsule,False,image_precision,0.9838709677419355
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",capsule,False,image_recall,0.5596330275229358
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",capsule,False,image_threshold,11.07295036315918
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",capsule,False,infer_ms_per_image,12.492549423989134
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",capsule,False,infer_ms_per_image_e2e,20.086241841922995
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",capsule,False,peak_gpu_mem_gb,3.267958641052246
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",capsule,False,pixel_auroc,0.9876391230557083
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",capsule,False,pixel_f1,0.4119043324975129
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",capsule,False,pixel_iou,0.2593699743198045
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",capsule,False,pixel_threshold,6.999203205108643
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",carpet,True,aupro,0.9435879646156283
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",carpet,True,fit_seconds,7.800959073938429
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",carpet,True,image_accuracy,0.9401709401709402
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",carpet,True,image_auroc,0.997191011235955
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",carpet,True,image_f1,0.9617486338797814
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",carpet,True,image_f1_max_oracle,0.9943502824858756
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",carpet,True,image_precision,0.9361702127659575
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",carpet,True,image_recall,0.9887640449438202
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",carpet,True,image_threshold,7.826826095581055
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",carpet,True,infer_ms_per_image,13.200213454074712
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",carpet,True,infer_ms_per_image_e2e,20.709050847137842
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",carpet,True,peak_gpu_mem_gb,3.392958641052246
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",carpet,True,pixel_auroc,0.9880349252173372
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",carpet,True,pixel_f1,0.11949905067403886
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",carpet,True,pixel_iou,0.06354639210199367
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",carpet,True,pixel_threshold,6.8122639656066895
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",leather,True,aupro,0.9454545780795071
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",leather,True,fit_seconds,6.371009488822892
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",leather,True,image_accuracy,0.9838709677419355
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",leather,True,image_auroc,1.0
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",leather,True,image_f1,0.989247311827957
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",leather,True,image_f1_max_oracle,1.0
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",leather,True,image_precision,0.9787234042553191
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",leather,True,image_recall,1.0
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",leather,True,image_threshold,8.62369441986084
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",leather,True,infer_ms_per_image,12.832435572730198
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",leather,True,infer_ms_per_image_e2e,19.339343307599908
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",leather,True,peak_gpu_mem_gb,3.267958641052246
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",leather,True,pixel_auroc,0.9783860581004247
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",leather,True,pixel_f1,0.05348675838317719
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",leather,True,pixel_iou,0.027478240188466296
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",leather,True,pixel_threshold,7.292761325836182
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",screw,False,aupro,0.8902030052843959
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",screw,False,fit_seconds,9.050569836981595
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",screw,False,image_accuracy,0.71875
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",screw,False,image_auroc,0.9604427136708342
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",screw,False,image_f1,0.7668393782383419
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",screw,False,image_f1_max_oracle,0.944206008583691
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",screw,False,image_precision,1.0
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",screw,False,image_recall,0.6218487394957983
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",screw,False,image_threshold,9.414466857910156
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",screw,False,infer_ms_per_image,13.60085878695827
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",screw,False,infer_ms_per_image_e2e,18.90673479938414
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",screw,False,peak_gpu_mem_gb,3.643050193786621
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",screw,False,pixel_auroc,0.9753078554328077
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",screw,False,pixel_f1,0.38207886822821807
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",screw,False,pixel_iou,0.23615419857320505
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",screw,False,pixel_threshold,7.562107086181641
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",tile,True,aupro,0.7995171066955293
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",tile,True,fit_seconds,5.811764518963173
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",tile,True,image_accuracy,1.0
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",tile,True,image_auroc,1.0
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",tile,True,image_f1,1.0
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",tile,True,image_f1_max_oracle,1.0
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",tile,True,image_precision,1.0
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",tile,True,image_recall,1.0
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",tile,True,image_threshold,8.391802787780762
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",tile,True,infer_ms_per_image,12.71609361601882
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",tile,True,infer_ms_per_image_e2e,18.382374965386767
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",tile,True,peak_gpu_mem_gb,3.267958641052246
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",tile,True,pixel_auroc,0.951781407084918
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",tile,True,pixel_f1,0.2671162262390606
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",tile,True,pixel_iou,0.1541454945124962
+"patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)",tile,True,pixel_threshold,6.836345195770264
