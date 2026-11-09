@@ -1,0 +1,7 @@
+category,n_anom,retained_lt_50pct,no_gt_in_crop,median_retained
+bottle,63,0,0,0.9994
+capsule,109,0,0,1.0000
+screw,119,1,0,0.9993
+carpet,89,1,0,0.9988
+tile,84,3,0,0.9379
+leather,92,0,0,0.9989
