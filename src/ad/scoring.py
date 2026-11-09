@@ -94,13 +94,26 @@ def image_scores_from_maps(maps: np.ndarray, mode: str = "max", topk_ratio: floa
     return top.mean(axis=1, dtype=np.float32)
 
 
+def fit_zscore(ref: np.ndarray) -> dict:
+    """Fit a category's location/scale using ONLY normal validation outputs.
+
+    Use image scores as the reference for images and all map pixels for maps.
+    Population std (ddof=0) is used; a constant reference gets unit scale.
+    """
+    ref = np.asarray(ref, dtype=np.float32)
+    if not ref.size or not np.isfinite(ref).all():
+        raise ValueError("ref must contain finite normal validation scores")
+    mean, std = float(ref.mean(dtype=np.float64)), float(ref.std(dtype=np.float64))
+    return {"mean": mean, "std": std, "scale": std if std > 0 else 1.0,
+            "count": int(ref.size)}
+
+
+def apply_zscore(scores: np.ndarray, stats: dict) -> np.ndarray:
+    """Apply frozen validation statistics without fitting on the target array."""
+    scores = np.asarray(scores, dtype=np.float32)
+    return ((scores.astype(np.float64) - stats["mean"]) / stats["scale"]).astype(np.float32)
+
+
 def zscore_normalize(scores: np.ndarray, ref: np.ndarray) -> np.ndarray:
     """Normalise ``scores`` with mean/std of ``ref`` (normal validation scores only)."""
-    scores = np.asarray(scores, dtype=np.float32)
-    ref = np.asarray(ref, dtype=np.float32)
-    if not ref.size:
-        raise ValueError("ref must contain normal validation scores")
-    mean = ref.mean(dtype=np.float64)
-    std = ref.std(dtype=np.float64)
-    # A constant validation reference has no scale; use a unit scale to stay finite.
-    return ((scores.astype(np.float64) - mean) / (std if std > 0 else 1.0)).astype(np.float32)
+    return apply_zscore(scores, fit_zscore(ref))

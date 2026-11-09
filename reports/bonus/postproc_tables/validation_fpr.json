@@ -1,0 +1,37 @@
+{
+  "bottle": {
+    "count": 21,
+    "at_z3": 1,
+    "at_pooled": 1
+  },
+  "capsule": {
+    "count": 22,
+    "at_z3": 0,
+    "at_pooled": 0
+  },
+  "screw": {
+    "count": 32,
+    "at_z3": 1,
+    "at_pooled": 0
+  },
+  "carpet": {
+    "count": 28,
+    "at_z3": 1,
+    "at_pooled": 0
+  },
+  "tile": {
+    "count": 23,
+    "at_z3": 0,
+    "at_pooled": 0
+  },
+  "leather": {
+    "count": 25,
+    "at_z3": 1,
+    "at_pooled": 1
+  },
+  "all": {
+    "count": 151,
+    "at_z3": 4,
+    "at_pooled": 2
+  }
+}

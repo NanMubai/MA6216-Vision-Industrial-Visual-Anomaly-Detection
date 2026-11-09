@@ -1,0 +1,127 @@
+{
+  "patchcore_wrn50": {
+    "image_auroc": 0.9874141163061309,
+    "image_f1": 0.9188785441041188,
+    "pixel_auroc": 0.9852924635958408,
+    "aupro": 0.9308276401921928,
+    "fit_seconds": 3.6261184498434886,
+    "infer_ms_per_image": 2.7918935786730033,
+    "peak_gpu_mem_gb": 1.5022536913553874
+  },
+  "pp_topk1": {
+    "image_auroc": 0.9877738725238122,
+    "image_f1": 0.934712119569888,
+    "pixel_auroc": 0.9852924635958408,
+    "aupro": 0.9308276401921928,
+    "fit_seconds": 3.6261184498434886,
+    "infer_ms_per_image": 2.7896756094809763,
+    "peak_gpu_mem_gb": 1.5022536913553874
+  },
+  "pp_max": {
+    "image_auroc": 0.9882856518888762,
+    "image_f1": 0.9341148507398729,
+    "pixel_auroc": 0.9852924635958408,
+    "aupro": 0.9308276401921928,
+    "fit_seconds": 3.6261184498434886,
+    "infer_ms_per_image": 2.7920215171709817,
+    "peak_gpu_mem_gb": 1.5022536913553874
+  },
+  "pp_sigma2": {
+    "image_auroc": 0.9874141163061309,
+    "image_f1": 0.9188785441041188,
+    "pixel_auroc": 0.9851801898264715,
+    "aupro": 0.9321885405383047,
+    "fit_seconds": 3.6261184498434886,
+    "infer_ms_per_image": 2.7832096263565522,
+    "peak_gpu_mem_gb": 1.5022536913553874
+  },
+  "pp_sigma8": {
+    "image_auroc": 0.9874141163061309,
+    "image_f1": 0.9188785441041188,
+    "pixel_auroc": 0.9848290168312932,
+    "aupro": 0.9233331669018758,
+    "fit_seconds": 3.6261184498434886,
+    "infer_ms_per_image": 2.807938851827195,
+    "peak_gpu_mem_gb": 1.5022536913553874
+  },
+  "pp_nosmooth": {
+    "image_auroc": 0.9874141163061309,
+    "image_f1": 0.9188785441041188,
+    "pixel_auroc": 0.9850595764945839,
+    "aupro": 0.9324098531301503,
+    "fit_seconds": 3.6261184498434886,
+    "infer_ms_per_image": 2.753093120562667,
+    "peak_gpu_mem_gb": 1.5022536913553874
+  },
+  "pp_zscore_global": {
+    "image_auroc": 0.9874141163061309,
+    "image_f1": 0.9188785441041188,
+    "pixel_auroc": 0.9852924635944595,
+    "aupro": 0.9308276446430788,
+    "fit_seconds": 3.6261184498434886,
+    "infer_ms_per_image": 2.7911612574666234,
+    "peak_gpu_mem_gb": 1.5022536913553874
+  },
+  "global_f1": {
+    "image_f1": 0.9188785441041188,
+    "image_f1_global": 0.8898385801069497,
+    "image_f1_global_pooled": 0.8685192617476476,
+    "image_precision_global": 0.9708216730878139,
+    "image_recall_global": 0.8418493415302416,
+    "image_precision_global_pooled": 0.9737998077237768,
+    "image_recall_global_pooled": 0.8110595026589132
+  },
+  "invariance_max_abs_delta": {
+    "image_auroc": 0.0,
+    "pixel_auroc": 5.3897997176477475e-12,
+    "aupro": 1.5822095855710927e-08
+  },
+  "global_thresholds": {
+    "source": "normal_validation",
+    "categories": [
+      "bottle",
+      "capsule",
+      "screw",
+      "carpet",
+      "tile",
+      "leather"
+    ],
+    "image_threshold_global": 3.0,
+    "image_threshold_global_pooled": 3.3269968032836914,
+    "pooled_quantile": 0.99,
+    "val_image_count": {
+      "bottle": 21,
+      "capsule": 22,
+      "screw": 32,
+      "carpet": 28,
+      "tile": 23,
+      "leather": 25
+    },
+    "pooled_threshold_categories": [
+      "bottle",
+      "capsule",
+      "screw",
+      "carpet",
+      "tile",
+      "leather"
+    ],
+    "pooled_status": "standard_categories"
+  },
+  "prediction_cache_provenance": {
+    "source_run": "patchcore_wrn50",
+    "reused_by": [
+      "pp_topk1",
+      "pp_max",
+      "pp_sigma2",
+      "pp_sigma8",
+      "pp_nosmooth",
+      "pp_zscore_global"
+    ],
+    "copied_fields": [
+      "fit_seconds",
+      "peak_gpu_mem_gb"
+    ],
+    "created_at": null,
+    "created_at_note": "Original sweep predates timestamp capture; fresh caches record UTC creation time"
+  }
+}

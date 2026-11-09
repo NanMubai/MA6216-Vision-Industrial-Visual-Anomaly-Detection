@@ -1,0 +1,15 @@
+name: pp_max
+method: patchcore
+model:
+  backbone: wrn50
+  layers:
+  - layer2
+  - layer3
+  patch_size: 3
+  target_dim: 1024
+  coreset_ratio: 0.1
+  proj_dim: 128
+  num_neighbors: 9
+scoring:
+  sigma: 4.0
+  image_score: max
