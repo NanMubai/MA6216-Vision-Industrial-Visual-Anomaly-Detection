@@ -1,0 +1,9 @@
+category,gt_size_bin,n,PaDiM,PatchCore
+capsule,<1 cell,5,0.8000,0.6000
+capsule,1-3 cells,35,0.5143,0.6286
+capsule,3-10 cells,44,0.6364,0.7045
+capsule,10-30 cells,13,0.7692,0.8462
+capsule,30-100 cells,12,1.0000,1.0000
+screw,1-3 cells,60,0.1333,0.7000
+screw,3-10 cells,58,0.1207,0.8966
+screw,10-30 cells,1,0.0000,1.0000
