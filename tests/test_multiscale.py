@@ -83,18 +83,41 @@ def test_fusion_shapes_alignment_and_stats(fake_backbone, fusion):
     assert all(item["fit_seconds"] >= 0 for item in stats["scales"])
 
 
-def test_identical_scales_equal_single_scale_raw_maps(fake_backbone):
+@pytest.mark.parametrize("fusion", ["mean", "zmean"])
+def test_identical_scales_equal_single_scale_maps(fake_backbone, fusion):
     generator = torch.Generator().manual_seed(4)
     train = batches(torch.randn(3, 3, 8, 8, generator=generator))
     query = batches(torch.randn(2, 3, 8, 8, generator=generator))
     single = PatchCore(**options())
-    multiple = MultiResPatchCore(scales=[1.0, 1.0], **options())
+    multiple = MultiResPatchCore(scales=[1.0, 1.0], fusion=fusion, **options())
     single.fit(train)
     multiple.fit(train)
     expected = single.predict(query)
     actual = multiple.predict(query)
-    np.testing.assert_array_equal(actual.patch_maps, expected.patch_maps)
+    if fusion == "mean":
+        np.testing.assert_array_equal(actual.patch_maps, expected.patch_maps)
+    else:
+        mean, std = multiple.normalization[0]
+        assert multiple.normalization[0] == multiple.normalization[1]
+        np.testing.assert_allclose(actual.patch_maps, (expected.patch_maps - mean) / std,
+                                   rtol=1e-6, atol=1e-6)
     assert actual.image_scores is None  # Eq. 7 is intentionally delegated to shared max scoring.
+
+
+@pytest.mark.parametrize("fusion", ["mean", "zmean"])
+def test_base_scale_memory_bank_equals_plain_patchcore(fake_backbone, fusion):
+    generator = torch.Generator().manual_seed(17)
+    train = batches(torch.randn(4, 3, 8, 12, generator=generator))
+    single = PatchCore(**options())
+    multiple = MultiResPatchCore(scales=[1.5, 1.0], fusion=fusion, **options())
+    single.fit(train)
+    multiple.fit(train)
+    # This guards the calibrated fit implementation against drifting from
+    # PatchCore's coreset selection, row ordering, dtype or embedding pipeline.
+    base = multiple.models[multiple.base_index]
+    assert base.feature_grid == single.feature_grid
+    assert base.memory_bank.dtype == single.memory_bank.dtype
+    torch.testing.assert_close(base.memory_bank, single.memory_bank, rtol=0, atol=0)
 
 
 def test_zmean_reference_excludes_source_rows_and_uses_only_fit(fake_backbone):
