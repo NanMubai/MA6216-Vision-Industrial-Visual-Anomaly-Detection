@@ -19,12 +19,13 @@
       "dpi": 300,
       "generator": "scripts/paper_panels.py",
       "height_inches": 3.85,
+      "image_composite_image": false,
       "interpretation": "Post-hoc illustrations only; cases are not a representative performance sample.",
       "layout": {
         "case_columns": 6,
         "colourbar_extendfrac": 0.03,
         "colourbar_fraction_approx": 0.45,
-        "decision_labels": "inside map tile, bottom-left",
+        "decision_labels": "least GT/prediction overlap among four measured corners",
         "image_rows": 3
       },
       "n": {
@@ -54,12 +55,46 @@
           "methods": {
             "PaDiM": {
               "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  76,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 26.14942169189453,
               "pixel_threshold": 21.809850692749023,
               "score_ratio": 0.7793125486329953
             },
             "PatchCore": {
               "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  72,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 1.3165967464447021,
               "pixel_threshold": 1.2046966552734375,
               "score_ratio": 1.162704875061728
@@ -78,12 +113,46 @@
           "methods": {
             "PaDiM": {
               "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  76,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 26.14942169189453,
               "pixel_threshold": 21.809850692749023,
               "score_ratio": 0.7602886775822425
             },
             "PatchCore": {
               "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  76,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 1.3165967464447021,
               "pixel_threshold": 1.2046966552734375,
               "score_ratio": 0.8552068946346995
@@ -102,12 +171,46 @@
           "methods": {
             "PaDiM": {
               "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 156,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  76,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 21.957149505615234,
               "pixel_threshold": 16.48423957824707,
               "score_ratio": 0.9671127279929325
             },
             "PatchCore": {
               "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  76,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 1.3311392068862915,
               "pixel_threshold": 1.056372046470642,
               "score_ratio": 0.6696766774982638
@@ -126,12 +229,46 @@
           "methods": {
             "PaDiM": {
               "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 52,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  76,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 21.957149505615234,
               "pixel_threshold": 16.48423957824707,
               "score_ratio": 0.9681895295898929
             },
             "PatchCore": {
               "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  76,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 1.3311392068862915,
               "pixel_threshold": 1.056372046470642,
               "score_ratio": 0.8857359194834864
@@ -150,12 +287,46 @@
           "methods": {
             "PaDiM": {
               "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 111,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  76,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 21.957149505615234,
               "pixel_threshold": 16.48423957824707,
               "score_ratio": 0.9151803312580841
             },
             "PatchCore": {
               "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  76,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 1.3311392068862915,
               "pixel_threshold": 1.056372046470642,
               "score_ratio": 0.8280610456095763
@@ -174,12 +345,46 @@
           "methods": {
             "PaDiM": {
               "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 45,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_right",
+                "native_pixel_box": [
+                  148,
+                  198,
+                  221,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 29.7950439453125,
               "pixel_threshold": 18.87364387512207,
               "score_ratio": 0.5255264901815381
             },
             "PatchCore": {
               "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 45,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_right",
+                "native_pixel_box": [
+                  148,
+                  198,
+                  221,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 1.6474798917770386,
               "pixel_threshold": 1.5294461250305176,
               "score_ratio": 0.7979734969370256
@@ -188,6 +393,7 @@
           "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/tile/test/gray_stroke/012.png"
         }
       ],
+      "raster_interpolation": "none",
       "selection_rule": "Prescribed curated case IDs from analysis_failure_panels.CASES",
       "sources": [
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/screw/maps.npz",
@@ -221,7 +427,7 @@
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/capsule/ground_truth/faulty_imprint/019_mask.png",
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/tile/ground_truth/gray_stroke/012_mask.png"
       ],
-      "transformation": "RGB input crop; greyscale base for maps; resize 256 -> crop 224 using ad.visualize._load_image; GT from MVTecDataset; ratio=stored map / unchanged validation pixel threshold; TwoSlopeNorm(0.4,1.0,1.6), RdBu_r, alpha=0.6, saturated ends shown by colourbar extensions; solid black predicted contour at ratio>=1; dashed yellow GT with black halo; native 224x224 input arrays, final-size vector labels, 300 dpi embedded rasters.",
+      "transformation": "RGB input crop; greyscale base for maps; resize 256 -> crop 224 using ad.visualize._load_image; GT from MVTecDataset; ratio=stored map / unchanged validation pixel threshold; TwoSlopeNorm(0.4,1.0,1.6), RdBu_r, alpha=0.6, saturated ends shown by colourbar extensions; solid black predicted contour at ratio>=1; dashed yellow GT with black halo; native 224x224 rasters embedded without interpolation or image compositing; decision labels use the corner with least GT/prediction overlap, with a 3-pixel contour guard; final-size vector labels.",
       "width_inches": 7.16
     },
     "fig_app_failures_2.pdf": {
@@ -232,12 +438,13 @@
       "dpi": 300,
       "generator": "scripts/paper_panels.py",
       "height_inches": 3.85,
+      "image_composite_image": false,
       "interpretation": "Post-hoc illustrations only; cases are not a representative performance sample.",
       "layout": {
         "case_columns": 6,
         "colourbar_extendfrac": 0.03,
         "colourbar_fraction_approx": 0.45,
-        "decision_labels": "inside map tile, bottom-left",
+        "decision_labels": "least GT/prediction overlap among four measured corners",
         "image_rows": 3
       },
       "n": {
@@ -267,12 +474,46 @@
           "methods": {
             "PaDiM": {
               "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  76,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 29.7950439453125,
               "pixel_threshold": 18.87364387512207,
               "score_ratio": 0.982247056305079
             },
             "PatchCore": {
               "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  72,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 1.6474798917770386,
               "pixel_threshold": 1.5294461250305176,
               "score_ratio": 1.2234806744368676
@@ -291,12 +532,46 @@
           "methods": {
             "PaDiM": {
               "decision": "FP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 525,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  72,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 15.113607406616211,
               "pixel_threshold": 13.498601913452148,
               "score_ratio": 1.009952443770308
             },
             "PatchCore": {
               "decision": "FP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 536,
+                  "bottom_right": 577,
+                  "top_left": 1217,
+                  "top_right": 173
+                },
+                "contour_guard_pixels": 3,
+                "corner": "top_right",
+                "native_pixel_box": [
+                  152,
+                  3,
+                  221,
+                  26
+                ],
+                "overlap_pixels": 173
+              },
               "image_threshold": 1.1775676012039185,
               "pixel_threshold": 1.1480698585510254,
               "score_ratio": 1.079436611277432
@@ -315,12 +590,46 @@
           "methods": {
             "PaDiM": {
               "decision": "TN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 377,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_right",
+                "native_pixel_box": [
+                  148,
+                  198,
+                  221,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 18.528865814208984,
               "pixel_threshold": 13.064669609069824,
               "score_ratio": 0.8872784720347869
             },
             "PatchCore": {
               "decision": "FP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 686,
+                  "bottom_right": 0,
+                  "top_left": 270,
+                  "top_right": 224
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_right",
+                "native_pixel_box": [
+                  152,
+                  198,
+                  221,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 1.099655270576477,
               "pixel_threshold": 1.0813825130462646,
               "score_ratio": 1.1170416811524257
@@ -339,12 +648,46 @@
           "methods": {
             "PaDiM": {
               "decision": "FP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  72,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 21.957149505615234,
               "pixel_threshold": 16.48423957824707,
               "score_ratio": 1.226998133231178
             },
             "PatchCore": {
               "decision": "TN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  76,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 1.3311392068862915,
               "pixel_threshold": 1.056372046470642,
               "score_ratio": 0.8508200266782371
@@ -363,12 +706,46 @@
           "methods": {
             "PaDiM": {
               "decision": "FP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  72,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 18.192604064941406,
               "pixel_threshold": 15.821178436279297,
               "score_ratio": 1.1531741328834355
             },
             "PatchCore": {
               "decision": "TN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  76,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 1.488857626914978,
               "pixel_threshold": 1.2660369873046875,
               "score_ratio": 0.8793093495042172
@@ -387,12 +764,46 @@
           "methods": {
             "PaDiM": {
               "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 483,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  72,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 18.528865814208984,
               "pixel_threshold": 13.064669609069824,
               "score_ratio": 1.1246413851842747
             },
             "PatchCore": {
               "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 442,
+                  "top_left": 0,
+                  "top_right": 102
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  72,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 1.099655270576477,
               "pixel_threshold": 1.0813825130462646,
               "score_ratio": 1.396648865308404
@@ -401,6 +812,7 @@
           "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/test/color/009.png"
         }
       ],
+      "raster_interpolation": "none",
       "selection_rule": "Prescribed curated case IDs from analysis_failure_panels.CASES",
       "sources": [
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/tile/maps.npz",
@@ -442,7 +854,7 @@
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/tile/ground_truth/oil/000_mask.png",
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/ground_truth/color/009_mask.png"
       ],
-      "transformation": "RGB input crop; greyscale base for maps; resize 256 -> crop 224 using ad.visualize._load_image; GT from MVTecDataset; ratio=stored map / unchanged validation pixel threshold; TwoSlopeNorm(0.4,1.0,1.6), RdBu_r, alpha=0.6, saturated ends shown by colourbar extensions; solid black predicted contour at ratio>=1; dashed yellow GT with black halo; native 224x224 input arrays, final-size vector labels, 300 dpi embedded rasters.",
+      "transformation": "RGB input crop; greyscale base for maps; resize 256 -> crop 224 using ad.visualize._load_image; GT from MVTecDataset; ratio=stored map / unchanged validation pixel threshold; TwoSlopeNorm(0.4,1.0,1.6), RdBu_r, alpha=0.6, saturated ends shown by colourbar extensions; solid black predicted contour at ratio>=1; dashed yellow GT with black halo; native 224x224 rasters embedded without interpolation or image compositing; decision labels use the corner with least GT/prediction overlap, with a 3-pixel contour guard; final-size vector labels.",
       "width_inches": 7.16
     },
     "fig_app_qual_bottle.pdf": {
@@ -453,12 +865,13 @@
       "dpi": 300,
       "generator": "scripts/paper_panels.py",
       "height_inches": 4.4,
+      "image_composite_image": false,
       "interpretation": "Post-hoc illustrations only; cases are not a representative performance sample.",
       "layout": {
         "case_columns": 4,
         "colourbar_extendfrac": 0.03,
         "colourbar_fraction_approx": 0.45,
-        "decision_labels": "inside map tile, bottom-left",
+        "decision_labels": "least GT/prediction overlap among four measured corners",
         "image_rows": 3
       },
       "n": {
@@ -488,12 +901,46 @@
           "methods": {
             "PaDiM": {
               "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 18.192604064941406,
               "pixel_threshold": 15.821178436279297,
               "score_ratio": 1.9375041150477177
             },
             "PatchCore": {
               "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 1.488857626914978,
               "pixel_threshold": 1.2660369873046875,
               "score_ratio": 1.642729944001506
@@ -512,12 +959,46 @@
           "methods": {
             "PaDiM": {
               "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 18.192604064941406,
               "pixel_threshold": 15.821178436279297,
               "score_ratio": 1.3216231132113057
             },
             "PatchCore": {
               "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 1.488857626914978,
               "pixel_threshold": 1.2660369873046875,
               "score_ratio": 1.0985299344414319
@@ -536,12 +1017,46 @@
           "methods": {
             "PaDiM": {
               "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 18.192604064941406,
               "pixel_threshold": 15.821178436279297,
               "score_ratio": 2.016272943094709
             },
             "PatchCore": {
               "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 1.488857626914978,
               "pixel_threshold": 1.2660369873046875,
               "score_ratio": 1.3287598173913762
@@ -560,12 +1075,46 @@
           "methods": {
             "PaDiM": {
               "decision": "TN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  69,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 18.192604064941406,
               "pixel_threshold": 15.821178436279297,
               "score_ratio": 0.9114949166317543
             },
             "PatchCore": {
               "decision": "TN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  69,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 1.488857626914978,
               "pixel_threshold": 1.2660369873046875,
               "score_ratio": 0.919123134634587
@@ -574,6 +1123,7 @@
           "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/bottle/test/good/001.png"
         }
       ],
+      "raster_interpolation": "none",
       "selection_rule": "Post-hoc illustration selection only, using PatchCore scores and test labels: (1) anomalous image closest to the median PatchCore image score; (2) lowest-scoring anomaly; (3) largest absolute PaDiM-PatchCore score/threshold difference among unpicked anomalies; (4) highest PatchCore score/threshold normal. Ties use lowest index. If an even-sized anomaly set brackets the median, choose the equidistant lower-index image. No fitted parameter or threshold is selected.",
       "sources": [
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/bottle/maps.npz",
@@ -590,7 +1140,7 @@
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/bottle/ground_truth/contamination/003_mask.png",
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/bottle/ground_truth/contamination/014_mask.png"
       ],
-      "transformation": "RGB input crop; greyscale base for maps; resize 256 -> crop 224 using ad.visualize._load_image; GT from MVTecDataset; ratio=stored map / unchanged validation pixel threshold; TwoSlopeNorm(0.4,1.0,1.6), RdBu_r, alpha=0.6, saturated ends shown by colourbar extensions; solid black predicted contour at ratio>=1; dashed yellow GT with black halo; native 224x224 input arrays, final-size vector labels, 300 dpi embedded rasters.",
+      "transformation": "RGB input crop; greyscale base for maps; resize 256 -> crop 224 using ad.visualize._load_image; GT from MVTecDataset; ratio=stored map / unchanged validation pixel threshold; TwoSlopeNorm(0.4,1.0,1.6), RdBu_r, alpha=0.6, saturated ends shown by colourbar extensions; solid black predicted contour at ratio>=1; dashed yellow GT with black halo; native 224x224 rasters embedded without interpolation or image compositing; decision labels use the corner with least GT/prediction overlap, with a 3-pixel contour guard; final-size vector labels.",
       "width_inches": 5.6
     },
     "fig_app_qual_capsule.pdf": {
@@ -601,12 +1151,13 @@
       "dpi": 300,
       "generator": "scripts/paper_panels.py",
       "height_inches": 4.4,
+      "image_composite_image": false,
       "interpretation": "Post-hoc illustrations only; cases are not a representative performance sample.",
       "layout": {
         "case_columns": 4,
         "colourbar_extendfrac": 0.03,
         "colourbar_fraction_approx": 0.45,
-        "decision_labels": "inside map tile, bottom-left",
+        "decision_labels": "least GT/prediction overlap among four measured corners",
         "image_rows": 3
       },
       "n": {
@@ -636,12 +1187,46 @@
           "methods": {
             "PaDiM": {
               "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 21.957149505615234,
               "pixel_threshold": 16.48423957824707,
               "score_ratio": 1.1166750493186597
             },
             "PatchCore": {
               "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 1.3311392068862915,
               "pixel_threshold": 1.056372046470642,
               "score_ratio": 1.1195390100932217
@@ -660,12 +1245,46 @@
           "methods": {
             "PaDiM": {
               "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 116,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  69,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 21.957149505615234,
               "pixel_threshold": 16.48423957824707,
               "score_ratio": 0.9671127279929325
             },
             "PatchCore": {
               "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  69,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 1.3311392068862915,
               "pixel_threshold": 1.056372046470642,
               "score_ratio": 0.6696766774982638
@@ -684,12 +1303,46 @@
           "methods": {
             "PaDiM": {
               "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 170,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 21.957149505615234,
               "pixel_threshold": 16.48423957824707,
               "score_ratio": 1.359550880960261
             },
             "PatchCore": {
               "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 162,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  69,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 1.3311392068862915,
               "pixel_threshold": 1.056372046470642,
               "score_ratio": 0.884742135002268
@@ -708,12 +1361,46 @@
           "methods": {
             "PaDiM": {
               "decision": "FP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 491,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 21.957149505615234,
               "pixel_threshold": 16.48423957824707,
               "score_ratio": 1.8989639389603947
             },
             "PatchCore": {
               "decision": "FP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 394,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 1.3311392068862915,
               "pixel_threshold": 1.056372046470642,
               "score_ratio": 1.031801909388026
@@ -722,6 +1409,7 @@
           "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/capsule/test/good/021.png"
         }
       ],
+      "raster_interpolation": "none",
       "selection_rule": "Post-hoc illustration selection only, using PatchCore scores and test labels: (1) anomalous image closest to the median PatchCore image score; (2) lowest-scoring anomaly; (3) largest absolute PaDiM-PatchCore score/threshold difference among unpicked anomalies; (4) highest PatchCore score/threshold normal. Ties use lowest index. If an even-sized anomaly set brackets the median, choose the equidistant lower-index image. No fitted parameter or threshold is selected.",
       "sources": [
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/capsule/maps.npz",
@@ -738,7 +1426,7 @@
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/capsule/ground_truth/scratch/017_mask.png",
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/capsule/ground_truth/scratch/003_mask.png"
       ],
-      "transformation": "RGB input crop; greyscale base for maps; resize 256 -> crop 224 using ad.visualize._load_image; GT from MVTecDataset; ratio=stored map / unchanged validation pixel threshold; TwoSlopeNorm(0.4,1.0,1.6), RdBu_r, alpha=0.6, saturated ends shown by colourbar extensions; solid black predicted contour at ratio>=1; dashed yellow GT with black halo; native 224x224 input arrays, final-size vector labels, 300 dpi embedded rasters.",
+      "transformation": "RGB input crop; greyscale base for maps; resize 256 -> crop 224 using ad.visualize._load_image; GT from MVTecDataset; ratio=stored map / unchanged validation pixel threshold; TwoSlopeNorm(0.4,1.0,1.6), RdBu_r, alpha=0.6, saturated ends shown by colourbar extensions; solid black predicted contour at ratio>=1; dashed yellow GT with black halo; native 224x224 rasters embedded without interpolation or image compositing; decision labels use the corner with least GT/prediction overlap, with a 3-pixel contour guard; final-size vector labels.",
       "width_inches": 5.6
     },
     "fig_app_qual_carpet.pdf": {
@@ -749,12 +1437,13 @@
       "dpi": 300,
       "generator": "scripts/paper_panels.py",
       "height_inches": 4.4,
+      "image_composite_image": false,
       "interpretation": "Post-hoc illustrations only; cases are not a representative performance sample.",
       "layout": {
         "case_columns": 4,
         "colourbar_extendfrac": 0.03,
         "colourbar_fraction_approx": 0.45,
-        "decision_labels": "inside map tile, bottom-left",
+        "decision_labels": "least GT/prediction overlap among four measured corners",
         "image_rows": 3
       },
       "n": {
@@ -784,12 +1473,46 @@
           "methods": {
             "PaDiM": {
               "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 88,
+                  "bottom_right": 417,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "top_left",
+                "native_pixel_box": [
+                  3,
+                  3,
+                  65,
+                  24
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 15.113607406616211,
               "pixel_threshold": 13.498601913452148,
               "score_ratio": 1.6305080476327074
             },
             "PatchCore": {
               "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 1009,
+                  "bottom_right": 1038,
+                  "top_left": 140,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "top_right",
+                "native_pixel_box": [
+                  159,
+                  3,
+                  221,
+                  24
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 1.1775676012039185,
               "pixel_threshold": 1.1480698585510254,
               "score_ratio": 1.5757314145670756
@@ -808,12 +1531,46 @@
           "methods": {
             "PaDiM": {
               "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 140,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  69,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 15.113607406616211,
               "pixel_threshold": 13.498601913452148,
               "score_ratio": 0.9904394726676302
             },
             "PatchCore": {
               "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  69,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 1.1775676012039185,
               "pixel_threshold": 1.1480698585510254,
               "score_ratio": 0.9736896158623985
@@ -832,12 +1589,46 @@
           "methods": {
             "PaDiM": {
               "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 15.113607406616211,
               "pixel_threshold": 13.498601913452148,
               "score_ratio": 1.9484450994543963
             },
             "PatchCore": {
               "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 1.1775676012039185,
               "pixel_threshold": 1.1480698585510254,
               "score_ratio": 1.1775887658350706
@@ -856,12 +1647,46 @@
           "methods": {
             "PaDiM": {
               "decision": "FP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 58
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 15.113607406616211,
               "pixel_threshold": 13.498601913452148,
               "score_ratio": 1.0268596217283874
             },
             "PatchCore": {
               "decision": "FP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 367,
+                  "top_left": 0,
+                  "top_right": 896
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 1.1775676012039185,
               "pixel_threshold": 1.1480698585510254,
               "score_ratio": 1.1462285510256827
@@ -870,6 +1695,7 @@
           "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/carpet/test/good/006.png"
         }
       ],
+      "raster_interpolation": "none",
       "selection_rule": "Post-hoc illustration selection only, using PatchCore scores and test labels: (1) anomalous image closest to the median PatchCore image score; (2) lowest-scoring anomaly; (3) largest absolute PaDiM-PatchCore score/threshold difference among unpicked anomalies; (4) highest PatchCore score/threshold normal. Ties use lowest index. If an even-sized anomaly set brackets the median, choose the equidistant lower-index image. No fitted parameter or threshold is selected.",
       "sources": [
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/carpet/maps.npz",
@@ -886,7 +1712,7 @@
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/carpet/ground_truth/thread/018_mask.png",
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/carpet/ground_truth/color/013_mask.png"
       ],
-      "transformation": "RGB input crop; greyscale base for maps; resize 256 -> crop 224 using ad.visualize._load_image; GT from MVTecDataset; ratio=stored map / unchanged validation pixel threshold; TwoSlopeNorm(0.4,1.0,1.6), RdBu_r, alpha=0.6, saturated ends shown by colourbar extensions; solid black predicted contour at ratio>=1; dashed yellow GT with black halo; native 224x224 input arrays, final-size vector labels, 300 dpi embedded rasters.",
+      "transformation": "RGB input crop; greyscale base for maps; resize 256 -> crop 224 using ad.visualize._load_image; GT from MVTecDataset; ratio=stored map / unchanged validation pixel threshold; TwoSlopeNorm(0.4,1.0,1.6), RdBu_r, alpha=0.6, saturated ends shown by colourbar extensions; solid black predicted contour at ratio>=1; dashed yellow GT with black halo; native 224x224 rasters embedded without interpolation or image compositing; decision labels use the corner with least GT/prediction overlap, with a 3-pixel contour guard; final-size vector labels.",
       "width_inches": 5.6
     },
     "fig_app_qual_leather.pdf": {
@@ -897,12 +1723,13 @@
       "dpi": 300,
       "generator": "scripts/paper_panels.py",
       "height_inches": 4.4,
+      "image_composite_image": false,
       "interpretation": "Post-hoc illustrations only; cases are not a representative performance sample.",
       "layout": {
         "case_columns": 4,
         "colourbar_extendfrac": 0.03,
         "colourbar_fraction_approx": 0.45,
-        "decision_labels": "inside map tile, bottom-left",
+        "decision_labels": "least GT/prediction overlap among four measured corners",
         "image_rows": 3
       },
       "n": {
@@ -932,12 +1759,46 @@
           "methods": {
             "PaDiM": {
               "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 18.528865814208984,
               "pixel_threshold": 13.064669609069824,
               "score_ratio": 1.3319226530506785
             },
             "PatchCore": {
               "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 1.099655270576477,
               "pixel_threshold": 1.0813825130462646,
               "score_ratio": 1.790997896163694
@@ -956,12 +1817,46 @@
           "methods": {
             "PaDiM": {
               "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 18.528865814208984,
               "pixel_threshold": 13.064669609069824,
               "score_ratio": 1.3787633324418789
             },
             "PatchCore": {
               "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 1.099655270576477,
               "pixel_threshold": 1.0813825130462646,
               "score_ratio": 1.2901625733082396
@@ -980,12 +1875,46 @@
           "methods": {
             "PaDiM": {
               "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 18.528865814208984,
               "pixel_threshold": 13.064669609069824,
               "score_ratio": 1.3603174318866038
             },
             "PatchCore": {
               "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 639
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 1.099655270576477,
               "pixel_threshold": 1.0813825130462646,
               "score_ratio": 1.9447363277470608
@@ -1004,12 +1933,46 @@
           "methods": {
             "PaDiM": {
               "decision": "TN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 358,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_right",
+                "native_pixel_box": [
+                  155,
+                  200,
+                  221,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 18.528865814208984,
               "pixel_threshold": 13.064669609069824,
               "score_ratio": 0.8872784720347869
             },
             "PatchCore": {
               "decision": "FP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 598,
+                  "bottom_right": 0,
+                  "top_left": 206,
+                  "top_right": 116
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_right",
+                "native_pixel_box": [
+                  159,
+                  200,
+                  221,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 1.099655270576477,
               "pixel_threshold": 1.0813825130462646,
               "score_ratio": 1.1170416811524257
@@ -1018,6 +1981,7 @@
           "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/test/good/024.png"
         }
       ],
+      "raster_interpolation": "none",
       "selection_rule": "Post-hoc illustration selection only, using PatchCore scores and test labels: (1) anomalous image closest to the median PatchCore image score; (2) lowest-scoring anomaly; (3) largest absolute PaDiM-PatchCore score/threshold difference among unpicked anomalies; (4) highest PatchCore score/threshold normal. Ties use lowest index. If an even-sized anomaly set brackets the median, choose the equidistant lower-index image. No fitted parameter or threshold is selected.",
       "sources": [
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/leather/maps.npz",
@@ -1034,7 +1998,7 @@
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/ground_truth/glue/004_mask.png",
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/ground_truth/fold/003_mask.png"
       ],
-      "transformation": "RGB input crop; greyscale base for maps; resize 256 -> crop 224 using ad.visualize._load_image; GT from MVTecDataset; ratio=stored map / unchanged validation pixel threshold; TwoSlopeNorm(0.4,1.0,1.6), RdBu_r, alpha=0.6, saturated ends shown by colourbar extensions; solid black predicted contour at ratio>=1; dashed yellow GT with black halo; native 224x224 input arrays, final-size vector labels, 300 dpi embedded rasters.",
+      "transformation": "RGB input crop; greyscale base for maps; resize 256 -> crop 224 using ad.visualize._load_image; GT from MVTecDataset; ratio=stored map / unchanged validation pixel threshold; TwoSlopeNorm(0.4,1.0,1.6), RdBu_r, alpha=0.6, saturated ends shown by colourbar extensions; solid black predicted contour at ratio>=1; dashed yellow GT with black halo; native 224x224 rasters embedded without interpolation or image compositing; decision labels use the corner with least GT/prediction overlap, with a 3-pixel contour guard; final-size vector labels.",
       "width_inches": 5.6
     },
     "fig_app_qual_screw.pdf": {
@@ -1045,12 +2009,13 @@
       "dpi": 300,
       "generator": "scripts/paper_panels.py",
       "height_inches": 4.4,
+      "image_composite_image": false,
       "interpretation": "Post-hoc illustrations only; cases are not a representative performance sample.",
       "layout": {
         "case_columns": 4,
         "colourbar_extendfrac": 0.03,
         "colourbar_fraction_approx": 0.45,
-        "decision_labels": "inside map tile, bottom-left",
+        "decision_labels": "least GT/prediction overlap among four measured corners",
         "image_rows": 3
       },
       "n": {
@@ -1080,12 +2045,46 @@
           "methods": {
             "PaDiM": {
               "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 26.14942169189453,
               "pixel_threshold": 21.809850692749023,
               "score_ratio": 1.0489187756403655
             },
             "PatchCore": {
               "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 1.3165967464447021,
               "pixel_threshold": 1.2046966552734375,
               "score_ratio": 1.087252705304238
@@ -1104,12 +2103,46 @@
           "methods": {
             "PaDiM": {
               "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  69,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 26.14942169189453,
               "pixel_threshold": 21.809850692749023,
               "score_ratio": 0.7602886775822425
             },
             "PatchCore": {
               "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  69,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 1.3165967464447021,
               "pixel_threshold": 1.2046966552734375,
               "score_ratio": 0.8552068946346995
@@ -1128,12 +2161,46 @@
           "methods": {
             "PaDiM": {
               "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  69,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 26.14942169189453,
               "pixel_threshold": 21.809850692749023,
               "score_ratio": 0.7581306636377932
             },
             "PatchCore": {
               "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 1.3165967464447021,
               "pixel_threshold": 1.2046966552734375,
               "score_ratio": 1.3670491707391628
@@ -1152,12 +2219,46 @@
           "methods": {
             "PaDiM": {
               "decision": "TN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  69,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 26.14942169189453,
               "pixel_threshold": 21.809850692749023,
               "score_ratio": 0.810354002982386
             },
             "PatchCore": {
               "decision": "FP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 1.3165967464447021,
               "pixel_threshold": 1.2046966552734375,
               "score_ratio": 1.0916204336418391
@@ -1166,6 +2267,7 @@
           "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/screw/test/good/004.png"
         }
       ],
+      "raster_interpolation": "none",
       "selection_rule": "Post-hoc illustration selection only, using PatchCore scores and test labels: (1) anomalous image closest to the median PatchCore image score; (2) lowest-scoring anomaly; (3) largest absolute PaDiM-PatchCore score/threshold difference among unpicked anomalies; (4) highest PatchCore score/threshold normal. Ties use lowest index. If an even-sized anomaly set brackets the median, choose the equidistant lower-index image. No fitted parameter or threshold is selected.",
       "sources": [
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/screw/maps.npz",
@@ -1182,7 +2284,7 @@
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/screw/ground_truth/thread_side/004_mask.png",
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/screw/ground_truth/thread_top/005_mask.png"
       ],
-      "transformation": "RGB input crop; greyscale base for maps; resize 256 -> crop 224 using ad.visualize._load_image; GT from MVTecDataset; ratio=stored map / unchanged validation pixel threshold; TwoSlopeNorm(0.4,1.0,1.6), RdBu_r, alpha=0.6, saturated ends shown by colourbar extensions; solid black predicted contour at ratio>=1; dashed yellow GT with black halo; native 224x224 input arrays, final-size vector labels, 300 dpi embedded rasters.",
+      "transformation": "RGB input crop; greyscale base for maps; resize 256 -> crop 224 using ad.visualize._load_image; GT from MVTecDataset; ratio=stored map / unchanged validation pixel threshold; TwoSlopeNorm(0.4,1.0,1.6), RdBu_r, alpha=0.6, saturated ends shown by colourbar extensions; solid black predicted contour at ratio>=1; dashed yellow GT with black halo; native 224x224 rasters embedded without interpolation or image compositing; decision labels use the corner with least GT/prediction overlap, with a 3-pixel contour guard; final-size vector labels.",
       "width_inches": 5.6
     },
     "fig_app_qual_tile.pdf": {
@@ -1193,12 +2295,13 @@
       "dpi": 300,
       "generator": "scripts/paper_panels.py",
       "height_inches": 4.4,
+      "image_composite_image": false,
       "interpretation": "Post-hoc illustrations only; cases are not a representative performance sample.",
       "layout": {
         "case_columns": 4,
         "colourbar_extendfrac": 0.03,
         "colourbar_fraction_approx": 0.45,
-        "decision_labels": "inside map tile, bottom-left",
+        "decision_labels": "least GT/prediction overlap among four measured corners",
         "image_rows": 3
       },
       "n": {
@@ -1228,12 +2331,46 @@
           "methods": {
             "PaDiM": {
               "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 168,
+                  "top_left": 0,
+                  "top_right": 360
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  69,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 29.7950439453125,
               "pixel_threshold": 18.87364387512207,
               "score_ratio": 0.8916011744052179
             },
             "PatchCore": {
               "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 198,
+                  "top_left": 0,
+                  "top_right": 451
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 1.6474798917770386,
               "pixel_threshold": 1.5294461250305176,
               "score_ratio": 1.1636236390528756
@@ -1252,12 +2389,46 @@
           "methods": {
             "PaDiM": {
               "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 9,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_right",
+                "native_pixel_box": [
+                  155,
+                  200,
+                  221,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 29.7950439453125,
               "pixel_threshold": 18.87364387512207,
               "score_ratio": 0.5255264901815381
             },
             "PatchCore": {
               "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 9,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_right",
+                "native_pixel_box": [
+                  155,
+                  200,
+                  221,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 1.6474798917770386,
               "pixel_threshold": 1.5294461250305176,
               "score_ratio": 0.7979734969370256
@@ -1276,12 +2447,46 @@
           "methods": {
             "PaDiM": {
               "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  69,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 29.7950439453125,
               "pixel_threshold": 18.87364387512207,
               "score_ratio": 0.9042038682855281
             },
             "PatchCore": {
               "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 1.6474798917770386,
               "pixel_threshold": 1.5294461250305176,
               "score_ratio": 1.3951179527908086
@@ -1300,12 +2505,46 @@
           "methods": {
             "PaDiM": {
               "decision": "TN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  69,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 29.7950439453125,
               "pixel_threshold": 18.87364387512207,
               "score_ratio": 0.6394767515701755
             },
             "PatchCore": {
               "decision": "TN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  69,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 1.6474798917770386,
               "pixel_threshold": 1.5294461250305176,
               "score_ratio": 0.8871196173273596
@@ -1314,6 +2553,7 @@
           "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/tile/test/good/017.png"
         }
       ],
+      "raster_interpolation": "none",
       "selection_rule": "Post-hoc illustration selection only, using PatchCore scores and test labels: (1) anomalous image closest to the median PatchCore image score; (2) lowest-scoring anomaly; (3) largest absolute PaDiM-PatchCore score/threshold difference among unpicked anomalies; (4) highest PatchCore score/threshold normal. Ties use lowest index. If an even-sized anomaly set brackets the median, choose the equidistant lower-index image. No fitted parameter or threshold is selected.",
       "sources": [
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/tile/maps.npz",
@@ -1330,7 +2570,7 @@
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/tile/ground_truth/gray_stroke/012_mask.png",
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/tile/ground_truth/glue_strip/017_mask.png"
       ],
-      "transformation": "RGB input crop; greyscale base for maps; resize 256 -> crop 224 using ad.visualize._load_image; GT from MVTecDataset; ratio=stored map / unchanged validation pixel threshold; TwoSlopeNorm(0.4,1.0,1.6), RdBu_r, alpha=0.6, saturated ends shown by colourbar extensions; solid black predicted contour at ratio>=1; dashed yellow GT with black halo; native 224x224 input arrays, final-size vector labels, 300 dpi embedded rasters.",
+      "transformation": "RGB input crop; greyscale base for maps; resize 256 -> crop 224 using ad.visualize._load_image; GT from MVTecDataset; ratio=stored map / unchanged validation pixel threshold; TwoSlopeNorm(0.4,1.0,1.6), RdBu_r, alpha=0.6, saturated ends shown by colourbar extensions; solid black predicted contour at ratio>=1; dashed yellow GT with black halo; native 224x224 rasters embedded without interpolation or image compositing; decision labels use the corner with least GT/prediction overlap, with a 3-pixel contour guard; final-size vector labels.",
       "width_inches": 5.6
     },
     "fig_defect_area.pdf": {
@@ -1417,12 +2657,13 @@
       "dpi": 300,
       "generator": "scripts/paper_panels.py",
       "height_inches": 3.85,
+      "image_composite_image": false,
       "interpretation": "Post-hoc illustrations only; cases are not a representative performance sample.",
       "layout": {
         "case_columns": 6,
         "colourbar_extendfrac": 0.03,
         "colourbar_fraction_approx": 0.45,
-        "decision_labels": "inside map tile, bottom-left",
+        "decision_labels": "least GT/prediction overlap among four measured corners",
         "image_rows": 3
       },
       "n": {
@@ -1452,12 +2693,46 @@
           "methods": {
             "PaDiM": {
               "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  76,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 26.14942169189453,
               "pixel_threshold": 21.809850692749023,
               "score_ratio": 0.7793125486329953
             },
             "PatchCore": {
               "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  72,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 1.3165967464447021,
               "pixel_threshold": 1.2046966552734375,
               "score_ratio": 1.162704875061728
@@ -1476,12 +2751,46 @@
           "methods": {
             "PaDiM": {
               "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 52,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  76,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 21.957149505615234,
               "pixel_threshold": 16.48423957824707,
               "score_ratio": 0.9681895295898929
             },
             "PatchCore": {
               "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  76,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 1.3311392068862915,
               "pixel_threshold": 1.056372046470642,
               "score_ratio": 0.8857359194834864
@@ -1500,12 +2809,46 @@
           "methods": {
             "PaDiM": {
               "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 111,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  76,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 21.957149505615234,
               "pixel_threshold": 16.48423957824707,
               "score_ratio": 0.9151803312580841
             },
             "PatchCore": {
               "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  76,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 1.3311392068862915,
               "pixel_threshold": 1.056372046470642,
               "score_ratio": 0.8280610456095763
@@ -1524,12 +2867,46 @@
           "methods": {
             "PaDiM": {
               "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  76,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 29.7950439453125,
               "pixel_threshold": 18.87364387512207,
               "score_ratio": 0.982247056305079
             },
             "PatchCore": {
               "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  72,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 1.6474798917770386,
               "pixel_threshold": 1.5294461250305176,
               "score_ratio": 1.2234806744368676
@@ -1548,12 +2925,46 @@
           "methods": {
             "PaDiM": {
               "decision": "FP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 525,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  72,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 15.113607406616211,
               "pixel_threshold": 13.498601913452148,
               "score_ratio": 1.009952443770308
             },
             "PatchCore": {
               "decision": "FP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 536,
+                  "bottom_right": 577,
+                  "top_left": 1217,
+                  "top_right": 173
+                },
+                "contour_guard_pixels": 3,
+                "corner": "top_right",
+                "native_pixel_box": [
+                  152,
+                  3,
+                  221,
+                  26
+                ],
+                "overlap_pixels": 173
+              },
               "image_threshold": 1.1775676012039185,
               "pixel_threshold": 1.1480698585510254,
               "score_ratio": 1.079436611277432
@@ -1572,12 +2983,46 @@
           "methods": {
             "PaDiM": {
               "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 483,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  72,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 18.528865814208984,
               "pixel_threshold": 13.064669609069824,
               "score_ratio": 1.1246413851842747
             },
             "PatchCore": {
               "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 442,
+                  "top_left": 0,
+                  "top_right": 102
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  72,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
               "image_threshold": 1.099655270576477,
               "pixel_threshold": 1.0813825130462646,
               "score_ratio": 1.396648865308404
@@ -1586,6 +3031,7 @@
           "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/test/color/009.png"
         }
       ],
+      "raster_interpolation": "none",
       "selection_rule": "Prescribed curated case IDs from analysis_failure_panels.CASES",
       "sources": [
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/screw/maps.npz",
@@ -1630,7 +3076,7 @@
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/tile/ground_truth/oil/000_mask.png",
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/ground_truth/color/009_mask.png"
       ],
-      "transformation": "RGB input crop; greyscale base for maps; resize 256 -> crop 224 using ad.visualize._load_image; GT from MVTecDataset; ratio=stored map / unchanged validation pixel threshold; TwoSlopeNorm(0.4,1.0,1.6), RdBu_r, alpha=0.6, saturated ends shown by colourbar extensions; solid black predicted contour at ratio>=1; dashed yellow GT with black halo; native 224x224 input arrays, final-size vector labels, 300 dpi embedded rasters.",
+      "transformation": "RGB input crop; greyscale base for maps; resize 256 -> crop 224 using ad.visualize._load_image; GT from MVTecDataset; ratio=stored map / unchanged validation pixel threshold; TwoSlopeNorm(0.4,1.0,1.6), RdBu_r, alpha=0.6, saturated ends shown by colourbar extensions; solid black predicted contour at ratio>=1; dashed yellow GT with black halo; native 224x224 rasters embedded without interpolation or image compositing; decision labels use the corner with least GT/prediction overlap, with a 3-pixel contour guard; final-size vector labels.",
       "width_inches": 7.16
     },
     "fig_main_dumbbell.pdf": {
@@ -1738,7 +3184,7 @@
         "reports/bonus/dinov2_tables/metrics_long.csv",
         "reports/bonus/multiscale_tables/metrics_long.csv"
       ],
-      "transformation": "Six-category arithmetic means, identical to bn* macros; model variants only; log2 latency; baseline reference lines; out-of-range L2+3+4 AU-PRO explicitly marked on the lower spine.",
+      "transformation": "Six-category arithmetic means, identical to bn* macros; model variants only; log2 latency; baseline reference lines; max-score control has a white-understroked plus above the baseline star; hollow post-hoc diamond above other markers; out-of-range L2+3+4 AU-PRO explicitly marked on the lower spine.",
       "uncertainty": "Single-seed category means; no repeated-run uncertainty available.",
       "variants": {
         "Base": {

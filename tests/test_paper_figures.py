@@ -12,9 +12,10 @@ import matplotlib.pyplot as plt
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
+import paper_figures
 from paper_figures import (CHARTS, EXPECTED_BINS, region_counts, wilson, output_root,
                            log_box_stats, csv_rows, PER_REGION, CATEGORIES)
-from paper_panels import PANEL_OUTPUTS, select_examples, gt_contour
+from paper_panels import PANEL_OUTPUTS, select_examples, gt_contour, place_decision_label, case_label
 
 
 def test_v1_checksums_and_legacy_figures():
@@ -75,6 +76,59 @@ def test_contour_retains_crop_pixel_coordinates():
     plt.close(fig)
 
 
+def test_decision_label_avoids_occupied_corner():
+    gt = np.zeros((224, 224), dtype=bool)
+    gt[140:, :100] = True
+    fig, ax = plt.subplots(figsize=(2, 2), layout="constrained")
+    ax.imshow(gt, interpolation="none")
+    label = ax.text(.025, .025, "0.89 · TN", transform=ax.transAxes,
+                    fontsize=6, ha="left", va="bottom", bbox={"pad": .7})
+    fig.canvas.draw()
+    placement = place_decision_label(ax, label, gt, np.zeros_like(gt), fig.canvas.get_renderer())
+    assert placement["corner"] != "bottom_left"
+    assert placement["candidate_overlap_pixels"]["bottom_left"] > 0
+    assert placement["overlap_pixels"] == min(placement["candidate_overlap_pixels"].values()) == 0
+    plt.close(fig)
+
+
+def test_qualitative_header_omits_repeated_category():
+    case = dict(letter="a", category="screw", key="manipulated_front/016.png")
+    assert case_label(case, qualitative=True) == "(a) manipulated_front 016"
+    assert "screw" in case_label(case)
+
+
+def test_tradeoff_control_stays_above_visible_baseline(monkeypatch, tmp_path):
+    figures = []
+    monkeypatch.setattr(paper_figures, "save", lambda fig, path: figures.append(fig))
+    monkeypatch.setattr(paper_figures, "record", lambda *args, **kwargs: None)
+    with plt.style.context(paper_figures.STYLE):
+        paper_figures.tradeoff(tmp_path, paper_figures.load_metrics())
+    fig, = figures
+    for ax in fig.axes:
+        baseline, = [line for line in ax.lines if line.get_marker() == "*"]
+        control, = [line for line in ax.lines if line.get_marker() == "+"]
+        assert baseline.get_markersize() >= 6
+        assert control.get_zorder() > baseline.get_zorder()
+        assert control.get_markersize() == 7
+        assert control.get_markeredgewidth() == 1
+        assert control.get_path_effects()  # White understroke separates coincident glyphs.
+    assert "max-score control" in [text.get_text() for text in fig.legends[0].get_texts()]
+    plt.close(fig)
+
+
+def test_panel_tiles_are_embedded_at_native_resolution():
+    folder = ROOT / "paper/generated/figures"
+    for name in PANEL_OUTPUTS:
+        listing = subprocess.check_output(["pdfimages", "-list", str(folder / name)], text=True)
+        tiles = []
+        for row in listing.splitlines()[2:]:
+            fields = row.split()
+            if fields[2] == "image" and min(int(fields[3]), int(fields[4])) > 100:
+                tiles.append(tuple(map(int, fields[3:5])))
+                assert fields[9] == "no", (name, row)
+        assert tiles and set(tiles) == {(224, 224)}, name
+
+
 def test_log_space_box_whiskers_use_extreme_observations_inside_fences():
     rows = csv_rows(PER_REGION)
     groups = [[float(r["area_cells"]) for r in rows if r["method"] == "PatchCore" and r["category"] == cat]
@@ -112,6 +166,13 @@ def test_manifest_and_physical_dimensions():
         if name in PANEL_OUTPUTS:
             assert path.stat().st_size <= 2_500_000
             assert entry["normalization"] == {"vmin": .4, "vcenter": 1., "vmax": 1.6, "cmap": "RdBu_r", "alpha": .6}
+            assert entry["raster_interpolation"] == "none"
+            assert entry["image_composite_image"] is False
+            for pick in entry["picks"]:
+                for method in pick["methods"].values():
+                    label = method["decision_label"]
+                    assert label["overlap_pixels"] == min(label["candidate_overlap_pixels"].values())
+                    assert label["overlap_pixels"] == label["candidate_overlap_pixels"][label["corner"]]
             assert entry["layout"]["image_rows"] == 3
             if name.startswith("fig_app_qual_"):
                 assert entry["width_inches"] == 5.6 and entry["height_inches"] <= 4.4

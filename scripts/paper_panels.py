@@ -19,6 +19,7 @@ from matplotlib.cm import ScalarMappable
 from matplotlib.colors import TwoSlopeNorm
 from matplotlib.lines import Line2D
 import numpy as np
+from scipy.ndimage import binary_dilation
 
 from paper_figures import (DOUBLE, ROOT, STYLE, output_root, record, save)
 
@@ -123,9 +124,50 @@ def pred_contour(ax, mask):
                    linewidths=.8,linestyles='-',zorder=4)
 
 
-def case_label(case):
+def case_label(case, qualitative=False):
     defect,file=case['key'].split('/')
+    if qualitative:
+        return f"({case['letter']}) {defect} {Path(file).stem}"
     return f"({case['letter']}) {case['category']}\n{defect} {Path(file).stem}"
+
+
+LABEL_CORNERS = {
+    'bottom_left': (.025,.025,'left','bottom'),
+    'bottom_right': (.975,.025,'right','bottom'),
+    'top_left': (.025,.975,'left','top'),
+    'top_right': (.975,.975,'right','top'),
+}
+
+
+def place_decision_label(ax, text, gt, predicted, renderer):
+    """Minimise protected GT/prediction pixels under the measured label box.
+
+    A 3-native-pixel dilation protects the contour strokes outside their masks.
+    Ties preserve corner order, starting at bottom left. Coordinates are measured
+    after constrained layout, then transformed back into the native crop frame.
+    """
+    occupied=binary_dilation(np.asarray(gt,dtype=bool)|np.asarray(predicted,dtype=bool),iterations=3)
+    candidates={}
+    boxes={}
+    height,width=occupied.shape
+    for corner,(x,y,ha,va) in LABEL_CORNERS.items():
+        text.set(position=(x,y),horizontalalignment=ha,verticalalignment=va)
+        text.update_bbox_position_size(renderer)
+        box=text.get_bbox_patch().get_window_extent(renderer)
+        coordinates=ax.transData.inverted().transform([[box.x0,box.y0],[box.x1,box.y1]])
+        low=np.floor(coordinates.min(axis=0)+.5).astype(int)
+        high=np.ceil(coordinates.max(axis=0)+.5).astype(int)
+        x0,y0=max(0,int(low[0])),max(0,int(low[1]))
+        x1,y1=min(width,int(high[0])),min(height,int(high[1]))
+        candidates[corner]=int(np.count_nonzero(occupied[y0:y1,x0:x1]))
+        boxes[corner]=[x0,y0,x1,y1]
+    chosen=min(candidates,key=candidates.get)
+    x,y,ha,va=LABEL_CORNERS[chosen]
+    text.set(position=(x,y),horizontalalignment=ha,verticalalignment=va)
+    text.update_bbox_position_size(renderer)
+    return {'corner':chosen,'overlap_pixels':candidates[chosen],
+            'candidate_overlap_pixels':candidates,'native_pixel_box':boxes[chosen],
+            'contour_guard_pixels':3}
 
 
 def render(output, name, cases, category=None):
@@ -149,22 +191,24 @@ def render(output, name, cases, category=None):
         if row:
             color,marker=('#0072B2','o') if row==1 else ('#D55E00','s')
             label.plot(.5,.9,marker=marker,color=color,markersize=3,transform=label.transAxes)
+    decision_labels=[]
     for column,case in enumerate(cases,1):
         heading=fig.add_subplot(grid[header,column]);heading.axis('off')
-        heading.text(.5,.05,case_label(case),fontsize=6.5,ha='center',va='bottom',linespacing=1.05)
+        heading.text(.5,.05,case_label(case,qualitative),fontsize=6.5,ha='center',va='bottom',linespacing=1.05)
         gray=np.asarray(case['image'],dtype=float) @ np.array([.2126,.7152,.0722])
         for row in range(3):
             ax=fig.add_subplot(grid[header+1+row,column])
             if row==0:
-                ax.imshow(case['image'],interpolation='nearest')
+                ax.imshow(case['image'],interpolation='none')
             else:
                 result=case['results'][row-1]
-                ax.imshow(gray,cmap='gray',vmin=0,vmax=255,interpolation='nearest')
-                ax.imshow(result['ratio'],norm=NORM,cmap=CMAP,alpha=.6,interpolation='nearest')
+                ax.imshow(gray,cmap='gray',vmin=0,vmax=255,interpolation='none')
+                ax.imshow(result['ratio'],norm=NORM,cmap=CMAP,alpha=.6,interpolation='none')
                 pred_contour(ax,result['ratio']>=1.)
-                ax.text(.025,.025,f"{result['score_ratio']:.2f} · {result['decision']}",
+                label=ax.text(.025,.025,f"{result['score_ratio']:.2f} · {result['decision']}",
                         transform=ax.transAxes,fontsize=6,ha='left',va='bottom',zorder=8,
                         bbox={'facecolor':'white','edgecolor':'none','alpha':.82,'pad':.7})
+                decision_labels.append((ax,label,case['gt'],result))
             gt_contour(ax,case['gt'])
             ax.set(xlim=(-.5,223.5),ylim=(223.5,-.5),xticks=[],yticks=[])
             for spine in ax.spines.values(): spine.set(linewidth=.3,color='0.7',visible=True)
@@ -183,12 +227,16 @@ def render(output, name, cases, category=None):
     pred_line=Line2D([],[],color='black',linewidth=.8,label='prediction solid')
     footer.legend(handles=[gt_line,pred_line],loc='center',bbox_to_anchor=(.75,.72),ncol=2,fontsize=6,
                columnspacing=.8,handlelength=1.6,handletextpad=.4)
+    fig.canvas.draw()
+    renderer=fig.canvas.get_renderer()
+    for ax,label,gt,result in decision_labels:
+        result['decision_label']=place_decision_label(ax,label,gt,result['ratio']>=1.,renderer)
     save(fig,output/name,generator='scripts/paper_panels.py')
     assert (output/name).stat().st_size <= 2_500_000, (name,(output/name).stat().st_size)
     picks=[]
     for c in cases:
         picks.append({k:c[k] for k in ('id','letter','category','index','key','path','mask_path','label')})
-        picks[-1]['methods']={r['method']:{k:r[k] for k in ('score_ratio','decision','image_threshold','pixel_threshold')}
+        picks[-1]['methods']={r['method']:{k:r[k] for k in ('score_ratio','decision','image_threshold','pixel_threshold','decision_label')}
                               for r in c['results']}
     sources=[]
     for cat in dict.fromkeys(c['category'] for c in cases):
@@ -201,13 +249,16 @@ def render(output, name, cases, category=None):
            'GT from MVTecDataset; ratio=stored map / unchanged validation pixel threshold; '
            'TwoSlopeNorm(0.4,1.0,1.6), RdBu_r, alpha=0.6, saturated ends shown by colourbar extensions; '
            'solid black predicted contour at ratio>=1; dashed yellow GT with black halo; '
-           'native 224x224 input arrays, final-size vector labels, 300 dpi embedded rasters.',
+           'native 224x224 rasters embedded without interpolation or image compositing; '
+           'decision labels use the corner with least GT/prediction overlap, with a 3-pixel contour guard; '
+           'final-size vector labels.',
            {'illustrative_cases':len(cases),'tiles':3*len(cases)},
            SELECTION_RULE if qualitative else 'Prescribed curated case IDs from analysis_failure_panels.CASES',
            generator='scripts/paper_panels.py',width_inches=width,height_inches=height,
-           layout={'case_columns':ncols,'image_rows':3,'decision_labels':'inside map tile, bottom-left',
+           layout={'case_columns':ncols,'image_rows':3,'decision_labels':'least GT/prediction overlap among four measured corners',
                    'colourbar_fraction_approx':.45,'colourbar_extendfrac':.03},
            picks=picks,native_tile_pixels=[224,224],dpi=300,
+           raster_interpolation='none',image_composite_image=False,
            normalization={'vmin':.4,'vcenter':1.,'vmax':1.6,'cmap':'RdBu_r','alpha':.6},
            contours={'prediction':'black, solid, 0.8pt','GT':'#F0E442, dashed, 0.8pt, black 1.6pt halo'},
            interpretation='Post-hoc illustrations only; cases are not a representative performance sample.')
@@ -216,7 +267,7 @@ def render(output, name, cases, category=None):
 def generate(output):
     output=output_root(output)
     store=FixedPredictions()
-    with plt.style.context(STYLE):
+    with plt.style.context(STYLE), matplotlib.rc_context({'image.composite_image': False}):
         for name,ids in zip(PANEL_OUTPUTS[:3],((1,4,5,7,8,12),tuple(range(1,7)),tuple(range(7,13)))):
             cases=[]
             for i,cid in enumerate(ids):

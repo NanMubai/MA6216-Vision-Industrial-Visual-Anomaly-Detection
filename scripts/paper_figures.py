@@ -16,6 +16,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.lines import Line2D
+from matplotlib import patheffects
 from matplotlib.ticker import NullFormatter
 
 from paper_tables import CATEGORIES, ROOT, RUNS, VARIANTS, csv_rows, load_metrics, variant_value
@@ -75,7 +76,7 @@ def main_dumbbell(output, data):
     fig, axes = plt.subplots(1, 3, figsize=(DOUBLE, 2.1), layout='constrained', sharey=True)
     y = np.arange(6)
     for ax, key, title in zip(axes, ('image_auroc', 'image_f1', 'aupro'),
-                             ('Image AUROC', 'Image F1 (val. threshold)', 'AU-PRO')):
+                             ('Image AUROC', 'Image F1 (val. threshold),\nfull 0–1 scale', 'AU-PRO')):
         vals = [[data['baseline'].get(run, key, (cat,)) for cat in CATEGORIES] for run in RUNS.values()]
         ax.hlines(y, vals[0], vals[1], color='0.65', linewidth=0.7, zorder=2)
         for i, (method, (color, marker)) in enumerate(METHODS.items()):
@@ -86,14 +87,14 @@ def main_dumbbell(output, data):
         if key == 'image_f1':
             ax.set(xlim=(0, 1), xticks=(0, .25, .5, .75, 1))
         else:
-            ax.set(xlim=(.75, 1), xticks=(.75, .875, 1), xticklabels=('0.75', '0.875', '1.00'))
+            ax.set(xlim=(.75, 1), xticks=(.8, .9, 1), xticklabels=('0.80', '0.90', '1.00'))
         ax.grid(axis='x', color='0.9', linewidth=.5)
         ax.axhline(2.5, color='0.65', linewidth=.5)
         ax.spines['left'].set_visible(False)
         ax.tick_params(axis='y', length=0, pad=3)
-    axes[0].text(-.48, .75, 'Objects', rotation=90, transform=axes[0].transAxes,
+    axes[0].text(-.29, .75, 'Objects', rotation=90, transform=axes[0].transAxes,
                  ha='center', va='center', fontsize=6)
-    axes[0].text(-.48, .25, 'Textures', rotation=90, transform=axes[0].transAxes,
+    axes[0].text(-.29, .25, 'Textures', rotation=90, transform=axes[0].transAxes,
                  ha='center', va='center', fontsize=6)
     fig.legend(handles=method_handles(), loc='outside upper center', ncol=2)
     save(fig, output / CHARTS[0])
@@ -123,8 +124,8 @@ def defect_area(output):
     fig, ax = plt.subplots(figsize=(SINGLE, 2.4), layout='constrained')
     rng = np.random.default_rng(0)
     for i, group in enumerate(vals):
-        ax.scatter(group, i + rng.uniform(-.16, .16, len(group)), s=3, color='0.25',
-                   alpha=.35, linewidths=0, zorder=2)
+        ax.scatter(group, i + rng.uniform(-.16, .16, len(group)), s=3, color='0.15',
+                   alpha=.5, linewidths=0, zorder=2)
         ax.text(1.015, i, f'n = {len(group)}', transform=ax.get_yaxis_transform(),
                 ha='left', va='center', fontsize=6)
     stats=[log_box_stats(group) for group in vals]
@@ -212,8 +213,8 @@ def tradeoff(output, data):
               'MsLTwoThreeFour':'L2+3+4','PyrMean':'Pyramid'}
     offsets = [
         {'Base':(-4,-16),'MsMaxCtrl':(8,3),'DinoB':(5,2),'DinoS':(-12,-14),
-         'WrnDino':(5,-4),'DinoNoLN':(6,0),'MsLOneTwoThree':(-30,-12),
-         'MsLTwoThreeFour':(6,2),'PyrMean':(-36,6)},
+         'WrnDino':(5,-4),'DinoNoLN':(7,-2),'MsLOneTwoThree':(-30,-12),
+         'MsLTwoThreeFour':(6,2),'PyrMean':(-39,10)},
         {'Base':(-5,8),'MsMaxCtrl':(7,-12),'DinoB':(5,-1),'DinoS':(-20,-12),
          'WrnDino':(5,-2),'DinoNoLN':(5,-10),'MsLOneTwoThree':(-32,5),'PyrMean':(-36,7)}]
     for panel, (ax, metric, title, lim) in enumerate(zip(axes,('ImgAuroc','Aupro'),
@@ -231,9 +232,14 @@ def tradeoff(output, data):
                 ax.annotate(f'L2+3+4 ({yy:.3f}, off-scale ↓)',(xx,lim[0]),xytext=(4,5),
                             textcoords='offset points',fontsize=6,ha='left',va='bottom')
             else:
-                ax.plot(xx,yy,marker=marker,color=color,linestyle='none',markersize=4,
+                point,=ax.plot(xx,yy,marker=marker,color=color,linestyle='none',
+                         markersize=7 if v.macro=='MsMaxCtrl' else (6.5 if v.macro=='Base' else 4),
                          markerfacecolor='white' if v.posthoc else color,
-                         markeredgewidth=.8,zorder=4,clip_on=False)
+                         markeredgewidth=1.0 if v.macro=='MsMaxCtrl' else .8,
+                         zorder=9 if v.macro=='MsMaxCtrl' else (8 if v.posthoc else 4),clip_on=False)
+                if v.macro=='MsMaxCtrl':
+                    point.set_path_effects([patheffects.Stroke(linewidth=2.0,foreground='white'),
+                                            patheffects.Normal()])
                 ax.annotate(labels[v.macro],(xx,yy),xytext=offsets[panel][v.macro],
                              textcoords='offset points',fontsize=6,
                              arrowprops={'arrowstyle':'-','color':'0.55','lw':.4},zorder=5)
@@ -243,15 +249,18 @@ def tradeoff(output, data):
         ax.xaxis.set_minor_formatter(NullFormatter())
         ax.grid(axis='x',color='0.92',linewidth=.5)
     axes[1].set_xlabel('Inference (ms/image, log base 2)')
-    handles=[Line2D([],[],color=c,marker=m,linestyle='none',markersize=4,label=label)
-             for (c,m),label in zip(FAMILIES.values(),('Baseline / control','DINOv2','Multi-scale'))]
+    handles=[Line2D([],[],color=c,marker=m,linestyle='none',markersize=6.5 if m=='*' else 4,label=label)
+             for (c,m),label in zip(FAMILIES.values(),('Baseline','DINOv2','Multi-scale'))]
+    handles.append(Line2D([],[],color='black',marker='+',markersize=7,markeredgewidth=1.,
+                          linestyle='none',label='max-score control'))
     handles.append(Line2D([],[],color=FAMILIES['dinov2'][0],marker='D',markerfacecolor='white',
                           linestyle='none',markersize=4,label='hollow = post-hoc'))
-    fig.legend(handles=handles,loc='outside lower center',ncol=2,fontsize=6.5)
+    fig.legend(handles=handles,loc='outside lower center',ncol=3,fontsize=6.5,
+               columnspacing=.7,handletextpad=.3,handlelength=1.4)
     save(fig,output/CHARTS[3])
     record(output,CHARTS[3],[MAIN_SOURCE,'reports/bonus/dinov2_tables/metrics_long.csv',
                             'reports/bonus/multiscale_tables/metrics_long.csv'],
-           'Six-category arithmetic means, identical to bn* macros; model variants only; log2 latency; baseline reference lines; out-of-range L2+3+4 AU-PRO explicitly marked on the lower spine.',
+           'Six-category arithmetic means, identical to bn* macros; model variants only; log2 latency; baseline reference lines; max-score control has a white-understroked plus above the baseline star; hollow post-hoc diamond above other markers; out-of-range L2+3+4 AU-PRO explicitly marked on the lower spine.',
            {'variants':len(vs),'categories_per_variant':6},
            'Prescribed nine model/control variants; no post-processing points; z-mean ≈ mean, so only pyramid mean is drawn.',
            width_inches=SINGLE,height_inches=3.65,variants={v.macro:{m:variant_value(v,m,data) for m in ('Infer','ImgAuroc','Aupro')} for v in vs},
