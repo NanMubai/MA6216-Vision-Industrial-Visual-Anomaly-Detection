@@ -1,0 +1,47 @@
+\begin{tabular}{@{}llrrr@{}}
+\toprule
+Category & Variant & \shortstack{Image\\AUROC} & \shortstack{Image F1\\(val thr)} & AU-PRO \\
+\midrule
+bottle & WRN50 baseline (Eq.~7) & 1.000 & 1.000 & 0.949 \\
+bottle & Layers 1+2+3 & 1.000 & 0.984 & 0.962 \\
+bottle & Layers 2+3+4 & 1.000 & 0.992 & 0.729 \\
+bottle & Max-score control & 1.000 & 1.000 & 0.949 \\
+bottle & Pyramid mean & 1.000 & 1.000 & 0.957 \\
+bottle & $z$-pyramid mean & 1.000 & 1.000 & 0.957 \\
+\midrule
+capsule & WRN50 baseline (Eq.~7) & 0.978 & 0.836 & 0.931 \\
+capsule & Layers 1+2+3 & 0.955 & 0.764 & 0.941 \\
+capsule & Layers 2+3+4 & 0.895 & 0.893 & 0.725 \\
+capsule & Max-score control & 0.974 & 0.866 & 0.931 \\
+capsule & Pyramid mean & 0.974 & 0.848 & 0.939 \\
+capsule & $z$-pyramid mean & 0.974 & 0.848 & 0.939 \\
+\midrule
+screw & WRN50 baseline (Eq.~7) & 0.970 & 0.884 & 0.963 \\
+screw & Layers 1+2+3 & 0.978 & 0.895 & 0.982 \\
+screw & Layers 2+3+4 & 0.665 & 0.065 & 0.633 \\
+screw & Max-score control & 0.978 & 0.868 & 0.963 \\
+screw & Pyramid mean & 0.984 & 0.929 & 0.972 \\
+screw & $z$-pyramid mean & 0.984 & 0.929 & 0.972 \\
+\midrule
+carpet & WRN50 baseline (Eq.~7) & 0.987 & 0.935 & 0.950 \\
+carpet & Layers 1+2+3 & 0.991 & 0.946 & 0.962 \\
+carpet & Layers 2+3+4 & 0.997 & 0.967 & 0.752 \\
+carpet & Max-score control & 0.987 & 0.937 & 0.950 \\
+carpet & Pyramid mean & 0.993 & 0.937 & 0.961 \\
+carpet & $z$-pyramid mean & 0.993 & 0.937 & 0.961 \\
+\midrule
+tile & WRN50 baseline (Eq.~7) & 0.989 & 0.895 & 0.819 \\
+tile & Layers 1+2+3 & 0.996 & 0.817 & 0.844 \\
+tile & Layers 2+3+4 & 0.978 & 0.976 & 0.624 \\
+tile & Max-score control & 0.991 & 0.976 & 0.819 \\
+tile & Pyramid mean & 0.991 & 0.976 & 0.833 \\
+tile & $z$-pyramid mean & 0.991 & 0.976 & 0.833 \\
+\midrule
+leather & WRN50 baseline (Eq.~7) & 1.000 & 0.963 & 0.972 \\
+leather & Layers 1+2+3 & 1.000 & 0.984 & 0.981 \\
+leather & Layers 2+3+4 & 0.998 & 0.979 & 0.772 \\
+leather & Max-score control & 1.000 & 0.958 & 0.972 \\
+leather & Pyramid mean & 1.000 & 0.968 & 0.977 \\
+leather & $z$-pyramid mean & 1.000 & 0.968 & 0.977 \\
+\bottomrule
+\end{tabular}

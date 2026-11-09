@@ -1,0 +1,48 @@
+\documentclass[conference]{IEEEtran}
+\usepackage{cite}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage[detect-weight]{siunitx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta,fit,shapes.geometric,calc,backgrounds}
+\usepackage[hidelinks]{hyperref}
+\usepackage{cleveref}
+\graphicspath{{generated/figures/}{figures/}}
+\input{generated/numbers.tex}
+\newcommand{\oracle}{F1\textsubscript{max}\textsuperscript{oracle}}
+\newcommand{\posthoc}{\textsuperscript{\dag}}
+% Keep a valid bibliography in the infrastructure-only checkout.
+\AtBeginDocument{\IfFileExists{sections/intro.tex}{}{\nocite{*}}}
+
+\title{PaDiM vs.\ PatchCore for Industrial Visual Anomaly Detection on MVTec AD: Evaluation, Failure Analysis and Enhancements}
+% TODO authors
+\author{\IEEEauthorblockN{Author One, Author Two, Author Three}
+\IEEEauthorblockA{School of ..., Nanyang Technological University, Singapore\\
+\{a1, a2\}@e.ntu.edu.sg}}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+\InputIfFileExists{sections/abstract.tex}{}{\typeout{MISSING abstract}}
+\end{abstract}
+\begin{IEEEkeywords}
+\InputIfFileExists{sections/keywords.tex}{}{\typeout{MISSING keywords}}
+\end{IEEEkeywords}
+\InputIfFileExists{sections/intro.tex}{}{\typeout{MISSING intro}}
+\InputIfFileExists{sections/related.tex}{}{\typeout{MISSING related}}
+\InputIfFileExists{sections/dataset.tex}{}{\typeout{MISSING dataset}}
+\InputIfFileExists{sections/method.tex}{}{\typeout{MISSING method}}
+\InputIfFileExists{sections/setup.tex}{}{\typeout{MISSING setup}}
+\InputIfFileExists{sections/results.tex}{}{\typeout{MISSING results}}
+\InputIfFileExists{sections/failures.tex}{}{\typeout{MISSING failures}}
+\InputIfFileExists{sections/enhancements.tex}{}{\typeout{MISSING enhancements}}
+\InputIfFileExists{sections/conclusion.tex}{}{\typeout{MISSING conclusion}}
+\bibliographystyle{IEEEtran}
+\bibliography{refs}
+\clearpage
+\appendices
+\InputIfFileExists{sections/appendix.tex}{}{\typeout{MISSING appendix}}
+\end{document}

@@ -1,0 +1,58 @@
+\section{Methods}
+\label{sec:method}
+
+Both methods take features from the same frozen WideResNet-50-2 backbone and learn normality in a single pass over the normal fit images, with no gradient updates.
+Each method returns a \emph{raw} patch-level anomaly map at feature resolution.
+Upsampling, smoothing, thresholding and evaluation are shared (Fig.~\ref{fig:pipeline}), so the two methods differ only in how they model normality.
+
+\begin{figure*}[t]
+  \centering
+  \input{figures/pipeline.tex}
+  \caption{Shared pipeline. Both models are fitted on 90\% of \texttt{train/good}. The held-out 10\% normal validation split supplies only scores, from which the image and pixel thresholds are derived. Test labels and masks are read exclusively by the evaluator.}
+  \label{fig:pipeline}
+\end{figure*}
+
+\subsection{PaDiM: per-position Gaussian}
+Features from \texttt{layer1} (56$\times$56 at a 224-pixel input), \texttt{layer2} and \texttt{layer3} are upsampled to the \texttt{layer1} grid and concatenated into 1{,}792 channels.
+A fixed random subset of $d=550$ channels is kept.
+At every grid position $(i,j)$, PaDiM fits a Gaussian over the $N$ fit images,
+\begin{equation}
+  \mu_{ij}=\tfrac{1}{N}\textstyle\sum_n f^{n}_{ij},\quad
+  \Sigma_{ij}=\widehat{\operatorname{Cov}}\big(f^{n}_{ij}\big)+\varepsilon I,
+\end{equation}
+with $\varepsilon=0.01$.
+A test feature is scored by its Mahalanobis distance
+\begin{equation}
+  M(f_{ij})=\sqrt{(f_{ij}-\mu_{ij})^{\top}\Sigma_{ij}^{-1}(f_{ij}-\mu_{ij})},
+\end{equation}
+and the image score is the maximum of the smoothed map.
+Two properties matter later.
+First, the model is \emph{position-specific}: it assumes that position $(i,j)$ shows the same part of the product in every image.
+Second, $N-1<d$ for every category ($N=188$--288), so the sample covariance is rank-deficient, and only $\varepsilon$ regularises the directions that the training data do not span.
+Storing $\Sigma_{ij}^{-1}$ for all positions takes about $56^2\cdot550^2\cdot4$\,B\,$\approx$\,3.8\,GB per category.
+We keep these matrices in pinned host memory and stream them to the GPU in chunks.
+
+\subsection{PatchCore: coreset memory bank}
+Features from \texttt{layer2} (28$\times$28) and \texttt{layer3} are each aggregated over a 3$\times$3 neighbourhood, so that every vector also summarises its local surroundings.
+The \texttt{layer3} features are upsampled to the 28$\times$28 grid, and the two layers are concatenated and average-pooled to 1{,}024 dimensions.
+All patches of all fit images form a memory bank $\mathcal{M}$.
+Greedy $k$-centre coreset selection~\cite{sener2018coreset}, run in a 128-dimensional random projection, keeps 10\% of the bank as $\mathcal{M}_C$, chosen to minimise the largest distance from any discarded patch to its nearest kept patch.
+In this way the coreset preserves rare but normal modes.
+The patch score is the nearest-neighbour distance $s(m)=\min_{n\in\mathcal{M}_C}\lVert m-n\rVert_2$.
+For the image score, let $m^{\mathrm{test},*}$ be the most anomalous test patch and $m^*$ its nearest bank patch, and let $\mathcal{N}_b(m^*)$ be $m^*$ together with its $b-1$ nearest bank neighbours ($b=9$).
+The score is then reweighted as in~\cite[Eq.~7]{roth2022patchcore}:
+\begin{equation}
+  s^{*}=\Big(1-\frac{\exp\lVert m^{\mathrm{test},*}-m^{*}\rVert_2}{\sum_{m\in\mathcal{N}_b(m^{*})}\exp\lVert m^{\mathrm{test},*}-m\rVert_2}\Big)\,\lVert m^{\mathrm{test},*}-m^{*}\rVert_2 .
+  \label{eq:reweight}
+\end{equation}
+The weight lowers the score of a patch whose nearest normal neighbour itself lies in a sparse region of the bank.
+We implement it as one minus a softmax over the nine support distances.
+PatchCore is \emph{position-agnostic}: a test patch only has to resemble some normal patch from any image at any location.
+Its bank requires only 57--88\,MiB per category.
+
+\subsection{Scoring, thresholds and leakage control}
+Raw maps are bilinearly upsampled to 224$\times$224 and smoothed with a Gaussian of $\sigma=4$\,px.
+Thresholds are computed from the normal validation split alone.
+The \emph{image threshold} is the 99\% quantile of the validation image scores, and the \emph{pixel threshold} is the 99.9\% quantile of all validation pixel scores.
+A test image is flagged as anomalous if its score is at or above the image threshold, and the predicted defect region is the set of pixels at or above the pixel threshold.
+Test labels and masks are read only by the evaluation module, and no hyper-parameter is tuned on test results.
