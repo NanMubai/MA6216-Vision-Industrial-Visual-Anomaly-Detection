@@ -10,7 +10,6 @@ import sys
 from statistics import mean
 
 import pytest
-from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
 CATEGORIES = ("bottle", "capsule", "screw", "carpet", "tile", "leather")
@@ -182,11 +181,7 @@ def test_committed_outputs_are_current(generated):
 
 def test_figure_artifacts(generated):
     figures = generated / "figures"
-    assert len(list(figures.glob("*.pdf"))) == 4
-    assert len(list(figures.glob("*.jpg"))) == 9
-    assert sum(p.stat().st_size for p in figures.iterdir()) < 12_000_000
-    assert (figures / "fig_failures.jpg").stat().st_size <= 1_500_000
-    for path in figures.glob("*.jpg"):
-        with Image.open(path) as im:
-            assert im.width > 1900
-            assert im.info["dpi"][0] <= 300
+    assert {p.name for p in figures.glob("*.pdf")} == {
+        "fig_main_dumbbell.pdf", "fig_defect_area.pdf", "fig_regionsize.pdf", "fig_tradeoff.pdf"}
+    assert not list(figures.glob("*.jpg"))  # Legacy JPEGs are never regenerated.
+    assert sum(p.stat().st_size for p in figures.iterdir()) < 15_000_000

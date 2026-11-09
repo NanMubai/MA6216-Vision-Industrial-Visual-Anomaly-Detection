@@ -1,0 +1,3242 @@
+{
+  "method_encoding": {
+    "PaDiM": {
+      "color": "#0072B2",
+      "marker": "o"
+    },
+    "PatchCore": {
+      "color": "#D55E00",
+      "marker": "s"
+    }
+  },
+  "minimum_text_pt": 6,
+  "outputs": {
+    "fig_app_failures_1.pdf": {
+      "contours": {
+        "GT": "#F0E442, dashed, 0.8pt, black 1.6pt halo",
+        "prediction": "black, solid, 0.8pt"
+      },
+      "dpi": 300,
+      "generator": "scripts/paper_panels.py",
+      "height_inches": 3.85,
+      "image_composite_image": false,
+      "interpretation": "Post-hoc illustrations only; cases are not a representative performance sample.",
+      "layout": {
+        "case_columns": 6,
+        "colourbar_extendfrac": 0.03,
+        "colourbar_fraction_approx": 0.45,
+        "decision_labels": "least GT/prediction overlap among four measured corners",
+        "image_rows": 3
+      },
+      "n": {
+        "illustrative_cases": 6,
+        "tiles": 18
+      },
+      "native_tile_pixels": [
+        224,
+        224
+      ],
+      "normalization": {
+        "alpha": 0.6,
+        "cmap": "RdBu_r",
+        "vcenter": 1.0,
+        "vmax": 1.6,
+        "vmin": 0.4
+      },
+      "picks": [
+        {
+          "category": "screw",
+          "id": "01",
+          "index": 141,
+          "key": "thread_top/004.png",
+          "label": 1,
+          "letter": "a",
+          "mask_path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/screw/ground_truth/thread_top/004_mask.png",
+          "methods": {
+            "PaDiM": {
+              "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  76,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 26.14942169189453,
+              "pixel_threshold": 21.809850692749023,
+              "score_ratio": 0.7793125486329953
+            },
+            "PatchCore": {
+              "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  72,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 1.3165967464447021,
+              "pixel_threshold": 1.2046966552734375,
+              "score_ratio": 1.162704875061728
+            }
+          },
+          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/screw/test/thread_top/004.png"
+        },
+        {
+          "category": "screw",
+          "id": "02",
+          "index": 118,
+          "key": "thread_side/004.png",
+          "label": 1,
+          "letter": "b",
+          "mask_path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/screw/ground_truth/thread_side/004_mask.png",
+          "methods": {
+            "PaDiM": {
+              "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  76,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 26.14942169189453,
+              "pixel_threshold": 21.809850692749023,
+              "score_ratio": 0.7602886775822425
+            },
+            "PatchCore": {
+              "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  76,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 1.3165967464447021,
+              "pixel_threshold": 1.2046966552734375,
+              "score_ratio": 0.8552068946346995
+            }
+          },
+          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/screw/test/thread_side/004.png"
+        },
+        {
+          "category": "capsule",
+          "id": "03",
+          "index": 106,
+          "key": "scratch/017.png",
+          "label": 1,
+          "letter": "c",
+          "mask_path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/capsule/ground_truth/scratch/017_mask.png",
+          "methods": {
+            "PaDiM": {
+              "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 156,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  76,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 21.957149505615234,
+              "pixel_threshold": 16.48423957824707,
+              "score_ratio": 0.9671127279929325
+            },
+            "PatchCore": {
+              "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  76,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 1.3311392068862915,
+              "pixel_threshold": 1.056372046470642,
+              "score_ratio": 0.6696766774982638
+            }
+          },
+          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/capsule/test/scratch/017.png"
+        },
+        {
+          "category": "capsule",
+          "id": "04",
+          "index": 16,
+          "key": "crack/016.png",
+          "label": 1,
+          "letter": "d",
+          "mask_path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/capsule/ground_truth/crack/016_mask.png",
+          "methods": {
+            "PaDiM": {
+              "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 52,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  76,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 21.957149505615234,
+              "pixel_threshold": 16.48423957824707,
+              "score_ratio": 0.9681895295898929
+            },
+            "PatchCore": {
+              "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  76,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 1.3311392068862915,
+              "pixel_threshold": 1.056372046470642,
+              "score_ratio": 0.8857359194834864
+            }
+          },
+          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/capsule/test/crack/016.png"
+        },
+        {
+          "category": "capsule",
+          "id": "05",
+          "index": 42,
+          "key": "faulty_imprint/019.png",
+          "label": 1,
+          "letter": "e",
+          "mask_path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/capsule/ground_truth/faulty_imprint/019_mask.png",
+          "methods": {
+            "PaDiM": {
+              "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 111,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  76,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 21.957149505615234,
+              "pixel_threshold": 16.48423957824707,
+              "score_ratio": 0.9151803312580841
+            },
+            "PatchCore": {
+              "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  76,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 1.3311392068862915,
+              "pixel_threshold": 1.056372046470642,
+              "score_ratio": 0.8280610456095763
+            }
+          },
+          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/capsule/test/faulty_imprint/019.png"
+        },
+        {
+          "category": "tile",
+          "id": "06",
+          "index": 80,
+          "key": "gray_stroke/012.png",
+          "label": 1,
+          "letter": "f",
+          "mask_path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/tile/ground_truth/gray_stroke/012_mask.png",
+          "methods": {
+            "PaDiM": {
+              "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 45,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_right",
+                "native_pixel_box": [
+                  148,
+                  198,
+                  221,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 29.7950439453125,
+              "pixel_threshold": 18.87364387512207,
+              "score_ratio": 0.5255264901815381
+            },
+            "PatchCore": {
+              "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 45,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_right",
+                "native_pixel_box": [
+                  148,
+                  198,
+                  221,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 1.6474798917770386,
+              "pixel_threshold": 1.5294461250305176,
+              "score_ratio": 0.7979734969370256
+            }
+          },
+          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/tile/test/gray_stroke/012.png"
+        }
+      ],
+      "raster_interpolation": "none",
+      "selection_rule": "Prescribed curated case IDs from analysis_failure_panels.CASES",
+      "sources": [
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/screw/maps.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/screw/scores.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/screw/metrics.json",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/screw/maps.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/screw/scores.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/screw/metrics.json",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/capsule/maps.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/capsule/scores.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/capsule/metrics.json",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/capsule/maps.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/capsule/scores.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/capsule/metrics.json",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/tile/maps.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/tile/scores.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/tile/metrics.json",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/tile/maps.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/tile/scores.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/tile/metrics.json",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/screw/test/thread_top/004.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/screw/test/thread_side/004.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/capsule/test/scratch/017.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/capsule/test/crack/016.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/capsule/test/faulty_imprint/019.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/tile/test/gray_stroke/012.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/screw/ground_truth/thread_top/004_mask.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/screw/ground_truth/thread_side/004_mask.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/capsule/ground_truth/scratch/017_mask.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/capsule/ground_truth/crack/016_mask.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/capsule/ground_truth/faulty_imprint/019_mask.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/tile/ground_truth/gray_stroke/012_mask.png"
+      ],
+      "transformation": "RGB input crop; greyscale base for maps; resize 256 -> crop 224 using ad.visualize._load_image; GT from MVTecDataset; ratio=stored map / unchanged validation pixel threshold; TwoSlopeNorm(0.4,1.0,1.6), RdBu_r, alpha=0.6, saturated ends shown by colourbar extensions; solid black predicted contour at ratio>=1; dashed yellow GT with black halo; native 224x224 rasters embedded without interpolation or image compositing; decision labels use the corner with least GT/prediction overlap, with a 3-pixel contour guard; final-size vector labels.",
+      "width_inches": 7.16
+    },
+    "fig_app_failures_2.pdf": {
+      "contours": {
+        "GT": "#F0E442, dashed, 0.8pt, black 1.6pt halo",
+        "prediction": "black, solid, 0.8pt"
+      },
+      "dpi": 300,
+      "generator": "scripts/paper_panels.py",
+      "height_inches": 3.85,
+      "image_composite_image": false,
+      "interpretation": "Post-hoc illustrations only; cases are not a representative performance sample.",
+      "layout": {
+        "case_columns": 6,
+        "colourbar_extendfrac": 0.03,
+        "colourbar_fraction_approx": 0.45,
+        "decision_labels": "least GT/prediction overlap among four measured corners",
+        "image_rows": 3
+      },
+      "n": {
+        "illustrative_cases": 6,
+        "tiles": 18
+      },
+      "native_tile_pixels": [
+        224,
+        224
+      ],
+      "normalization": {
+        "alpha": 0.6,
+        "cmap": "RdBu_r",
+        "vcenter": 1.0,
+        "vmax": 1.6,
+        "vmin": 0.4
+      },
+      "picks": [
+        {
+          "category": "tile",
+          "id": "07",
+          "index": 84,
+          "key": "oil/000.png",
+          "label": 1,
+          "letter": "a",
+          "mask_path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/tile/ground_truth/oil/000_mask.png",
+          "methods": {
+            "PaDiM": {
+              "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  76,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 29.7950439453125,
+              "pixel_threshold": 18.87364387512207,
+              "score_ratio": 0.982247056305079
+            },
+            "PatchCore": {
+              "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  72,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 1.6474798917770386,
+              "pixel_threshold": 1.5294461250305176,
+              "score_ratio": 1.2234806744368676
+            }
+          },
+          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/tile/test/oil/000.png"
+        },
+        {
+          "category": "carpet",
+          "id": "08",
+          "index": 48,
+          "key": "good/012.png",
+          "label": 0,
+          "letter": "b",
+          "mask_path": null,
+          "methods": {
+            "PaDiM": {
+              "decision": "FP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 525,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  72,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 15.113607406616211,
+              "pixel_threshold": 13.498601913452148,
+              "score_ratio": 1.009952443770308
+            },
+            "PatchCore": {
+              "decision": "FP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 536,
+                  "bottom_right": 577,
+                  "top_left": 1217,
+                  "top_right": 173
+                },
+                "contour_guard_pixels": 3,
+                "corner": "top_right",
+                "native_pixel_box": [
+                  152,
+                  3,
+                  221,
+                  26
+                ],
+                "overlap_pixels": 173
+              },
+              "image_threshold": 1.1775676012039185,
+              "pixel_threshold": 1.1480698585510254,
+              "score_ratio": 1.079436611277432
+            }
+          },
+          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/carpet/test/good/012.png"
+        },
+        {
+          "category": "leather",
+          "id": "09",
+          "index": 98,
+          "key": "good/024.png",
+          "label": 0,
+          "letter": "c",
+          "mask_path": null,
+          "methods": {
+            "PaDiM": {
+              "decision": "TN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 377,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_right",
+                "native_pixel_box": [
+                  148,
+                  198,
+                  221,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 18.528865814208984,
+              "pixel_threshold": 13.064669609069824,
+              "score_ratio": 0.8872784720347869
+            },
+            "PatchCore": {
+              "decision": "FP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 686,
+                  "bottom_right": 0,
+                  "top_left": 270,
+                  "top_right": 224
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_right",
+                "native_pixel_box": [
+                  152,
+                  198,
+                  221,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 1.099655270576477,
+              "pixel_threshold": 1.0813825130462646,
+              "score_ratio": 1.1170416811524257
+            }
+          },
+          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/test/good/024.png"
+        },
+        {
+          "category": "capsule",
+          "id": "10",
+          "index": 51,
+          "key": "good/006.png",
+          "label": 0,
+          "letter": "d",
+          "mask_path": null,
+          "methods": {
+            "PaDiM": {
+              "decision": "FP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  72,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 21.957149505615234,
+              "pixel_threshold": 16.48423957824707,
+              "score_ratio": 1.226998133231178
+            },
+            "PatchCore": {
+              "decision": "TN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  76,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 1.3311392068862915,
+              "pixel_threshold": 1.056372046470642,
+              "score_ratio": 0.8508200266782371
+            }
+          },
+          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/capsule/test/good/006.png"
+        },
+        {
+          "category": "bottle",
+          "id": "11",
+          "index": 78,
+          "key": "good/015.png",
+          "label": 0,
+          "letter": "e",
+          "mask_path": null,
+          "methods": {
+            "PaDiM": {
+              "decision": "FP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  72,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 18.192604064941406,
+              "pixel_threshold": 15.821178436279297,
+              "score_ratio": 1.1531741328834355
+            },
+            "PatchCore": {
+              "decision": "TN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  76,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 1.488857626914978,
+              "pixel_threshold": 1.2660369873046875,
+              "score_ratio": 0.8793093495042172
+            }
+          },
+          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/bottle/test/good/015.png"
+        },
+        {
+          "category": "leather",
+          "id": "12",
+          "index": 9,
+          "key": "color/009.png",
+          "label": 1,
+          "letter": "f",
+          "mask_path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/ground_truth/color/009_mask.png",
+          "methods": {
+            "PaDiM": {
+              "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 483,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  72,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 18.528865814208984,
+              "pixel_threshold": 13.064669609069824,
+              "score_ratio": 1.1246413851842747
+            },
+            "PatchCore": {
+              "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 442,
+                  "top_left": 0,
+                  "top_right": 102
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  72,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 1.099655270576477,
+              "pixel_threshold": 1.0813825130462646,
+              "score_ratio": 1.396648865308404
+            }
+          },
+          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/test/color/009.png"
+        }
+      ],
+      "raster_interpolation": "none",
+      "selection_rule": "Prescribed curated case IDs from analysis_failure_panels.CASES",
+      "sources": [
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/tile/maps.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/tile/scores.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/tile/metrics.json",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/tile/maps.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/tile/scores.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/tile/metrics.json",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/carpet/maps.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/carpet/scores.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/carpet/metrics.json",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/carpet/maps.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/carpet/scores.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/carpet/metrics.json",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/leather/maps.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/leather/scores.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/leather/metrics.json",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/leather/maps.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/leather/scores.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/leather/metrics.json",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/capsule/maps.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/capsule/scores.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/capsule/metrics.json",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/capsule/maps.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/capsule/scores.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/capsule/metrics.json",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/bottle/maps.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/bottle/scores.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/bottle/metrics.json",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/bottle/maps.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/bottle/scores.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/bottle/metrics.json",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/tile/test/oil/000.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/carpet/test/good/012.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/test/good/024.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/capsule/test/good/006.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/bottle/test/good/015.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/test/color/009.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/tile/ground_truth/oil/000_mask.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/ground_truth/color/009_mask.png"
+      ],
+      "transformation": "RGB input crop; greyscale base for maps; resize 256 -> crop 224 using ad.visualize._load_image; GT from MVTecDataset; ratio=stored map / unchanged validation pixel threshold; TwoSlopeNorm(0.4,1.0,1.6), RdBu_r, alpha=0.6, saturated ends shown by colourbar extensions; solid black predicted contour at ratio>=1; dashed yellow GT with black halo; native 224x224 rasters embedded without interpolation or image compositing; decision labels use the corner with least GT/prediction overlap, with a 3-pixel contour guard; final-size vector labels.",
+      "width_inches": 7.16
+    },
+    "fig_app_qual_bottle.pdf": {
+      "contours": {
+        "GT": "#F0E442, dashed, 0.8pt, black 1.6pt halo",
+        "prediction": "black, solid, 0.8pt"
+      },
+      "dpi": 300,
+      "generator": "scripts/paper_panels.py",
+      "height_inches": 4.4,
+      "image_composite_image": false,
+      "interpretation": "Post-hoc illustrations only; cases are not a representative performance sample.",
+      "layout": {
+        "case_columns": 4,
+        "colourbar_extendfrac": 0.03,
+        "colourbar_fraction_approx": 0.45,
+        "decision_labels": "least GT/prediction overlap among four measured corners",
+        "image_rows": 3
+      },
+      "n": {
+        "illustrative_cases": 4,
+        "tiles": 12
+      },
+      "native_tile_pixels": [
+        224,
+        224
+      ],
+      "normalization": {
+        "alpha": 0.6,
+        "cmap": "RdBu_r",
+        "vcenter": 1.0,
+        "vmax": 1.6,
+        "vmin": 0.4
+      },
+      "picks": [
+        {
+          "category": "bottle",
+          "id": null,
+          "index": 16,
+          "key": "broken_large/016.png",
+          "label": 1,
+          "letter": "a",
+          "mask_path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/bottle/ground_truth/broken_large/016_mask.png",
+          "methods": {
+            "PaDiM": {
+              "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 18.192604064941406,
+              "pixel_threshold": 15.821178436279297,
+              "score_ratio": 1.9375041150477177
+            },
+            "PatchCore": {
+              "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 1.488857626914978,
+              "pixel_threshold": 1.2660369873046875,
+              "score_ratio": 1.642729944001506
+            }
+          },
+          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/bottle/test/broken_large/016.png"
+        },
+        {
+          "category": "bottle",
+          "id": null,
+          "index": 45,
+          "key": "contamination/003.png",
+          "label": 1,
+          "letter": "b",
+          "mask_path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/bottle/ground_truth/contamination/003_mask.png",
+          "methods": {
+            "PaDiM": {
+              "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 18.192604064941406,
+              "pixel_threshold": 15.821178436279297,
+              "score_ratio": 1.3216231132113057
+            },
+            "PatchCore": {
+              "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 1.488857626914978,
+              "pixel_threshold": 1.2660369873046875,
+              "score_ratio": 1.0985299344414319
+            }
+          },
+          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/bottle/test/contamination/003.png"
+        },
+        {
+          "category": "bottle",
+          "id": null,
+          "index": 56,
+          "key": "contamination/014.png",
+          "label": 1,
+          "letter": "c",
+          "mask_path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/bottle/ground_truth/contamination/014_mask.png",
+          "methods": {
+            "PaDiM": {
+              "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 18.192604064941406,
+              "pixel_threshold": 15.821178436279297,
+              "score_ratio": 2.016272943094709
+            },
+            "PatchCore": {
+              "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 1.488857626914978,
+              "pixel_threshold": 1.2660369873046875,
+              "score_ratio": 1.3287598173913762
+            }
+          },
+          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/bottle/test/contamination/014.png"
+        },
+        {
+          "category": "bottle",
+          "id": null,
+          "index": 64,
+          "key": "good/001.png",
+          "label": 0,
+          "letter": "d",
+          "mask_path": null,
+          "methods": {
+            "PaDiM": {
+              "decision": "TN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  69,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 18.192604064941406,
+              "pixel_threshold": 15.821178436279297,
+              "score_ratio": 0.9114949166317543
+            },
+            "PatchCore": {
+              "decision": "TN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  69,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 1.488857626914978,
+              "pixel_threshold": 1.2660369873046875,
+              "score_ratio": 0.919123134634587
+            }
+          },
+          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/bottle/test/good/001.png"
+        }
+      ],
+      "raster_interpolation": "none",
+      "selection_rule": "Post-hoc illustration selection only, using PatchCore scores and test labels: (1) anomalous image closest to the median PatchCore image score; (2) lowest-scoring anomaly; (3) largest absolute PaDiM-PatchCore score/threshold difference among unpicked anomalies; (4) highest PatchCore score/threshold normal. Ties use lowest index. If an even-sized anomaly set brackets the median, choose the equidistant lower-index image. No fitted parameter or threshold is selected.",
+      "sources": [
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/bottle/maps.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/bottle/scores.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/bottle/metrics.json",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/bottle/maps.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/bottle/scores.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/bottle/metrics.json",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/bottle/test/broken_large/016.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/bottle/test/contamination/003.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/bottle/test/contamination/014.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/bottle/test/good/001.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/bottle/ground_truth/broken_large/016_mask.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/bottle/ground_truth/contamination/003_mask.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/bottle/ground_truth/contamination/014_mask.png"
+      ],
+      "transformation": "RGB input crop; greyscale base for maps; resize 256 -> crop 224 using ad.visualize._load_image; GT from MVTecDataset; ratio=stored map / unchanged validation pixel threshold; TwoSlopeNorm(0.4,1.0,1.6), RdBu_r, alpha=0.6, saturated ends shown by colourbar extensions; solid black predicted contour at ratio>=1; dashed yellow GT with black halo; native 224x224 rasters embedded without interpolation or image compositing; decision labels use the corner with least GT/prediction overlap, with a 3-pixel contour guard; final-size vector labels.",
+      "width_inches": 5.6
+    },
+    "fig_app_qual_capsule.pdf": {
+      "contours": {
+        "GT": "#F0E442, dashed, 0.8pt, black 1.6pt halo",
+        "prediction": "black, solid, 0.8pt"
+      },
+      "dpi": 300,
+      "generator": "scripts/paper_panels.py",
+      "height_inches": 4.4,
+      "image_composite_image": false,
+      "interpretation": "Post-hoc illustrations only; cases are not a representative performance sample.",
+      "layout": {
+        "case_columns": 4,
+        "colourbar_extendfrac": 0.03,
+        "colourbar_fraction_approx": 0.45,
+        "decision_labels": "least GT/prediction overlap among four measured corners",
+        "image_rows": 3
+      },
+      "n": {
+        "illustrative_cases": 4,
+        "tiles": 12
+      },
+      "native_tile_pixels": [
+        224,
+        224
+      ],
+      "normalization": {
+        "alpha": 0.6,
+        "cmap": "RdBu_r",
+        "vcenter": 1.0,
+        "vmax": 1.6,
+        "vmin": 0.4
+      },
+      "picks": [
+        {
+          "category": "capsule",
+          "id": null,
+          "index": 109,
+          "key": "scratch/020.png",
+          "label": 1,
+          "letter": "a",
+          "mask_path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/capsule/ground_truth/scratch/020_mask.png",
+          "methods": {
+            "PaDiM": {
+              "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 21.957149505615234,
+              "pixel_threshold": 16.48423957824707,
+              "score_ratio": 1.1166750493186597
+            },
+            "PatchCore": {
+              "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 1.3311392068862915,
+              "pixel_threshold": 1.056372046470642,
+              "score_ratio": 1.1195390100932217
+            }
+          },
+          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/capsule/test/scratch/020.png"
+        },
+        {
+          "category": "capsule",
+          "id": null,
+          "index": 106,
+          "key": "scratch/017.png",
+          "label": 1,
+          "letter": "b",
+          "mask_path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/capsule/ground_truth/scratch/017_mask.png",
+          "methods": {
+            "PaDiM": {
+              "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 116,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  69,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 21.957149505615234,
+              "pixel_threshold": 16.48423957824707,
+              "score_ratio": 0.9671127279929325
+            },
+            "PatchCore": {
+              "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  69,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 1.3311392068862915,
+              "pixel_threshold": 1.056372046470642,
+              "score_ratio": 0.6696766774982638
+            }
+          },
+          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/capsule/test/scratch/017.png"
+        },
+        {
+          "category": "capsule",
+          "id": null,
+          "index": 92,
+          "key": "scratch/003.png",
+          "label": 1,
+          "letter": "c",
+          "mask_path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/capsule/ground_truth/scratch/003_mask.png",
+          "methods": {
+            "PaDiM": {
+              "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 170,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 21.957149505615234,
+              "pixel_threshold": 16.48423957824707,
+              "score_ratio": 1.359550880960261
+            },
+            "PatchCore": {
+              "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 162,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  69,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 1.3311392068862915,
+              "pixel_threshold": 1.056372046470642,
+              "score_ratio": 0.884742135002268
+            }
+          },
+          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/capsule/test/scratch/003.png"
+        },
+        {
+          "category": "capsule",
+          "id": null,
+          "index": 66,
+          "key": "good/021.png",
+          "label": 0,
+          "letter": "d",
+          "mask_path": null,
+          "methods": {
+            "PaDiM": {
+              "decision": "FP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 491,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 21.957149505615234,
+              "pixel_threshold": 16.48423957824707,
+              "score_ratio": 1.8989639389603947
+            },
+            "PatchCore": {
+              "decision": "FP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 394,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 1.3311392068862915,
+              "pixel_threshold": 1.056372046470642,
+              "score_ratio": 1.031801909388026
+            }
+          },
+          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/capsule/test/good/021.png"
+        }
+      ],
+      "raster_interpolation": "none",
+      "selection_rule": "Post-hoc illustration selection only, using PatchCore scores and test labels: (1) anomalous image closest to the median PatchCore image score; (2) lowest-scoring anomaly; (3) largest absolute PaDiM-PatchCore score/threshold difference among unpicked anomalies; (4) highest PatchCore score/threshold normal. Ties use lowest index. If an even-sized anomaly set brackets the median, choose the equidistant lower-index image. No fitted parameter or threshold is selected.",
+      "sources": [
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/capsule/maps.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/capsule/scores.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/capsule/metrics.json",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/capsule/maps.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/capsule/scores.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/capsule/metrics.json",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/capsule/test/scratch/020.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/capsule/test/scratch/017.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/capsule/test/scratch/003.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/capsule/test/good/021.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/capsule/ground_truth/scratch/020_mask.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/capsule/ground_truth/scratch/017_mask.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/capsule/ground_truth/scratch/003_mask.png"
+      ],
+      "transformation": "RGB input crop; greyscale base for maps; resize 256 -> crop 224 using ad.visualize._load_image; GT from MVTecDataset; ratio=stored map / unchanged validation pixel threshold; TwoSlopeNorm(0.4,1.0,1.6), RdBu_r, alpha=0.6, saturated ends shown by colourbar extensions; solid black predicted contour at ratio>=1; dashed yellow GT with black halo; native 224x224 rasters embedded without interpolation or image compositing; decision labels use the corner with least GT/prediction overlap, with a 3-pixel contour guard; final-size vector labels.",
+      "width_inches": 5.6
+    },
+    "fig_app_qual_carpet.pdf": {
+      "contours": {
+        "GT": "#F0E442, dashed, 0.8pt, black 1.6pt halo",
+        "prediction": "black, solid, 0.8pt"
+      },
+      "dpi": 300,
+      "generator": "scripts/paper_panels.py",
+      "height_inches": 4.4,
+      "image_composite_image": false,
+      "interpretation": "Post-hoc illustrations only; cases are not a representative performance sample.",
+      "layout": {
+        "case_columns": 4,
+        "colourbar_extendfrac": 0.03,
+        "colourbar_fraction_approx": 0.45,
+        "decision_labels": "least GT/prediction overlap among four measured corners",
+        "image_rows": 3
+      },
+      "n": {
+        "illustrative_cases": 4,
+        "tiles": 12
+      },
+      "native_tile_pixels": [
+        224,
+        224
+      ],
+      "normalization": {
+        "alpha": 0.6,
+        "cmap": "RdBu_r",
+        "vcenter": 1.0,
+        "vmax": 1.6,
+        "vmin": 0.4
+      },
+      "picks": [
+        {
+          "category": "carpet",
+          "id": null,
+          "index": 102,
+          "key": "thread/004.png",
+          "label": 1,
+          "letter": "a",
+          "mask_path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/carpet/ground_truth/thread/004_mask.png",
+          "methods": {
+            "PaDiM": {
+              "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 88,
+                  "bottom_right": 417,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "top_left",
+                "native_pixel_box": [
+                  3,
+                  3,
+                  65,
+                  24
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 15.113607406616211,
+              "pixel_threshold": 13.498601913452148,
+              "score_ratio": 1.6305080476327074
+            },
+            "PatchCore": {
+              "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 1009,
+                  "bottom_right": 1038,
+                  "top_left": 140,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "top_right",
+                "native_pixel_box": [
+                  159,
+                  3,
+                  221,
+                  24
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 1.1775676012039185,
+              "pixel_threshold": 1.1480698585510254,
+              "score_ratio": 1.5757314145670756
+            }
+          },
+          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/carpet/test/thread/004.png"
+        },
+        {
+          "category": "carpet",
+          "id": null,
+          "index": 116,
+          "key": "thread/018.png",
+          "label": 1,
+          "letter": "b",
+          "mask_path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/carpet/ground_truth/thread/018_mask.png",
+          "methods": {
+            "PaDiM": {
+              "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 140,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  69,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 15.113607406616211,
+              "pixel_threshold": 13.498601913452148,
+              "score_ratio": 0.9904394726676302
+            },
+            "PatchCore": {
+              "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  69,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 1.1775676012039185,
+              "pixel_threshold": 1.1480698585510254,
+              "score_ratio": 0.9736896158623985
+            }
+          },
+          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/carpet/test/thread/018.png"
+        },
+        {
+          "category": "carpet",
+          "id": null,
+          "index": 13,
+          "key": "color/013.png",
+          "label": 1,
+          "letter": "c",
+          "mask_path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/carpet/ground_truth/color/013_mask.png",
+          "methods": {
+            "PaDiM": {
+              "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 15.113607406616211,
+              "pixel_threshold": 13.498601913452148,
+              "score_ratio": 1.9484450994543963
+            },
+            "PatchCore": {
+              "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 1.1775676012039185,
+              "pixel_threshold": 1.1480698585510254,
+              "score_ratio": 1.1775887658350706
+            }
+          },
+          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/carpet/test/color/013.png"
+        },
+        {
+          "category": "carpet",
+          "id": null,
+          "index": 42,
+          "key": "good/006.png",
+          "label": 0,
+          "letter": "d",
+          "mask_path": null,
+          "methods": {
+            "PaDiM": {
+              "decision": "FP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 58
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 15.113607406616211,
+              "pixel_threshold": 13.498601913452148,
+              "score_ratio": 1.0268596217283874
+            },
+            "PatchCore": {
+              "decision": "FP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 367,
+                  "top_left": 0,
+                  "top_right": 896
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 1.1775676012039185,
+              "pixel_threshold": 1.1480698585510254,
+              "score_ratio": 1.1462285510256827
+            }
+          },
+          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/carpet/test/good/006.png"
+        }
+      ],
+      "raster_interpolation": "none",
+      "selection_rule": "Post-hoc illustration selection only, using PatchCore scores and test labels: (1) anomalous image closest to the median PatchCore image score; (2) lowest-scoring anomaly; (3) largest absolute PaDiM-PatchCore score/threshold difference among unpicked anomalies; (4) highest PatchCore score/threshold normal. Ties use lowest index. If an even-sized anomaly set brackets the median, choose the equidistant lower-index image. No fitted parameter or threshold is selected.",
+      "sources": [
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/carpet/maps.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/carpet/scores.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/carpet/metrics.json",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/carpet/maps.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/carpet/scores.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/carpet/metrics.json",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/carpet/test/thread/004.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/carpet/test/thread/018.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/carpet/test/color/013.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/carpet/test/good/006.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/carpet/ground_truth/thread/004_mask.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/carpet/ground_truth/thread/018_mask.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/carpet/ground_truth/color/013_mask.png"
+      ],
+      "transformation": "RGB input crop; greyscale base for maps; resize 256 -> crop 224 using ad.visualize._load_image; GT from MVTecDataset; ratio=stored map / unchanged validation pixel threshold; TwoSlopeNorm(0.4,1.0,1.6), RdBu_r, alpha=0.6, saturated ends shown by colourbar extensions; solid black predicted contour at ratio>=1; dashed yellow GT with black halo; native 224x224 rasters embedded without interpolation or image compositing; decision labels use the corner with least GT/prediction overlap, with a 3-pixel contour guard; final-size vector labels.",
+      "width_inches": 5.6
+    },
+    "fig_app_qual_leather.pdf": {
+      "contours": {
+        "GT": "#F0E442, dashed, 0.8pt, black 1.6pt halo",
+        "prediction": "black, solid, 0.8pt"
+      },
+      "dpi": 300,
+      "generator": "scripts/paper_panels.py",
+      "height_inches": 4.4,
+      "image_composite_image": false,
+      "interpretation": "Post-hoc illustrations only; cases are not a representative performance sample.",
+      "layout": {
+        "case_columns": 4,
+        "colourbar_extendfrac": 0.03,
+        "colourbar_fraction_approx": 0.45,
+        "decision_labels": "least GT/prediction overlap among four measured corners",
+        "image_rows": 3
+      },
+      "n": {
+        "illustrative_cases": 4,
+        "tiles": 12
+      },
+      "native_tile_pixels": [
+        224,
+        224
+      ],
+      "normalization": {
+        "alpha": 0.6,
+        "cmap": "RdBu_r",
+        "vcenter": 1.0,
+        "vmax": 1.6,
+        "vmin": 0.4
+      },
+      "picks": [
+        {
+          "category": "leather",
+          "id": null,
+          "index": 45,
+          "key": "fold/007.png",
+          "label": 1,
+          "letter": "a",
+          "mask_path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/ground_truth/fold/007_mask.png",
+          "methods": {
+            "PaDiM": {
+              "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 18.528865814208984,
+              "pixel_threshold": 13.064669609069824,
+              "score_ratio": 1.3319226530506785
+            },
+            "PatchCore": {
+              "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 1.099655270576477,
+              "pixel_threshold": 1.0813825130462646,
+              "score_ratio": 1.790997896163694
+            }
+          },
+          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/test/fold/007.png"
+        },
+        {
+          "category": "leather",
+          "id": null,
+          "index": 59,
+          "key": "glue/004.png",
+          "label": 1,
+          "letter": "b",
+          "mask_path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/ground_truth/glue/004_mask.png",
+          "methods": {
+            "PaDiM": {
+              "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 18.528865814208984,
+              "pixel_threshold": 13.064669609069824,
+              "score_ratio": 1.3787633324418789
+            },
+            "PatchCore": {
+              "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 1.099655270576477,
+              "pixel_threshold": 1.0813825130462646,
+              "score_ratio": 1.2901625733082396
+            }
+          },
+          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/test/glue/004.png"
+        },
+        {
+          "category": "leather",
+          "id": null,
+          "index": 41,
+          "key": "fold/003.png",
+          "label": 1,
+          "letter": "c",
+          "mask_path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/ground_truth/fold/003_mask.png",
+          "methods": {
+            "PaDiM": {
+              "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 18.528865814208984,
+              "pixel_threshold": 13.064669609069824,
+              "score_ratio": 1.3603174318866038
+            },
+            "PatchCore": {
+              "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 639
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 1.099655270576477,
+              "pixel_threshold": 1.0813825130462646,
+              "score_ratio": 1.9447363277470608
+            }
+          },
+          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/test/fold/003.png"
+        },
+        {
+          "category": "leather",
+          "id": null,
+          "index": 98,
+          "key": "good/024.png",
+          "label": 0,
+          "letter": "d",
+          "mask_path": null,
+          "methods": {
+            "PaDiM": {
+              "decision": "TN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 358,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_right",
+                "native_pixel_box": [
+                  155,
+                  200,
+                  221,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 18.528865814208984,
+              "pixel_threshold": 13.064669609069824,
+              "score_ratio": 0.8872784720347869
+            },
+            "PatchCore": {
+              "decision": "FP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 598,
+                  "bottom_right": 0,
+                  "top_left": 206,
+                  "top_right": 116
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_right",
+                "native_pixel_box": [
+                  159,
+                  200,
+                  221,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 1.099655270576477,
+              "pixel_threshold": 1.0813825130462646,
+              "score_ratio": 1.1170416811524257
+            }
+          },
+          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/test/good/024.png"
+        }
+      ],
+      "raster_interpolation": "none",
+      "selection_rule": "Post-hoc illustration selection only, using PatchCore scores and test labels: (1) anomalous image closest to the median PatchCore image score; (2) lowest-scoring anomaly; (3) largest absolute PaDiM-PatchCore score/threshold difference among unpicked anomalies; (4) highest PatchCore score/threshold normal. Ties use lowest index. If an even-sized anomaly set brackets the median, choose the equidistant lower-index image. No fitted parameter or threshold is selected.",
+      "sources": [
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/leather/maps.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/leather/scores.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/leather/metrics.json",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/leather/maps.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/leather/scores.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/leather/metrics.json",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/test/fold/007.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/test/glue/004.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/test/fold/003.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/test/good/024.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/ground_truth/fold/007_mask.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/ground_truth/glue/004_mask.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/ground_truth/fold/003_mask.png"
+      ],
+      "transformation": "RGB input crop; greyscale base for maps; resize 256 -> crop 224 using ad.visualize._load_image; GT from MVTecDataset; ratio=stored map / unchanged validation pixel threshold; TwoSlopeNorm(0.4,1.0,1.6), RdBu_r, alpha=0.6, saturated ends shown by colourbar extensions; solid black predicted contour at ratio>=1; dashed yellow GT with black halo; native 224x224 rasters embedded without interpolation or image compositing; decision labels use the corner with least GT/prediction overlap, with a 3-pixel contour guard; final-size vector labels.",
+      "width_inches": 5.6
+    },
+    "fig_app_qual_screw.pdf": {
+      "contours": {
+        "GT": "#F0E442, dashed, 0.8pt, black 1.6pt halo",
+        "prediction": "black, solid, 0.8pt"
+      },
+      "dpi": 300,
+      "generator": "scripts/paper_panels.py",
+      "height_inches": 4.4,
+      "image_composite_image": false,
+      "interpretation": "Post-hoc illustrations only; cases are not a representative performance sample.",
+      "layout": {
+        "case_columns": 4,
+        "colourbar_extendfrac": 0.03,
+        "colourbar_fraction_approx": 0.45,
+        "decision_labels": "least GT/prediction overlap among four measured corners",
+        "image_rows": 3
+      },
+      "n": {
+        "illustrative_cases": 4,
+        "tiles": 12
+      },
+      "native_tile_pixels": [
+        224,
+        224
+      ],
+      "normalization": {
+        "alpha": 0.6,
+        "cmap": "RdBu_r",
+        "vcenter": 1.0,
+        "vmax": 1.6,
+        "vmin": 0.4
+      },
+      "picks": [
+        {
+          "category": "screw",
+          "id": null,
+          "index": 57,
+          "key": "manipulated_front/016.png",
+          "label": 1,
+          "letter": "a",
+          "mask_path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/screw/ground_truth/manipulated_front/016_mask.png",
+          "methods": {
+            "PaDiM": {
+              "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 26.14942169189453,
+              "pixel_threshold": 21.809850692749023,
+              "score_ratio": 1.0489187756403655
+            },
+            "PatchCore": {
+              "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 1.3165967464447021,
+              "pixel_threshold": 1.2046966552734375,
+              "score_ratio": 1.087252705304238
+            }
+          },
+          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/screw/test/manipulated_front/016.png"
+        },
+        {
+          "category": "screw",
+          "id": null,
+          "index": 118,
+          "key": "thread_side/004.png",
+          "label": 1,
+          "letter": "b",
+          "mask_path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/screw/ground_truth/thread_side/004_mask.png",
+          "methods": {
+            "PaDiM": {
+              "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  69,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 26.14942169189453,
+              "pixel_threshold": 21.809850692749023,
+              "score_ratio": 0.7602886775822425
+            },
+            "PatchCore": {
+              "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  69,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 1.3165967464447021,
+              "pixel_threshold": 1.2046966552734375,
+              "score_ratio": 0.8552068946346995
+            }
+          },
+          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/screw/test/thread_side/004.png"
+        },
+        {
+          "category": "screw",
+          "id": null,
+          "index": 142,
+          "key": "thread_top/005.png",
+          "label": 1,
+          "letter": "c",
+          "mask_path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/screw/ground_truth/thread_top/005_mask.png",
+          "methods": {
+            "PaDiM": {
+              "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  69,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 26.14942169189453,
+              "pixel_threshold": 21.809850692749023,
+              "score_ratio": 0.7581306636377932
+            },
+            "PatchCore": {
+              "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 1.3165967464447021,
+              "pixel_threshold": 1.2046966552734375,
+              "score_ratio": 1.3670491707391628
+            }
+          },
+          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/screw/test/thread_top/005.png"
+        },
+        {
+          "category": "screw",
+          "id": null,
+          "index": 4,
+          "key": "good/004.png",
+          "label": 0,
+          "letter": "d",
+          "mask_path": null,
+          "methods": {
+            "PaDiM": {
+              "decision": "TN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  69,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 26.14942169189453,
+              "pixel_threshold": 21.809850692749023,
+              "score_ratio": 0.810354002982386
+            },
+            "PatchCore": {
+              "decision": "FP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 1.3165967464447021,
+              "pixel_threshold": 1.2046966552734375,
+              "score_ratio": 1.0916204336418391
+            }
+          },
+          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/screw/test/good/004.png"
+        }
+      ],
+      "raster_interpolation": "none",
+      "selection_rule": "Post-hoc illustration selection only, using PatchCore scores and test labels: (1) anomalous image closest to the median PatchCore image score; (2) lowest-scoring anomaly; (3) largest absolute PaDiM-PatchCore score/threshold difference among unpicked anomalies; (4) highest PatchCore score/threshold normal. Ties use lowest index. If an even-sized anomaly set brackets the median, choose the equidistant lower-index image. No fitted parameter or threshold is selected.",
+      "sources": [
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/screw/maps.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/screw/scores.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/screw/metrics.json",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/screw/maps.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/screw/scores.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/screw/metrics.json",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/screw/test/manipulated_front/016.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/screw/test/thread_side/004.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/screw/test/thread_top/005.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/screw/test/good/004.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/screw/ground_truth/manipulated_front/016_mask.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/screw/ground_truth/thread_side/004_mask.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/screw/ground_truth/thread_top/005_mask.png"
+      ],
+      "transformation": "RGB input crop; greyscale base for maps; resize 256 -> crop 224 using ad.visualize._load_image; GT from MVTecDataset; ratio=stored map / unchanged validation pixel threshold; TwoSlopeNorm(0.4,1.0,1.6), RdBu_r, alpha=0.6, saturated ends shown by colourbar extensions; solid black predicted contour at ratio>=1; dashed yellow GT with black halo; native 224x224 rasters embedded without interpolation or image compositing; decision labels use the corner with least GT/prediction overlap, with a 3-pixel contour guard; final-size vector labels.",
+      "width_inches": 5.6
+    },
+    "fig_app_qual_tile.pdf": {
+      "contours": {
+        "GT": "#F0E442, dashed, 0.8pt, black 1.6pt halo",
+        "prediction": "black, solid, 0.8pt"
+      },
+      "dpi": 300,
+      "generator": "scripts/paper_panels.py",
+      "height_inches": 4.4,
+      "image_composite_image": false,
+      "interpretation": "Post-hoc illustrations only; cases are not a representative performance sample.",
+      "layout": {
+        "case_columns": 4,
+        "colourbar_extendfrac": 0.03,
+        "colourbar_fraction_approx": 0.45,
+        "decision_labels": "least GT/prediction overlap among four measured corners",
+        "image_rows": 3
+      },
+      "n": {
+        "illustrative_cases": 4,
+        "tiles": 12
+      },
+      "native_tile_pixels": [
+        224,
+        224
+      ],
+      "normalization": {
+        "alpha": 0.6,
+        "cmap": "RdBu_r",
+        "vcenter": 1.0,
+        "vmax": 1.6,
+        "vmin": 0.4
+      },
+      "picks": [
+        {
+          "category": "tile",
+          "id": null,
+          "index": 27,
+          "key": "glue_strip/010.png",
+          "label": 1,
+          "letter": "a",
+          "mask_path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/tile/ground_truth/glue_strip/010_mask.png",
+          "methods": {
+            "PaDiM": {
+              "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 168,
+                  "top_left": 0,
+                  "top_right": 360
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  69,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 29.7950439453125,
+              "pixel_threshold": 18.87364387512207,
+              "score_ratio": 0.8916011744052179
+            },
+            "PatchCore": {
+              "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 198,
+                  "top_left": 0,
+                  "top_right": 451
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 1.6474798917770386,
+              "pixel_threshold": 1.5294461250305176,
+              "score_ratio": 1.1636236390528756
+            }
+          },
+          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/tile/test/glue_strip/010.png"
+        },
+        {
+          "category": "tile",
+          "id": null,
+          "index": 80,
+          "key": "gray_stroke/012.png",
+          "label": 1,
+          "letter": "b",
+          "mask_path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/tile/ground_truth/gray_stroke/012_mask.png",
+          "methods": {
+            "PaDiM": {
+              "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 9,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_right",
+                "native_pixel_box": [
+                  155,
+                  200,
+                  221,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 29.7950439453125,
+              "pixel_threshold": 18.87364387512207,
+              "score_ratio": 0.5255264901815381
+            },
+            "PatchCore": {
+              "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 9,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_right",
+                "native_pixel_box": [
+                  155,
+                  200,
+                  221,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 1.6474798917770386,
+              "pixel_threshold": 1.5294461250305176,
+              "score_ratio": 0.7979734969370256
+            }
+          },
+          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/tile/test/gray_stroke/012.png"
+        },
+        {
+          "category": "tile",
+          "id": null,
+          "index": 34,
+          "key": "glue_strip/017.png",
+          "label": 1,
+          "letter": "c",
+          "mask_path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/tile/ground_truth/glue_strip/017_mask.png",
+          "methods": {
+            "PaDiM": {
+              "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  69,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 29.7950439453125,
+              "pixel_threshold": 18.87364387512207,
+              "score_ratio": 0.9042038682855281
+            },
+            "PatchCore": {
+              "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  65,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 1.6474798917770386,
+              "pixel_threshold": 1.5294461250305176,
+              "score_ratio": 1.3951179527908086
+            }
+          },
+          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/tile/test/glue_strip/017.png"
+        },
+        {
+          "category": "tile",
+          "id": null,
+          "index": 52,
+          "key": "good/017.png",
+          "label": 0,
+          "letter": "d",
+          "mask_path": null,
+          "methods": {
+            "PaDiM": {
+              "decision": "TN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  69,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 29.7950439453125,
+              "pixel_threshold": 18.87364387512207,
+              "score_ratio": 0.6394767515701755
+            },
+            "PatchCore": {
+              "decision": "TN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  200,
+                  69,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 1.6474798917770386,
+              "pixel_threshold": 1.5294461250305176,
+              "score_ratio": 0.8871196173273596
+            }
+          },
+          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/tile/test/good/017.png"
+        }
+      ],
+      "raster_interpolation": "none",
+      "selection_rule": "Post-hoc illustration selection only, using PatchCore scores and test labels: (1) anomalous image closest to the median PatchCore image score; (2) lowest-scoring anomaly; (3) largest absolute PaDiM-PatchCore score/threshold difference among unpicked anomalies; (4) highest PatchCore score/threshold normal. Ties use lowest index. If an even-sized anomaly set brackets the median, choose the equidistant lower-index image. No fitted parameter or threshold is selected.",
+      "sources": [
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/tile/maps.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/tile/scores.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/tile/metrics.json",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/tile/maps.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/tile/scores.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/tile/metrics.json",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/tile/test/glue_strip/010.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/tile/test/gray_stroke/012.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/tile/test/glue_strip/017.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/tile/test/good/017.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/tile/ground_truth/glue_strip/010_mask.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/tile/ground_truth/gray_stroke/012_mask.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/tile/ground_truth/glue_strip/017_mask.png"
+      ],
+      "transformation": "RGB input crop; greyscale base for maps; resize 256 -> crop 224 using ad.visualize._load_image; GT from MVTecDataset; ratio=stored map / unchanged validation pixel threshold; TwoSlopeNorm(0.4,1.0,1.6), RdBu_r, alpha=0.6, saturated ends shown by colourbar extensions; solid black predicted contour at ratio>=1; dashed yellow GT with black halo; native 224x224 rasters embedded without interpolation or image compositing; decision labels use the corner with least GT/prediction overlap, with a 3-pixel contour guard; final-size vector labels.",
+      "width_inches": 5.6
+    },
+    "fig_defect_area.pdf": {
+      "box_statistics": {
+        "bottle": {
+          "fliers": [],
+          "med": 47.627544018351415,
+          "q1": 21.36704268814132,
+          "q3": 126.79288197887038,
+          "whishi": 272.359,
+          "whislo": 2.0625
+        },
+        "capsule": {
+          "fliers": [],
+          "med": 3.414056055485908,
+          "q1": 2.1404522329061613,
+          "q3": 6.914017266022008,
+          "whishi": 40.1094,
+          "whislo": 0.40625
+        },
+        "carpet": {
+          "fliers": [],
+          "med": 12.765599999999997,
+          "q1": 4.500000000000001,
+          "q3": 29.2656,
+          "whishi": 82.0938,
+          "whislo": 0.96875
+        },
+        "leather": {
+          "fliers": [],
+          "med": 3.9531199999999997,
+          "q1": 2.179559015030334,
+          "q3": 8.873885902782389,
+          "whishi": 63.5469,
+          "whislo": 0.359375
+        },
+        "screw": {
+          "fliers": [],
+          "med": 2.7654534410110756,
+          "q1": 1.59375,
+          "q3": 3.741969129994423,
+          "whishi": 10.2969,
+          "whislo": 0.453125
+        },
+        "tile": {
+          "fliers": [],
+          "med": 50.4751484566415,
+          "q1": 18.499999999999996,
+          "q3": 126.78899038949585,
+          "whishi": 357.875,
+          "whislo": 1.70312
+        }
+      },
+      "box_statistics_space": "log10(area_cells)",
+      "generator": "scripts/paper_figures.py",
+      "height_inches": 2.4,
+      "jitter_seed": 0,
+      "n": {
+        "by_category": {
+          "bottle": 68,
+          "capsule": 120,
+          "carpet": 97,
+          "leather": 99,
+          "screw": 136,
+          "tile": 96
+        },
+        "regions": 616
+      },
+      "reference_cell_crop_percent": 0.12755102040816327,
+      "reference_cell_pixels": 64,
+      "selection_rule": "method == PatchCore; all rows; no exclusions",
+      "sources": [
+        "reports/figures/failure_cases/tables/per_region.csv"
+      ],
+      "transformation": "PatchCore rows only (each GT region once); area_cells in the 224 crop; unfilled boxes with quartiles and 1.5 IQR whiskers computed in log10(area_cells) and back-transformed plus every region with vertical U(-0.16,0.16) jitter, seed 0; log10 x axis.",
+      "unit": "8-connected GT region inside the 224 crop",
+      "width_inches": 3.5
+    },
+    "fig_failures.pdf": {
+      "contours": {
+        "GT": "#F0E442, dashed, 0.8pt, black 1.6pt halo",
+        "prediction": "black, solid, 0.8pt"
+      },
+      "dpi": 300,
+      "generator": "scripts/paper_panels.py",
+      "height_inches": 3.85,
+      "image_composite_image": false,
+      "interpretation": "Post-hoc illustrations only; cases are not a representative performance sample.",
+      "layout": {
+        "case_columns": 6,
+        "colourbar_extendfrac": 0.03,
+        "colourbar_fraction_approx": 0.45,
+        "decision_labels": "least GT/prediction overlap among four measured corners",
+        "image_rows": 3
+      },
+      "n": {
+        "illustrative_cases": 6,
+        "tiles": 18
+      },
+      "native_tile_pixels": [
+        224,
+        224
+      ],
+      "normalization": {
+        "alpha": 0.6,
+        "cmap": "RdBu_r",
+        "vcenter": 1.0,
+        "vmax": 1.6,
+        "vmin": 0.4
+      },
+      "picks": [
+        {
+          "category": "screw",
+          "id": "01",
+          "index": 141,
+          "key": "thread_top/004.png",
+          "label": 1,
+          "letter": "a",
+          "mask_path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/screw/ground_truth/thread_top/004_mask.png",
+          "methods": {
+            "PaDiM": {
+              "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  76,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 26.14942169189453,
+              "pixel_threshold": 21.809850692749023,
+              "score_ratio": 0.7793125486329953
+            },
+            "PatchCore": {
+              "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  72,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 1.3165967464447021,
+              "pixel_threshold": 1.2046966552734375,
+              "score_ratio": 1.162704875061728
+            }
+          },
+          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/screw/test/thread_top/004.png"
+        },
+        {
+          "category": "capsule",
+          "id": "04",
+          "index": 16,
+          "key": "crack/016.png",
+          "label": 1,
+          "letter": "b",
+          "mask_path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/capsule/ground_truth/crack/016_mask.png",
+          "methods": {
+            "PaDiM": {
+              "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 52,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  76,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 21.957149505615234,
+              "pixel_threshold": 16.48423957824707,
+              "score_ratio": 0.9681895295898929
+            },
+            "PatchCore": {
+              "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  76,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 1.3311392068862915,
+              "pixel_threshold": 1.056372046470642,
+              "score_ratio": 0.8857359194834864
+            }
+          },
+          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/capsule/test/crack/016.png"
+        },
+        {
+          "category": "capsule",
+          "id": "05",
+          "index": 42,
+          "key": "faulty_imprint/019.png",
+          "label": 1,
+          "letter": "c",
+          "mask_path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/capsule/ground_truth/faulty_imprint/019_mask.png",
+          "methods": {
+            "PaDiM": {
+              "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 111,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  76,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 21.957149505615234,
+              "pixel_threshold": 16.48423957824707,
+              "score_ratio": 0.9151803312580841
+            },
+            "PatchCore": {
+              "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  76,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 1.3311392068862915,
+              "pixel_threshold": 1.056372046470642,
+              "score_ratio": 0.8280610456095763
+            }
+          },
+          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/capsule/test/faulty_imprint/019.png"
+        },
+        {
+          "category": "tile",
+          "id": "07",
+          "index": 84,
+          "key": "oil/000.png",
+          "label": 1,
+          "letter": "d",
+          "mask_path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/tile/ground_truth/oil/000_mask.png",
+          "methods": {
+            "PaDiM": {
+              "decision": "FN",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  76,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 29.7950439453125,
+              "pixel_threshold": 18.87364387512207,
+              "score_ratio": 0.982247056305079
+            },
+            "PatchCore": {
+              "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  72,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 1.6474798917770386,
+              "pixel_threshold": 1.5294461250305176,
+              "score_ratio": 1.2234806744368676
+            }
+          },
+          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/tile/test/oil/000.png"
+        },
+        {
+          "category": "carpet",
+          "id": "08",
+          "index": 48,
+          "key": "good/012.png",
+          "label": 0,
+          "letter": "e",
+          "mask_path": null,
+          "methods": {
+            "PaDiM": {
+              "decision": "FP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 0,
+                  "top_left": 525,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  72,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 15.113607406616211,
+              "pixel_threshold": 13.498601913452148,
+              "score_ratio": 1.009952443770308
+            },
+            "PatchCore": {
+              "decision": "FP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 536,
+                  "bottom_right": 577,
+                  "top_left": 1217,
+                  "top_right": 173
+                },
+                "contour_guard_pixels": 3,
+                "corner": "top_right",
+                "native_pixel_box": [
+                  152,
+                  3,
+                  221,
+                  26
+                ],
+                "overlap_pixels": 173
+              },
+              "image_threshold": 1.1775676012039185,
+              "pixel_threshold": 1.1480698585510254,
+              "score_ratio": 1.079436611277432
+            }
+          },
+          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/carpet/test/good/012.png"
+        },
+        {
+          "category": "leather",
+          "id": "12",
+          "index": 9,
+          "key": "color/009.png",
+          "label": 1,
+          "letter": "f",
+          "mask_path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/ground_truth/color/009_mask.png",
+          "methods": {
+            "PaDiM": {
+              "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 483,
+                  "top_left": 0,
+                  "top_right": 0
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  72,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 18.528865814208984,
+              "pixel_threshold": 13.064669609069824,
+              "score_ratio": 1.1246413851842747
+            },
+            "PatchCore": {
+              "decision": "TP",
+              "decision_label": {
+                "candidate_overlap_pixels": {
+                  "bottom_left": 0,
+                  "bottom_right": 442,
+                  "top_left": 0,
+                  "top_right": 102
+                },
+                "contour_guard_pixels": 3,
+                "corner": "bottom_left",
+                "native_pixel_box": [
+                  3,
+                  198,
+                  72,
+                  221
+                ],
+                "overlap_pixels": 0
+              },
+              "image_threshold": 1.099655270576477,
+              "pixel_threshold": 1.0813825130462646,
+              "score_ratio": 1.396648865308404
+            }
+          },
+          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/test/color/009.png"
+        }
+      ],
+      "raster_interpolation": "none",
+      "selection_rule": "Prescribed curated case IDs from analysis_failure_panels.CASES",
+      "sources": [
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/screw/maps.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/screw/scores.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/screw/metrics.json",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/screw/maps.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/screw/scores.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/screw/metrics.json",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/capsule/maps.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/capsule/scores.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/capsule/metrics.json",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/capsule/maps.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/capsule/scores.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/capsule/metrics.json",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/tile/maps.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/tile/scores.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/tile/metrics.json",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/tile/maps.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/tile/scores.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/tile/metrics.json",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/carpet/maps.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/carpet/scores.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/carpet/metrics.json",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/carpet/maps.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/carpet/scores.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/carpet/metrics.json",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/leather/maps.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/leather/scores.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/leather/metrics.json",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/leather/maps.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/leather/scores.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/leather/metrics.json",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/screw/test/thread_top/004.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/capsule/test/crack/016.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/capsule/test/faulty_imprint/019.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/tile/test/oil/000.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/carpet/test/good/012.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/test/color/009.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/screw/ground_truth/thread_top/004_mask.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/capsule/ground_truth/crack/016_mask.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/capsule/ground_truth/faulty_imprint/019_mask.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/tile/ground_truth/oil/000_mask.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/ground_truth/color/009_mask.png"
+      ],
+      "transformation": "RGB input crop; greyscale base for maps; resize 256 -> crop 224 using ad.visualize._load_image; GT from MVTecDataset; ratio=stored map / unchanged validation pixel threshold; TwoSlopeNorm(0.4,1.0,1.6), RdBu_r, alpha=0.6, saturated ends shown by colourbar extensions; solid black predicted contour at ratio>=1; dashed yellow GT with black halo; native 224x224 rasters embedded without interpolation or image compositing; decision labels use the corner with least GT/prediction overlap, with a 3-pixel contour guard; final-size vector labels.",
+      "width_inches": 7.16
+    },
+    "fig_main_dumbbell.pdf": {
+      "generator": "scripts/paper_figures.py",
+      "height_inches": 2.1,
+      "n": {
+        "categories": 6,
+        "methods": 2
+      },
+      "selection_rule": null,
+      "sources": [
+        "reports/tables/metrics_long.csv"
+      ],
+      "transformation": "Per-category point estimates on a common row; hollow PatchCore squares retain visible ties; no rescaling of metric values.",
+      "uncertainty": "Single-seed estimates; no between-run uncertainty is available.",
+      "width_inches": 7.16
+    },
+    "fig_regionsize.pdf": {
+      "counts": {
+        "PaDiM": [
+          {
+            "detected": 17,
+            "n": 50
+          },
+          {
+            "detected": 93,
+            "n": 143
+          },
+          {
+            "detected": 142,
+            "n": 186
+          },
+          {
+            "detected": 84,
+            "n": 88
+          },
+          {
+            "detected": 79,
+            "n": 95
+          },
+          {
+            "detected": 42,
+            "n": 54
+          }
+        ],
+        "PatchCore": [
+          {
+            "detected": 27,
+            "n": 50
+          },
+          {
+            "detected": 135,
+            "n": 143
+          },
+          {
+            "detected": 181,
+            "n": 186
+          },
+          {
+            "detected": 87,
+            "n": 88
+          },
+          {
+            "detected": 95,
+            "n": 95
+          },
+          {
+            "detected": 52,
+            "n": 54
+          }
+        ]
+      },
+      "generator": "scripts/paper_figures.py",
+      "height_inches": 2.3,
+      "n": {
+        "by_bin": {
+          "1-3 cells": 143,
+          "10-30 cells": 88,
+          "3-10 cells": 186,
+          "30-100 cells": 95,
+          "<1 cell": 50,
+          ">=100 cells": 54
+        },
+        "regions_per_method": 616
+      },
+      "selection_rule": "All regions; prescribed bins ordered as in pooled CSV",
+      "sources": [
+        "reports/figures/failure_cases/tables/per_region.csv",
+        "reports/figures/failure_cases/tables/region_detection_pooled.csv"
+      ],
+      "transformation": "Exact region_detected/n per method and bin; 95% Wilson score intervals, z=1.959964; horizontal dodge \u00b10.12; lines are ordinal guides only.",
+      "uncertainty": "Nominal region-level Wilson intervals; regions within an image may be dependent (not an image-cluster interval).",
+      "width_inches": 3.5
+    },
+    "fig_tradeoff.pdf": {
+      "generator": "scripts/paper_figures.py",
+      "height_inches": 3.65,
+      "n": {
+        "categories_per_variant": 6,
+        "variants": 9
+      },
+      "selection_rule": "Prescribed nine model/control variants; no post-processing points; z-mean \u2248 mean, so only pyramid mean is drawn.",
+      "sources": [
+        "reports/tables/metrics_long.csv",
+        "reports/bonus/dinov2_tables/metrics_long.csv",
+        "reports/bonus/multiscale_tables/metrics_long.csv"
+      ],
+      "transformation": "Six-category arithmetic means, identical to bn* macros; model variants only; log2 latency; baseline reference lines; max-score control has a white-understroked plus above the baseline star; hollow post-hoc diamond above other markers; out-of-range L2+3+4 AU-PRO explicitly marked on the lower spine.",
+      "uncertainty": "Single-seed category means; no repeated-run uncertainty available.",
+      "variants": {
+        "Base": {
+          "Aupro": 0.9308276401921928,
+          "ImgAuroc": 0.9874141163061309,
+          "Infer": 2.7823711974941574
+        },
+        "DinoB": {
+          "Aupro": 0.9313727139442203,
+          "ImgAuroc": 0.9748718684432626,
+          "Infer": 12.911642416271267
+        },
+        "DinoNoLN": {
+          "Aupro": 0.9076794256580155,
+          "ImgAuroc": 0.9862909020304029,
+          "Infer": 12.875828381213275
+        },
+        "DinoS": {
+          "Aupro": 0.9290242254059476,
+          "ImgAuroc": 0.9678126307045328,
+          "Infer": 6.326842276689409
+        },
+        "MsLOneTwoThree": {
+          "Aupro": 0.945415602116167,
+          "ImgAuroc": 0.9865713847194447,
+          "Infer": 25.865353569174722
+        },
+        "MsLTwoThreeFour": {
+          "Aupro": 0.7058320963893874,
+          "ImgAuroc": 0.9221270181576968,
+          "Infer": 3.253004183583366
+        },
+        "MsMaxCtrl": {
+          "Aupro": 0.9308276401921928,
+          "ImgAuroc": 0.9882856518888762,
+          "Infer": 2.787008035501584
+        },
+        "PyrMean": {
+          "Aupro": 0.9400242099235695,
+          "ImgAuroc": 0.9903418670337517,
+          "Infer": 12.809661404883824
+        },
+        "WrnDino": {
+          "Aupro": 0.9141392795271519,
+          "ImgAuroc": 0.9645938326338371,
+          "Infer": 13.770225363404327
+        }
+      },
+      "width_inches": 3.5
+    }
+  },
+  "schema_version": 1,
+  "style": "paper/style/ieee.mplstyle",
+  "style_basis": "scientific-visualization publication.mplstyle (copied values)"
+}

@@ -1,52 +1,58 @@
 \begin{tikzpicture}[
-  font=\footnotesize, >=Latex, node distance=3mm,
-  block/.style={draw, rounded corners=1pt, align=center, fill=black!3,
-    minimum height=8mm, inner sep=3pt},
-  arrow/.style={->, line width=0.5pt},
-  score/.style={arrow, dashed},
-  every edge/.style={arrow},
+  font=\footnotesize, >=Latex,
+  box/.style={draw=black!65,rounded corners=1pt,align=center,
+    fill=white,inner sep=2pt,minimum height=8mm},
+  data/.style={->,line width=0.5pt},
+  wire/.style={line width=0.5pt},
+  fitonly/.style={->,dashed,line width=0.6pt},
+  labels/.style={->,densely dotted,line width=0.7pt},
 ]
-% Coordinates and text widths keep the drawing within IEEE's 7.16-in text width.
-\node[block, text width=18mm] (train) at (0,0.9) {train/good};
-\node[block, text width=18mm] (fit) at (2.3,0.9) {90\% fit};
-\node[block, text width=18mm] (val) at (2.3,-0.25) {10\% normal val\\seed 0};
-\node[block, text width=18mm] (test) at (0,-1.4) {test images};
-\node[block, text width=23mm] (pre) at (4.8,0.3) {Resize 256\\Crop 224\\ImageNet norm};
-\node[block, text width=19mm] (backbone) at (7.4,0.3) {Frozen\\WRN50-2};
-\node[block, text width=32mm] (padim) at (10.8,1.25) {\textbf{PaDiM}\\Layers 1--3, 550 ch\\Per-position Gaussian\\$\mu,\Sigma$};
-\node[block, text width=32mm] (patchcore) at (10.8,-0.8) {\textbf{PatchCore}\\Layers 2+3, $3\!\times\!3$ agg.\\1024-d features\\10\% coreset bank};
-\node[block, text width=22mm] (raw) at (14.25,0.3) {Raw patch map\\Mahalanobis /\\NN distance};
-\node[block, text width=26mm] (post) at (14.25,-2.7) {Bilinear $\uparrow224$\\Gaussian $\sigma=4$};
-\node[block, text width=26mm] (score) at (10.8,-2.7) {Image score\\PaDiM: map max\\PatchCore: Eq.~7};
-\node[block, text width=26mm] (threshold) at (4.8,-2.7) {Normal-val thresholds\\99\% image\\99.9\% pixel};
-\node[block, text width=22mm] (decision) at (7.7,-4.4) {Decision\\score $\geq$ image thr};
-\node[block, text width=26mm] (segment) at (14.25,-4.4) {Segmentation\\map $\geq$ pixel thr};
-\node[block, line width=1pt, fill=black!12, text width=54mm] (metrics) at (10.8,-6.0)
-  {\textbf{\texttt{ad.metrics}}\\\textbf{Only place test labels are read}\\Test labels and masks: evaluation only};
-\draw[arrow] (train) -- (fit);
-\draw[arrow] (train.south east) -- (val.north west);
-\draw[arrow] (fit) -- (pre);
-\draw[arrow] (val.east) -- (pre.south west);
-\draw[arrow] (test.east) -- ++(1.25,0) -| (pre.south);
-\draw[arrow] (pre) -- (backbone);
-\draw[arrow] (backbone.east) -- (padim.west);
-\draw[arrow] (backbone.east) -- (patchcore.west);
-\draw[arrow] (padim.east) -- (raw.north west);
-\draw[arrow] (patchcore.east) -- (raw.south west);
-\draw[arrow] (raw) -- (post);
-\draw[arrow] (post) -- (score);
-% Eq. 7 uses raw patch distances, rather than the smoothed map maximum.
-\draw[arrow, dotted] (raw.east) -- (15.9,0.3)
-  -- node[midway, left, fill=white, inner sep=2pt] {Eq.~7 (raw)} (15.9,-3.2)
-  -- (score.south east);
-\draw[score] (val.south) -- node[pos=0.8, left, fill=white, inner sep=2pt] {scores only}
-  (2.3,-2.7) -- (threshold.west);
-\draw[arrow] (score.south) -- ++(0,-0.5) -| (decision.north);
-\draw[arrow] (threshold.south) |- (decision.west);
-\draw[arrow] (threshold.south) -- ++(0,-0.6) -| (segment.north west);
-\draw[arrow] (post) -- (segment);
-\draw[arrow] (decision.south) |- (metrics.west);
-\draw[arrow] (segment.south) |- (metrics.east);
-\draw[arrow, dotted] (test.south) -- (0,-6.0)
-  -- node[midway, above, fill=white, inner sep=2pt] {labels, masks} (metrics.west);
+% (a) Model: arrowheads terminate only at box borders, never at junctions.
+\node[anchor=west,font=\footnotesize\bfseries] at (0,1.4) {(a) Per-image scoring};
+\node[box,text width=10mm] (input) at (0.6,0) {Input\\image};
+\node[box,text width=21mm] (pre) at (2.9,0) {Preprocess\\Resize 256\\Crop 224\\ImageNet norm};
+\node[box,text width=17mm] (wrn) at (5.2,0) {Frozen\\WRN50-2};
+\node[box,text width=31mm] (pd) at (8.15,0.65) {\textbf{PaDiM}: L1--3, 550 ch\\Per-position Gaussian $\mu,\Sigma$\\Mahalanobis};
+\node[box,text width=31mm] (pc) at (8.15,-0.65) {\textbf{PatchCore}: L2+3\\$3\!\times\!3$ agg.; 1024-d\\10\% coreset; NN distance};
+\node[box,text width=15mm] (raw) at (10.8,0) {Raw\\patch map};
+\node[box,text width=20mm] (post) at (12.85,0) {Bilinear $\uparrow224$\\Gaussian $\sigma=4$};
+\node[box,text width=25mm] (out) at (15.9,0) {Anomaly map\\and image score\\PaDiM: map max\\PatchCore: Eq.~7\\(raw distances)};
+\draw[data] (input) -- (pre);
+\draw[data] (pre) -- (wrn);
+\draw[wire] (wrn.east) -- (6.3,0);
+\draw[data] (6.3,0) |- (pd.west);
+\draw[data] (6.3,0) |- (pc.west);
+\draw[wire] (pd.east) -- (9.9,0.65) -- (9.9,-0.65) -- (pc.east);
+\draw[data] (9.9,0) -- (raw.west);
+\draw[data] (raw) -- (post);
+\draw[data] (post) -- (out);
+
+% (b) Protocol: independent, straight rows refer to model (a).
+\node[anchor=west,font=\footnotesize\bfseries] at (0,-1.6) {(b) Data protocol};
+\node[box,fill=black!3,text width=24mm] (fit) at (1.3,-2.25) {Fit split\\90\% train/good};
+\node[box,fill=black!8,text width=24mm] (val) at (1.3,-3.35) {Normal val\\10\% train/good};
+\node[box,fill=black!15,text width=24mm] (test) at (1.3,-4.45) {Test\\good + defects};
+\node[box,text width=30mm] (fitmodel) at (4.8,-2.25) {model (a)\\Fitted Gaussians / bank};
+\node[box,text width=30mm] (valmodel) at (4.8,-3.35) {model (a)};
+\node[box,text width=30mm] (testmodel) at (4.8,-4.45) {model (a)};
+\node[box,text width=20mm] (mapscore) at (7.9,-4.45) {Map \& score};
+\node[box,text width=32mm] (thr) at (11.2,-3.35) {Thresholds (quantiles)\\99\% image / 99.9\% pixel};
+\node[box,text width=34mm] (apply) at (11.2,-4.45) {\textbf{Decision}: score $\geq$ thr\\\textbf{Segmentation}: map $\geq$ thr};
+\node[box,draw=black,fill=black!10,line width=1pt,text width=25mm] (met) at (15.4,-4.45)
+  {\textbf{\texttt{ad.metrics}}\\Labels/masks only here};
+\draw[fitonly] (fit) -- node[midway,above] {fit} (fitmodel);
+\draw[data] (val) -- (valmodel);
+\draw[data] (valmodel) -- node[midway,above] {val scores} (thr);
+\draw[data] (test) -- (testmodel);
+\draw[data] (testmodel) -- (mapscore);
+\draw[data] (mapscore) -- (apply);
+\draw[data] (thr) -- (apply);
+\draw[data] (apply) -- (met);
+\draw[labels] (test.south) -- (1.3,-5.22)
+  -- node[midway,below] {Test labels \& masks} (15.4,-5.22) -- (met.south);
+
+% The legend uses the free space on the fit row; font matches the nodes.
+\draw[data] (7.0,-2.25) -- (7.6,-2.25) node[right] {data / scores};
+\draw[fitonly] (10.5,-2.25) -- (11.1,-2.25) node[right] {fit only};
+\draw[labels] (13.4,-2.25) -- (14.0,-2.25) node[right] {labels / masks};
 \end{tikzpicture}
