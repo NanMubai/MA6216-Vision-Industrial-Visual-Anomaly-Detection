@@ -89,3 +89,27 @@ def test_save_category_figures(tmp_path, synth):
                      "tp_best_3_crack.png", "tp_poor_loc_4_crack.png"]
     for p in written:
         assert (rdir / "figs" / p.split("/")[-1]).stat().st_size > 0
+
+
+def test_dataset_stats_script(fake_mvtec, tmp_path):
+    import importlib.util
+    from pathlib import Path
+
+    import pandas as pd
+
+    spec = importlib.util.spec_from_file_location(
+        "dataset_stats", Path(__file__).resolve().parents[1] / "scripts" / "dataset_stats.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+
+    out = tmp_path / "rep"
+    mod.main(["--root", str(fake_mvtec), "--out", str(out), "--categories", "toy", "missing_cat"])
+    for f in ("dataset_stats.md", "dataset_stats.csv", "defect_regions_per_image.csv",
+              "samples_toy.png", "defect_area_hist.png"):
+        assert (out / f).stat().st_size > 0, f
+    df = pd.read_csv(out / "dataset_stats.csv").set_index("defect_type")
+    assert df.loc["good", "n_test"] == 3 and df.loc["crack", "n_test"] == 2
+    assert abs(df.loc["crack", "area_median"] - 100 * 60 / 300**2) < 1e-6
+    assert df.loc["crack", "regions_mean"] == 1
+    md = (out / "dataset_stats.md").read_text()
+    assert "| toy | texture | 300x300 | 20 | 18 / 2 | 3 | 2 | 1 |" in md
