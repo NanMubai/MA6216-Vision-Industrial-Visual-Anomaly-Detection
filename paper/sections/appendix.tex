@@ -1,3 +1,4 @@
+\onecolumn
 \section{Reproducibility}
 \label{app:repro}
 All code, configurations and result tables are in the project repository.
@@ -12,7 +13,7 @@ Unit tests check these contracts.
 
 \section{Recall by Defect Type}
 \label{app:recall}
-\begin{table}[h]
+\begin{table}[!htbp]
   \centering
   \caption{Image recall at the validation threshold, by defect type.}
   \label{tab:app_recall}
@@ -20,9 +21,10 @@ Unit tests check these contracts.
   \input{generated/tables/tab_app_recall_type.tex}
 \end{table}
 
+\clearpage
 \section{Per-Category Results of the Enhancements}
 \label{app:bonus}
-\begin{table*}[h]
+\begin{table*}[!htbp]
   \centering
   \caption{DINOv2 variants per category. \posthoc{}Post-hoc and test-informed.}
   \label{tab:app_dino}
@@ -30,7 +32,7 @@ Unit tests check these contracts.
   \input{generated/tables/tab_app_bonus_dinov2.tex}
 \end{table*}
 
-\begin{table*}[h]
+\begin{table*}[!htbp]
   \centering
   \caption{Multi-scale variants per category.}
   \label{tab:app_ms}
@@ -38,7 +40,7 @@ Unit tests check these contracts.
   \input{generated/tables/tab_app_bonus_multiscale.tex}
 \end{table*}
 
-\begin{table*}[h]
+\begin{table*}[!htbp]
   \centering
   \caption{Post-processing variants per category.}
   \label{tab:app_pp}
@@ -46,24 +48,26 @@ Unit tests check these contracts.
   \input{generated/tables/tab_app_bonus_postproc.tex}
 \end{table*}
 
+\clearpage
 \section{All Curated Failure Cases}
 \label{app:failures}
 Each panel shows the image with the GT outlined in green, the PaDiM map and the PatchCore map. Maps are divided by the validation pixel threshold, and the red contours mark the predicted regions.
 
-\begin{figure*}[h]
+\begin{figure*}[!htbp]
   \centering
   \includegraphics[width=\textwidth]{fig_app_failures_1.jpg}
   \caption{Failure cases 1--6. (a)~Screw thread\_top: missed only by PaDiM (pose). (b)~Screw thread\_side: missed by both; two tiny regions on the normal high-frequency thread. (c)~Capsule scratch: missed by both; PaDiM's only hot spot is background dust. (d)~Capsule crack: missed by both; peaks on dark specks. (e)~Capsule faulty imprint: localised but not detected by PatchCore. (f)~Tile gray\_stroke: only about 10\% of the GT survives the centre crop.}
   \label{fig:app_fail1}
 \end{figure*}
 
-\begin{figure*}[h]
+\begin{figure*}[!htbp]
   \centering
   \includegraphics[width=\textwidth]{fig_app_failures_2.jpg}
   \caption{Failure cases 7--12. (a)~Tile oil: PaDiM calibration failure; PatchCore IoU 0.85. (b)~Normal carpet: global-shift false positive by PatchCore. (c)~Normal leather: diffuse PatchCore false positive, absorbed by PaDiM's looser threshold. (d)~Normal capsule: PaDiM-only false positive caused by background dust. (e)~Normal bottle: PaDiM-only false positive on the glossy rim. (f)~Leather colour: true positive with poor localisation (IoU 0.07).}
   \label{fig:app_fail2}
 \end{figure*}
 
+\clearpage
 \section{Qualitative Results}
 \label{app:qual}
 Figs.~\ref{fig:app_qual_bottle}--\ref{fig:app_qual_leather} show the per-category qualitative summaries for PaDiM (left) and PatchCore (right).
@@ -72,9 +76,9 @@ From top to bottom, the rows show true positives with the best localisation, tru
 The GT is outlined in green and the predicted region (map at or above the validation pixel threshold) in red.
 
 \newcommand{\qualfig}[1]{%
-\begin{figure*}[p]
+\begin{figure*}[!htbp]
   \centering
-  \includegraphics[width=\textwidth,height=0.85\textheight,keepaspectratio]{fig_app_qual_#1.jpg}
+  \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio]{fig_app_qual_#1.jpg}
   \caption{Qualitative results for \emph{#1}: PaDiM (left) and PatchCore (right).}
   \label{fig:app_qual_#1}
 \end{figure*}}
