@@ -1,0 +1,27 @@
+\section{Conclusion}
+\label{sec:conclusion}
+
+\textbf{Advantages.}
+PatchCore needs no training: a forward pass and coreset selection fit a category from about 200 normal images in \pcFitAll{}\,s.
+It is fast and light (\pcInferAll{}\,ms per image on the GPU, \pcInferEtoEAll{}\,ms including loading, and a 57--88\,MiB bank) and accurate (image AUROC \pcImgAurocAll{}, AU-PRO \pcAuproAll{}).
+It is robust to pose (screw image AUROC \pcImgAurocScrew{} vs \pdImgAurocScrew{}), and every anomalous patch can be explained by showing its nearest normal patch.
+PaDiM, a much simpler statistical model, performs equally well on stationary textures but requires aligned parts, about 3.8\,GB of covariances per category, and a uniform background free of specks.
+
+\textbf{Limitations.}
+The largest practical weakness is threshold calibration with few normal images.
+With 21--32 validation images, the 99\% quantile is close to the validation maximum.
+This collapses PaDiM's F1 on tile and screw and costs PatchCore 6.5 F1 points relative to the oracle reference.
+Normal drift between training and test images causes most of PatchCore's texture false alarms.
+Defects smaller than one feature cell are detected only about half the time, and thin defects are segmented as wide blobs, even though AU-PRO looks high.
+The centre crop discards the image border, and every product needs its own memory bank and threshold.
+Our evidence is limited to a single seed, six of the 15 categories and a 224-pixel input.
+
+\textbf{Industrial applicability.}
+PatchCore suits a line that can supply a few hundred good images per product and tolerate per-product setup, which takes seconds; inference takes milliseconds on one GPU.
+Before deployment we would
+(i)~collect a larger normal calibration set and choose the operating point from the costs of a miss and a false alarm;
+(ii)~inspect the full field of view without cropping;
+(iii)~use higher resolution or tiling for defects smaller than 0.3\% of the image;
+(iv)~monitor normal score levels and refresh the bank when the material lot or lighting changes; and
+(v)~send near-threshold images (within about $\pm$10\%) to human review.
+Promising next steps are a native higher-resolution protocol fixed in advance, layer-1 maps for segmentation combined with the layer-2+3 score for detection, an a-priori re-test of DINOv2 without the final LayerNorm, rotation augmentation of the bank for pose-variable parts, and multiple seeds with confidence intervals.

@@ -1,0 +1,8 @@
+Industrial visual inspection must reject defective parts even though defects are rare, diverse and expensive to annotate.
+We study one-class anomaly detection on six MVTec AD categories (bottle, capsule, screw, carpet, tile, leather) and compare two training-free feature-embedding methods that share a frozen WideResNet-50-2 backbone: PaDiM, which fits a Gaussian per image position and scores patches by Mahalanobis distance, and PatchCore, which stores a coreset of normal patch features and scores patches by nearest-neighbour distance.
+Models are fitted on normal images only, and all decision thresholds come from a held-out normal validation split; test labels are used for evaluation alone.
+PatchCore reaches a mean image AUROC of \pcImgAurocAll{} versus \pdImgAurocAll{} for PaDiM, with pixel AUROC \pcPixAurocAll{} and AU-PRO \pcAuproAll{}, while fitting in under four seconds and running at \pcInferAll{}~ms per image.
+The gap is concentrated in object categories: position-specific Gaussians fail on the freely rotated screw and react to background specks on capsule, whereas the two methods tie on stationary textures.
+A failure analysis traces the remaining errors to sub-feature-cell defects, threshold calibration with few normal images, and a shift between training and test normals.
+Finally, we evaluate three PatchCore enhancements: a DINOv2 backbone, multi-scale fusion and post-processing.
+An input-resolution pyramid gives the best image-level results (image AUROC \bnPyrMeanImgAuroc{}), adding layer-1 features gives the best localisation (AU-PRO \bnMsLOneTwoThreeAupro{}), and DINOv2 does not help under our protocol.

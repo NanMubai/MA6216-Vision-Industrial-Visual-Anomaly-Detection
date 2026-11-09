@@ -1,0 +1,18 @@
+\section{Experimental Setup}
+\label{sec:setup}
+
+\textbf{Metrics.}
+For image-level detection we report \emph{image AUROC}, which is threshold-free, and \emph{image F1} at the validation threshold, which measures the decision a deployed system would actually make.
+We also list \oracle{}, the best F1 over all thresholds.
+Because it selects the threshold using test labels, it is an \emph{oracle reference only}, never a result.
+For localisation we report \emph{pixel AUROC}, pooled over all test pixels, and \emph{AU-PRO}~\cite{bergmann2020students,bergmann2021mvtec}.
+AU-PRO averages the overlap between prediction and ground truth over each connected GT region separately and integrates up to 30\% false-positive rate, so that a small scratch counts as much as a large crack.
+Pixel AUROC is dominated by large defects and by the many normal pixels, which makes AU-PRO the more informative localisation metric for small defects.
+Category means are unweighted.
+
+\textbf{Implementation.}
+The pipeline uses PyTorch with \texttt{timm} weights and runs on a single NVIDIA RTX~5080 (16\,GB).
+\emph{Infer} is model prediction plus upsampling and smoothing on preloaded batches, measured with CUDA synchronisation.
+\emph{e2e} additionally includes data loading.
+Memory is reported as peak allocated CUDA memory.
+All runs use seed~0.

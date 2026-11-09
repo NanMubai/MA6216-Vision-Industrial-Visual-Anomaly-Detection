@@ -1,0 +1,49 @@
+\section{PatchCore Enhancements}
+\label{sec:enh}
+
+We test three enhancements to PatchCore, each changing one factor relative to the WRN50 baseline under the same protocol.
+All variants were specified \emph{a priori}, except one DINOv2 sensitivity run that was chosen after seeing test results and is marked post-hoc (\posthoc).
+Table~\ref{tab:bonus} reports six-category means, and Fig.~\ref{fig:tradeoff} plots localisation against latency.
+
+\begin{table*}[t]
+  \centering
+  \caption{PatchCore enhancements, six-category means. Bold marks the best value among a-priori variants. \posthoc{}Post-hoc and test-informed; shown as a sensitivity check and not selectable. The input-pyramid and post-processing rows score images by the smoothed-map maximum and should be compared with the max-score control rather than with the Eq.~\eqref{eq:reweight} baseline.}
+  \label{tab:bonus}
+  \footnotesize
+  \input{generated/tables/tab_bonus.tex}
+\end{table*}
+
+\textbf{DINOv2 backbone.}
+We replace WRN50 by self-supervised DINOv2 ViT-B/14 or ViT-S/14 features~\cite{oquab2024dinov2}, or concatenate the two backbones, motivated by the strong few-shot results of AnomalyDINO~\cite{damm2025anomalydino}.
+Textures improve: mean texture F1 rises from 0.931 to 0.987--0.993 and texture AU-PRO from 0.914 to 0.941--0.945.
+However, all three a-priori variants \emph{lower} mean image AUROC (\bnDinoBImgAuroc{}, \bnDinoSImgAuroc{}, \bnWrnDinoImgAuroc{} vs \bnBaseImgAuroc{}), driven by screw (0.971$\to$0.809--0.879), at 2.3--4.9$\times$ the inference time.
+A post-hoc diagnostic on screw traced the regression mainly to processing rather than to the features themselves.
+Applying DINOv2's \emph{final} LayerNorm to intermediate blocks concentrates about 40\% of the token variance in 5 of 768 channels, which then dominate Euclidean nearest-neighbour distances.
+The CNN-oriented 3$\times$3 patch aggregation also hurts.
+Removing the LayerNorm recovers mean image AUROC to \bnDinoNoLNImgAuroc{} but lowers texture AU-PRO.
+Because this variant was chosen after inspecting test results, we report it only as a sensitivity check.
+
+\textbf{Multi-scale fusion.}
+Adding \texttt{layer1} to the feature hierarchy (L1+2+3) gives the best localisation: AU-PRO rises from \bnBaseAupro{} to \bnMsLOneTwoThreeAupro{}, with gains in every category (e.g.\ +0.025 on tile).
+It costs image F1 (\bnMsLOneTwoThreeImgFone{} vs \bnBaseImgFone{}), $9.3\times$ inference time and 5.55\,GiB of memory.
+Finer stride-4 features help the sub-cell and boundary failures of Section~\ref{sec:failures}, but they also add rare-but-normal peaks that disturb the image decision.
+Adding \texttt{layer4} instead hurts badly (AU-PRO \bnMsLTwoThreeFourAupro{}), because coarse 7$\times$7 semantics dilute fine defect evidence.
+An \emph{input pyramid} fuses independently fitted banks at scales 1.0 and 1.5 by averaging their maps.
+Against the max-score control, it improves image AUROC (\bnPyrMeanImgAuroc{} vs \bnMsMaxCtrlImgAuroc{}), image F1 (\bnPyrMeanImgFone{} vs \bnMsMaxCtrlImgFone{}) and AU-PRO (\bnPyrMeanAupro{} vs \bnMsMaxCtrlAupro{}), at $4.6\times$ the inference time.
+It is the best a-priori variant for detection.
+Normalising each scale by training-only z-scores before averaging makes no difference.
+
+\textbf{Post-processing.}
+Replacing the Eq.~\eqref{eq:reweight} image score with the maximum or the top-1\% mean of the smoothed map leaves AUROC almost unchanged but raises mean F1 from \bnBaseImgFone{} to \bnPpMaxImgFone{} and \bnPpTopkImgFone{}.
+The aggregation therefore changes calibration, not ranking.
+Its effect is category-dependent: top-1\% helps capsule and tile but hurts screw.
+Smoothing with $\sigma\le4$ makes no practical difference (AU-PRO within 0.0016), whereas $\sigma=8$ lowers AU-PRO in every category.
+Finally, replacing per-category thresholds with \emph{one global threshold}, either $z=3$ on validation-normalised scores or a 99\% quantile of the pooled validation scores, lowers mean F1 to \bnPpGlobalZImgFone{} and \bnPpGlobalPooledImgFone{}.
+Per-product calibration therefore remains necessary.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\columnwidth]{fig_tradeoff.pdf}
+  \caption{Localisation--latency trade-off of the PatchCore variants (six-category means; log-scale inference time). The hollow marker with a dagger is post-hoc.}
+  \label{fig:tradeoff}
+\end{figure}

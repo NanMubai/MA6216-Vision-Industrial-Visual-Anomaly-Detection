@@ -1,0 +1,87 @@
+\section{Failure Analysis}
+\label{sec:failures}
+
+We analyse the saved per-image outputs at the stored validation thresholds.
+Test labels are used here only to describe predictions that are already fixed, and nothing is tuned on them.
+Of \nAnomTest{} anomalous test images, PaDiM detects \pdDetected{} and PatchCore \pcDetected{}.
+Of \nGoodTest{} normal test images, PaDiM falsely flags \pdFP{} and PatchCore \pcFP{}.
+Fig.~\ref{fig:failures} shows representative cases.
+Full per-defect-type recall and all twelve curated panels are in the appendix.
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\textwidth]{fig_failures.png}
+  \caption{Curated failure cases. Each panel shows, from left to right, the image with the GT outlined in green, the PaDiM map and the PatchCore map. Maps are divided by each method's validation pixel threshold (1.0 = threshold), and the red contours mark the predicted region. (a)~Screw thread\_top: missed only by PaDiM, because of pose. (b)~Capsule crack: missed by both, with both peaks on dark specks. (c)~Capsule faulty imprint: PatchCore localises the defect (IoU 0.45) but its image score reaches only $0.83\times$ the image threshold. (d)~Tile oil: PaDiM highlights the stain at $1.55\times$ its pixel threshold, yet the image is not flagged (calibration). (e)~Normal carpet: PatchCore false positive with 42\% of the pixels above threshold and no local cause. (f)~Leather colour: a true positive whose thin streak is blurred into a wide blob (IoU 0.07 for both methods).}
+  \label{fig:failures}
+\end{figure*}
+
+\subsection{Missed defects}
+\textbf{By type.}
+The hardest defect types fall into three groups:
+\emph{tiny and thin} defects (capsule scratch and crack, screw thread\_side);
+\emph{low-contrast, texture-consistent} defects (tile gray\_stroke and rough, where a grey stroke resembles the tile's own dark blotches);
+and \emph{semantic} defects (capsule faulty\_imprint, screw manipulated\_front), whose patches look locally plausible but form a wrong shape.
+PatchCore's misses are mostly near-misses.
+Their median score is $0.94\times$ the threshold, and 75\% lie within 10\% of it.
+In 83\% of PatchCore's false negatives, some pixel inside the GT exceeds the \emph{pixel} threshold (Fig.~\ref{fig:failures}c).
+The map does see these defects; they are lost at the image decision, because the image threshold is an extreme-value statistic of only a few dozen normal images.
+
+\textbf{By size.}
+We count a GT region as detected if at least 30\% of its pixels exceed the pixel threshold (Table~\ref{tab:regionsize}).
+Regions smaller than one stride-8 feature cell are the hard limit for PatchCore: only 54\% are found, against at least 94\% in every larger bin.
+These regions come mainly from capsule, screw and tile.
+PaDiM's lower rate on large regions is a calibration effect rather than a size effect: it ranks the large tile stains well but thresholds them badly (Section~\ref{sec:calib}).
+
+\begin{table}[t]
+  \centering
+  \caption{GT region detection rate by region size (one cell = $8\times8$\,px = 0.128\% of the crop). A region counts as detected if $\geq$30\% of its pixels exceed the validation pixel threshold.}
+  \label{tab:regionsize}
+  \footnotesize
+  \input{generated/tables/tab_regionsize.tex}
+\end{table}
+
+\textbf{Preprocessing.}
+The centre crop removes part of some defects.
+Five anomalous images keep less than half of their GT, and three of them are tile gray\_strokes.
+One gray\_stroke keeps only about 10\% of its defect, and it is among PatchCore's two lowest-scoring tile misses.
+
+\textbf{Shared vs method-specific misses} (Table~\ref{tab:missoverlap}).
+PaDiM-only misses (\missPdOnly{}) arise from two mechanisms: pose on screw and calibration on tile.
+The \missBoth{} images missed by both methods mark the limits of frozen WRN50 features at 224\,px.
+They are the tiny, thin, low-contrast and semantic types listed above, plus the crop-truncated tiles.
+The \missPcOnly{} PatchCore-only misses are all near-threshold capsules.
+
+\begin{table}[t]
+  \centering
+  \caption{Anomalous test images missed at the validation threshold.}
+  \label{tab:missoverlap}
+  \footnotesize
+  \setlength{\tabcolsep}{3pt}
+  \input{generated/tables/tab_missoverlap.tex}
+\end{table}
+
+\subsection{False positives}
+Table~\ref{tab:fploc} lists the false positives on normal test images.
+\textbf{PatchCore's texture false positives are global, not local.}
+On the flagged normal carpets, a median 26.6\% of the image exceeds the pixel threshold, with no hotspot (Fig.~\ref{fig:failures}e).
+Normal \emph{test} images score systematically higher than the normal \emph{validation} images, which come from \texttt{train/good}.
+The median PatchCore image score is 1.112 for normal test images vs 1.061 for validation images on carpet, and 1.070 vs 0.968 on leather.
+On these categories the validation spread is also the tightest of all, so a 99\% quantile leaves almost no margin for this shift, which likely comes from acquisition conditions or the material lot.
+\textbf{PaDiM's false positives are local}, triggered by rare but harmless appearances: a dust speck on the capsule background, a bright spot on the glossy bottle rim and image borders.
+All of PaDiM's carpet and screw false positives peak within 16\,px of the crop edge.
+
+\begin{table}[t]
+  \centering
+  \caption{False positives (FP) on normal test images and localisation quality of true positives (TP), PaDiM / PatchCore. \emph{IoU}: median pixel IoU of TPs at the validation pixel threshold. \emph{Off}: fraction of TPs whose map maximum lies outside the GT.}
+  \label{tab:fploc}
+  \footnotesize
+  \setlength{\tabcolsep}{2.5pt}
+  \input{generated/tables/tab_fp_loc.tex}
+\end{table}
+
+\subsection{Poor localisation}
+Leather is detected perfectly but segmented poorly.
+75\% (PaDiM) and 82\% (PatchCore) of its true positives have IoU below 0.1, because the stride-8 grid, bilinear upsampling and $\sigma=4$ smoothing turn a thin streak into a blob several times wider (Fig.~\ref{fig:failures}f).
+AU-PRO does not reveal this (0.97 for both methods), since it is threshold-free and credits partial overlap.
+Pixel IoU at a fixed threshold is the stricter, deployment-relevant view.
+On capsule, a third of PaDiM's true positives are flagged for the wrong reason: the map peaks outside the defect.

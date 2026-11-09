@@ -1,0 +1,27 @@
+\section{Related Work and Method Selection}
+\label{sec:related}
+
+\subsection{Approaches to industrial anomaly detection}
+\emph{Reconstruction} methods train an autoencoder, VAE or GAN on normal images and use the reconstruction error as the anomaly map~\cite{bergmann2019ssim,akcay2018ganomaly,kingma2014vae}.
+These networks tend to generalise too well: they reconstruct defects too and blur fine textures, so they lag behind feature-based methods on MVTec AD~\cite{bergmann2021mvtec}.
+\emph{Feature-embedding} methods instead model the distribution of pretrained deep features.
+A single Gaussian over global ImageNet features is already a strong image-level detector~\cite{rippel2020gaussian}.
+SPADE~\cite{cohen2020spade}, PaDiM~\cite{defard2021padim} and PatchCore~\cite{roth2022patchcore} extend the idea to patches, which yields localisation.
+\emph{Teacher--student} methods train a student to regress a frozen teacher's features on normal data and read anomalies from the discrepancy~\cite{bergmann2020students,wang2021stfpm,deng2022rd4ad,batzner2024efficientad}.
+\emph{Normalising flows} learn an exact likelihood over pretrained features~\cite{rudolph2021differnet,gudovskiy2022cflow,yu2021fastflow}.
+\emph{Self-supervised} methods synthesise pseudo-anomalies and train a discriminator~\cite{li2021cutpaste,zavrtanik2021draem,liu2023simplenet}.
+\emph{Foundation-model} approaches use CLIP~\cite{radford2021clip} or DINOv2~\cite{oquab2024dinov2} features for zero- or few-shot detection~\cite{jeong2023winclip,damm2025anomalydino}.
+\emph{Unified} models train one network for all categories~\cite{you2022uniad}.
+The last five families require training, and the zero-shot and unified models still trail the best per-category methods in accuracy.
+
+\subsection{Selected methods}
+We select two feature-embedding methods that share a frozen ImageNet WideResNet-50-2~\cite{zagoruyko2016wrn,deng2009imagenet} backbone but model normality in different ways.
+\textbf{PaDiM} (baseline) is \emph{parametric} and \emph{position-specific}: it fits one Gaussian per spatial position and therefore assumes that a given grid cell shows the same part of the product in every image.
+\textbf{PatchCore} (main method) is \emph{non-parametric} and \emph{position-agnostic}: a test patch only needs to resemble \emph{some} normal patch from any image at any location, and the memory bank covers multi-modal normal appearance.
+Four considerations motivate this choice.
+\emph{Accuracy}: PatchCore is among the strongest full-shot methods on MVTec AD (99.1\% image AUROC, 93.4\% AU-PRO~\cite{roth2022patchcore}), and PaDiM (95.3\%, 92.1\%~\cite{defard2021padim}) is a clearly weaker baseline, so the gap between them is large enough to analyse.
+\emph{Complexity}: neither method uses back-propagation, and both have few interpretable hyper-parameters, which keeps failure analysis tractable.
+\emph{Compute}: fitting is a single forward pass followed by covariance estimation or coreset selection, and takes seconds on one GPU.
+\emph{Applicability}: both need only normal images, and PatchCore's memory bank can be extended without retraining and explains each decision by its nearest normal patch.
+Because the backbone is shared, any performance difference reflects the modelling principle.
+We expected the gap to be largest on screw and capsule, where pose and shift variation would violate PaDiM's alignment assumption, and expected the stationary textures to suit both methods; Section~\ref{sec:results} tests this hypothesis.

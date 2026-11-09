@@ -1,0 +1,41 @@
+\section{Dataset and Preprocessing}
+\label{sec:dataset}
+
+MVTec AD~\cite{bergmann2019mvtec,bergmann2021mvtec} contains 15 categories.
+Each training set contains only defect-free images, and each test set mixes good images with defects annotated by pixel-precise masks.
+We use three objects (bottle, capsule, screw) and three textures (carpet, tile, leather); Table~\ref{tab:dataset} summarises them.
+Using a fixed seed, we split each \texttt{train/good} set into 90\% for fitting and 10\% (21--32 images) for a \emph{normal-only validation set}, which is never used for fitting.
+
+\begin{table}[t]
+  \centering
+  \caption{Selected categories. Columns: \emph{fit/val} is our split of \texttt{train/good}; \emph{med.\ area} is the median GT defect area as a percentage of the image; \emph{pix\_std} is the mean per-pixel standard deviation of the normal images; \emph{align} is the mean correlation of a normal image with the mean normal image.}
+  \label{tab:dataset}
+  \footnotesize
+  \setlength{\tabcolsep}{2.5pt}
+  \input{generated/tables/tab_dataset.tex}
+\end{table}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\columnwidth]{fig_defect_area.pdf}
+  \caption{Distribution of GT defect area (fraction of the image, log scale). The dashed line marks one stride-8 feature cell, 0.128\% of the 224-pixel crop. Many screw, capsule and leather defects cover only a few cells.}
+  \label{fig:defectarea}
+\end{figure}
+
+Four dataset characteristics shape the difficulty of each category.
+\textbf{Defect size} spans about three orders of magnitude, from 0.037\% of the image (the smallest capsule crack) to 35.49\% (a tile glue strip), as Fig.~\ref{fig:defectarea} shows.
+Screw, capsule and leather have median defect areas below 0.5\%.
+At a 224-pixel input, one stride-8 WRN50 feature cell covers about 0.13\% of the image, so many of these defects span only a few cells.
+\textbf{Alignment} is near-perfect for bottle and capsule (align $\approx$\,0.996--0.998), while screws lie at arbitrary rotation and position (0.579).
+This is the property that breaks position-specific models.
+\textbf{Texture versus object}: textures are stationary, so any patch can be compared with any normal patch and alignment does not matter (for textures, \emph{align} reflects only illumination).
+For objects, the decision rests on a small foreground region against a fixed background, where specks and illumination gradients can trigger false alarms.
+\textbf{Normal variability} is highest for tile and screw (pix\_std 0.106 and 0.094).
+High variability broadens the learned normal distribution and makes threshold calibration harder.
+Finally, up to 10\% of anomalous images contain several separate defect regions, and AU-PRO weights each region equally.
+
+\textbf{Preprocessing.}
+Images are resized to 256 pixels, centre-cropped to 224 and normalised with ImageNet mean and standard deviation.
+Masks receive the same geometric transform, and all metrics are computed at 224$\times$224.
+Matching the backbone's pre-training statistics is essential for frozen features.
+The centre crop follows the reference implementations but discards a 12.5\% border, which removes part of a few defects (Section~\ref{sec:failures}).

@@ -1,0 +1,79 @@
+\section{Results}
+\label{sec:results}
+
+\begin{table*}[t]
+  \centering
+  \caption{Main results, PaDiM vs PatchCore (WRN50, 224\,px, seed 0). Image F1 uses the threshold set on the normal validation split. \oracle{} selects its threshold with test labels and is shown \emph{for reference only}. The better value of each pair is in bold.}
+  \label{tab:main}
+  \footnotesize
+  \input{generated/tables/tab_main.tex}
+\end{table*}
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\textwidth]{fig_bars.pdf}
+  \caption{Per-category (a) image AUROC and (b) AU-PRO. The dashed line separates objects (left) from textures (right). PaDiM falls behind on screw and capsule, and the two methods tie on the textures.}
+  \label{fig:bars}
+\end{figure*}
+
+\subsection{Overall comparison}
+Table~\ref{tab:main} and Fig.~\ref{fig:bars} summarise the results.
+PatchCore is better on every six-category mean: image AUROC \pcImgAurocAll{} vs \pdImgAurocAll{}, image F1 \pcImgFoneAll{} vs \pdImgFoneAll{}, pixel AUROC \pcPixAurocAll{} vs \pdPixAurocAll{} and AU-PRO \pcAuproAll{} vs \pdAuproAll{}.
+It is also cheaper (Table~\ref{tab:cost}).
+PatchCore fits about $1.7\times$ faster, runs at \pcInferAll{} vs \pdInferAll{}\,ms per image, and uses less peak GPU memory.
+PaDiM's peak GPU figure understates its real footprint, because its 3.8\,GB of inverse covariances per category sit in host memory.
+
+\begin{table}[t]
+  \centering
+  \caption{Cost, six-category means on an RTX~5080. \emph{Infer} excludes and \emph{e2e} includes data loading.}
+  \label{tab:cost}
+  \footnotesize
+  \input{generated/tables/tab_cost.tex}
+\end{table}
+
+\subsection{Objects vs textures}
+\textbf{Textures are a tie.}
+Mean texture image AUROC is \pdImgAurocTex{} for PaDiM and \pcImgAurocTex{} for PatchCore, and PaDiM is even slightly better on carpet (\pdImgAurocCarpet{} vs \pcImgAurocCarpet{}).
+In a stationary texture every position sees the same statistics, so position-specific Gaussians lose nothing.
+
+\textbf{The gap is in the objects.}
+Mean object image AUROC is \pdImgAurocObj{} vs \pcImgAurocObj{}, driven by screw (\pdImgAurocScrew{} vs \pcImgAurocScrew{}) and capsule (\pdImgAurocCapsule{} vs \pcImgAurocCapsule{}).
+This confirms the prediction of Section~\ref{sec:related}, although the two categories fail for different reasons.
+
+\emph{Screw: pose.}
+Screws are poorly aligned (align 0.579).
+A fixed grid position therefore sees thread in one image, shank in another and background in a third, and its single Gaussian must stretch to cover all of them.
+As a result, a damaged thread falls ``within normal variation'' at that position.
+PatchCore asks only whether the damaged patch resembles \emph{any} normal patch, so pose does not matter.
+PaDiM's image recall on screw is 0.000--0.083 for four of the five defect types, against 0.522--0.960 for PatchCore, and 80 of the 119 anomalous screws are missed only by PaDiM.
+
+\emph{Capsule: background specks, not pose.}
+Capsule is as well aligned as bottle (align 0.998), so pose cannot explain PaDiM's deficit.
+Instead, 34.7\% of PaDiM's capsule true positives have their map maximum \emph{outside} the GT, against 13.9\% for PatchCore.
+Over a near-constant background, the per-position covariance is tiny, so a dust speck becomes a large Mahalanobis outlier that can outscore a subtle defect on the capsule body (Fig.~\ref{fig:failures}b).
+
+\textbf{Localisation gap is smaller.}
+Pixel AUROC is dominated by normal pixels and large defects.
+Tile has the lowest AU-PRO for both methods (\pdAuproTile{} / \pcAuproTile{}), because its large, low-contrast oil and glue stains are only partly segmented.
+
+\subsection{Threshold calibration}
+\label{sec:calib}
+PaDiM ranks tile well (image AUROC \pdImgAurocTile{}) and screw moderately, yet its F1 at the validation threshold is only \pdImgFoneTile{} on tile and \pdImgFoneScrew{} on screw.
+The corresponding oracle values are \pdImgFmaxTile{} and \pdImgFmaxScrew{}.
+Table~\ref{tab:calib} shows why: the threshold sits far above typical normal scores (1.49--1.74$\times$ the validation median, against 1.20 for PatchCore), and on screw it even exceeds the median score of the anomalous test images.
+There are two causes.
+First, with $d=550$ and only 206--287 degrees of freedom, a \emph{held-out} normal image with energy in the directions the fit data do not span receives an inflated Mahalanobis distance.
+This produces a heavy right tail in the validation scores (coefficient of variation 0.15--0.19 vs 0.07 for PatchCore) on the two most variable categories.
+We infer this mechanism from the validation distribution; in-sample training distances were not stored.
+Second, with only 21--32 validation scores, the interpolated 99\% quantile lies between the two largest scores and is effectively the maximum. On tile, one normal validation image (31.33, against a second-largest score of 24.37) alone sets the threshold at 29.80, above the median anomalous test image.
+The result is near-perfect precision at a recall of 0.13--0.17.
+PatchCore suffers less but also loses calibration: its mean F1 is \pcImgFoneAll{} against an oracle reference of \pcImgFmaxAll{}.
+
+\begin{table}[t]
+  \centering
+  \caption{Calibration on screw and tile. All statistics are image scores; the threshold is the 99\% quantile of the normal validation scores.}
+  \label{tab:calib}
+  \footnotesize
+  \setlength{\tabcolsep}{2pt}
+  \input{generated/tables/tab_calibration.tex}
+\end{table}

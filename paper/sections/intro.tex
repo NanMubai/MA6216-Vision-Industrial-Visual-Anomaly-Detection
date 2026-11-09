@@ -1,0 +1,25 @@
+\section{Introduction}
+\label{sec:intro}
+
+A production line must reject parts with scratches, cracks, contamination, deformations or abnormal texture.
+A supervised defect classifier fits this task poorly for three reasons.
+First, defects are rare, so a balanced labelled set, let alone one with pixel masks, is slow and expensive to collect.
+Second, defects are open-ended: the most dangerous defect is the one never seen before.
+Third, defect-free parts are plentiful and fairly consistent in appearance.
+Visual inspection is therefore commonly posed as \emph{one-class}, or unsupervised, anomaly detection~\cite{bergmann2019mvtec,bergmann2021mvtec}.
+A model sees only normal images and learns what ``normal'' looks like.
+At test time it produces (i)~an \emph{image score} that is thresholded into an accept/reject decision, and (ii)~a \emph{pixel anomaly map} that shows where the defect is.
+The map supports operator trust and root-cause analysis.
+
+This report compares two methods that represent different principles for modelling normality, using the MVTec AD benchmark~\cite{bergmann2019mvtec}.
+PaDiM~\cite{defard2021padim} is a \emph{parametric}, position-specific Gaussian model.
+PatchCore~\cite{roth2022patchcore} is a \emph{non-parametric}, position-agnostic memory bank.
+Both use the same frozen ImageNet backbone, so the comparison isolates the modelling principle.
+Our contributions are:
+\begin{itemize}
+  \item a leakage-free implementation of both methods on three object and three texture categories, in which every threshold is set from a held-out \emph{normal} validation split and test labels are read only by the evaluator;
+  \item an image- and pixel-level evaluation (image AUROC and F1, pixel AUROC, AU-PRO) together with fit time, latency and memory;
+  \item a failure analysis that explains \emph{why} each method misses or falsely flags images, broken down by defect type, defect size, calibration and localisation quality;
+  \item three PatchCore enhancements (a DINOv2 backbone~\cite{oquab2024dinov2}, multi-scale fusion and post-processing), all specified \emph{a priori} and evaluated against the same baseline.
+\end{itemize}
+All results come from a single seed (0).
