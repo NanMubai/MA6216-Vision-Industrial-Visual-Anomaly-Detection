@@ -3,7 +3,7 @@
 
 We test three enhancements to PatchCore, each changing one factor relative to the WRN50 baseline under the same protocol.
 All variants were specified \emph{a priori}, except one DINOv2 sensitivity run that was chosen after seeing test results and is marked post-hoc (\posthoc).
-Table~\ref{tab:bonus} reports six-category means, and Fig.~\ref{fig:tradeoff} plots localisation against latency.
+Table~\ref{tab:bonus} reports six-category means, and Fig.~\ref{fig:tradeoff} plots detection and localisation against latency.
 
 \begin{table*}[t]
   \centering
@@ -44,6 +44,6 @@ Per-product calibration therefore remains necessary.
 \begin{figure}[t]
   \centering
   \includegraphics[width=\columnwidth]{fig_tradeoff.pdf}
-  \caption{Localisation--latency trade-off of the PatchCore variants (six-category means; log-scale inference time). The hollow marker with a dagger is post-hoc.}
+  \caption{Accuracy--latency trade-off of the PatchCore model variants (six-category means; inference time on a log$_2$ axis): (a)~image AUROC, (b)~AU-PRO. Dotted lines mark the WRN50 baseline; the max-score control nearly coincides with it ($|\Delta|\leq0.001$). All values are single-seed estimates. The hollow marker (\dag) is the post-hoc DINOv2 run. Post-processing variants are omitted because they do not change latency (Table~\ref{tab:bonus}). A value below the axis range is drawn on the axis edge with its value.}
   \label{fig:tradeoff}
 \end{figure}

@@ -11,13 +11,13 @@
 
 \begin{figure*}[t]
   \centering
-  \includegraphics[width=\textwidth]{fig_bars.pdf}
-  \caption{Per-category (a) image AUROC and (b) AU-PRO. The dashed line separates objects (left) from textures (right). PaDiM falls behind on screw and capsule, and the two methods tie on the textures.}
-  \label{fig:bars}
+  \includegraphics[width=\textwidth]{fig_main_dumbbell.pdf}
+  \caption{Per-category comparison of PaDiM (circles) and PatchCore (squares): (a)~image AUROC, (b)~image F1 at the normal-validation threshold, (c)~AU-PRO. A segment joins the two methods for each category. Panels (a) and (c) share the range $[0.75,1]$ and panel (b) spans $[0,1]$. Values are single-seed estimates, so no uncertainty is shown. PaDiM falls behind on screw and capsule, the two methods tie on the textures, and PaDiM's F1 collapses on screw and tile despite usable AUROC.}
+  \label{fig:dumbbell}
 \end{figure*}
 
 \subsection{Overall comparison}
-Table~\ref{tab:main} and Fig.~\ref{fig:bars} summarise the results.
+Table~\ref{tab:main} and Fig.~\ref{fig:dumbbell} summarise the results.
 PatchCore is better on every six-category mean: image AUROC \pcImgAurocAll{} vs \pdImgAurocAll{}, image F1 \pcImgFoneAll{} vs \pdImgFoneAll{}, pixel AUROC \pcPixAurocAll{} vs \pdPixAurocAll{} and AU-PRO \pcAuproAll{} vs \pdAuproAll{}.
 It is also cheaper (Table~\ref{tab:cost}).
 PatchCore fits about $1.7\times$ faster, runs at \pcInferAll{} vs \pdInferAll{}\,ms per image, and uses less peak GPU memory.

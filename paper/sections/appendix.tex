@@ -11,8 +11,25 @@ Thresholds and score normalisation are computed only from the normal validation 
 Test labels are read only by \texttt{ad.metrics}.
 Unit tests check these contracts.
 
-\section{Recall by Defect Type}
+\section{Recall by Defect Type and Region Size}
 \label{app:recall}
+\begin{table}[!htbp]
+  \centering
+  \caption{GT region detection rate by region size, pooled over the six categories (data of Fig.~\ref{fig:regionsize}).}
+  \label{tab:regionsize}
+  \footnotesize
+  \input{generated/tables/tab_regionsize.tex}
+\end{table}
+
+\begin{table}[!htbp]
+  \centering
+  \caption{Anomalous test images missed at the validation threshold.}
+  \label{tab:missoverlap}
+  \footnotesize
+  \setlength{\tabcolsep}{3pt}
+  \input{generated/tables/tab_missoverlap.tex}
+\end{table}
+
 \begin{table}[!htbp]
   \centering
   \caption{Image recall at the validation threshold, by defect type.}
@@ -51,18 +68,18 @@ Unit tests check these contracts.
 \clearpage
 \section{All Curated Failure Cases}
 \label{app:failures}
-Each panel shows the image with the GT outlined in green, the PaDiM map and the PatchCore map. Maps are divided by the validation pixel threshold, and the red contours mark the predicted regions.
+As in Fig.~\ref{fig:failures}, each column is one case; the rows show the image with the GT outlined by a dashed yellow line, then the PaDiM and PatchCore maps on a greyscale copy of the image. Maps are divided by each method's normal-validation pixel threshold and drawn on a diverging scale centred at the threshold (white $=1$, red above, blue below), and solid black contours mark the predicted region (map $\geq$ threshold), which also identifies the threshold in greyscale print. The label in each map gives the image score divided by the image threshold and the resulting decision.
 
 \begin{figure*}[!htbp]
   \centering
-  \includegraphics[width=\textwidth]{fig_app_failures_1.jpg}
+  \includegraphics[width=\textwidth]{fig_app_failures_1.pdf}
   \caption{Failure cases 1--6. (a)~Screw thread\_top: missed only by PaDiM (pose). (b)~Screw thread\_side: missed by both; two tiny regions on the normal high-frequency thread. (c)~Capsule scratch: missed by both; PaDiM's only hot spot is background dust. (d)~Capsule crack: missed by both; peaks on dark specks. (e)~Capsule faulty imprint: localised but not detected by PatchCore. (f)~Tile gray\_stroke: only about 10\% of the GT survives the centre crop.}
   \label{fig:app_fail1}
 \end{figure*}
 
 \begin{figure*}[!htbp]
   \centering
-  \includegraphics[width=\textwidth]{fig_app_failures_2.jpg}
+  \includegraphics[width=\textwidth]{fig_app_failures_2.pdf}
   \caption{Failure cases 7--12. (a)~Tile oil: PaDiM calibration failure; PatchCore IoU 0.85. (b)~Normal carpet: global-shift false positive by PatchCore. (c)~Normal leather: diffuse PatchCore false positive, absorbed by PaDiM's looser threshold. (d)~Normal capsule: PaDiM-only false positive caused by background dust. (e)~Normal bottle: PaDiM-only false positive on the glossy rim. (f)~Leather colour: true positive with poor localisation (IoU 0.07).}
   \label{fig:app_fail2}
 \end{figure*}
@@ -70,16 +87,19 @@ Each panel shows the image with the GT outlined in green, the PaDiM map and the 
 \clearpage
 \section{Qualitative Results}
 \label{app:qual}
-Figs.~\ref{fig:app_qual_bottle}--\ref{fig:app_qual_leather} show the per-category qualitative summaries for PaDiM (left) and PatchCore (right).
-Each method selects its own examples.
-From top to bottom, the rows show true positives with the best localisation, true positives with poor localisation, missed anomalies (FN) and false alarms (FP).
-The GT is outlined in green and the predicted region (map at or above the validation pixel threshold) in red.
+Figs.~\ref{fig:app_qual_bottle}--\ref{fig:app_qual_leather} compare both methods on the \emph{same} test images, using the encoding of Fig.~\ref{fig:failures}.
+For each category, four images are chosen by a fixed rule that uses the stored PatchCore scores and the test labels only to pick illustrations:
+(1)~the anomalous image with the median PatchCore score;
+(2)~the anomalous image with the lowest PatchCore score;
+(3)~the anomalous image on which the two methods disagree most, measured by score divided by image threshold;
+(4)~the normal image with the highest PatchCore score.
+Ties are broken by image index.
 
 \newcommand{\qualfig}[1]{%
 \begin{figure*}[!htbp]
   \centering
-  \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio]{fig_app_qual_#1.jpg}
-  \caption{Qualitative results for \emph{#1}: PaDiM (left) and PatchCore (right).}
+  \includegraphics{fig_app_qual_#1.pdf}
+  \caption{Qualitative comparison on \emph{#1}. Cases (a)--(d) follow selection rule (1)--(4).}
   \label{fig:app_qual_#1}
 \end{figure*}}
 \qualfig{bottle}
