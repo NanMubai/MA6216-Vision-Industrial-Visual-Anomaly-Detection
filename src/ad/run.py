@@ -9,7 +9,7 @@ CLI:  python -m ad.run --config configs/patchcore_wrn50.yaml [--categories bottl
 Per category, writes results/<name>/<category>/:
     scores.npz   image_scores (N,), labels (N,), defect_types (N,), paths (N,),
                  val_image_scores (M,)
-    maps.npz     maps (N,H,W) float16 post-processed test maps, masks (N,H,W) uint8
+    maps.npz     maps (N,H,W) float16 post-processed test maps (float32 with zscore), masks (N,H,W) uint8
     metrics.json ad.metrics.evaluate(...) + image_threshold, pixel_threshold,
                  fit_seconds, infer_ms_per_image, infer_ms_per_image_e2e,
                  peak_gpu_mem_gb, model_stats, config, category, is_texture
@@ -23,6 +23,14 @@ test batches, with CUDA synchronisation. infer_ms_per_image_e2e also includes lo
 those batches (including worker startup). Both exclude evaluation and image-score
 aggregation. The preloaded CPU batches are released after their masks are collected.
 Thresholds come only from the normal validation split (ad.threshold).
+scoring.normalize defaults to none; zscore fits separate image/pixel statistics
+on normal validation and reports image_f1_global (fixed z=3) and
+image_f1_global_pooled (99% pooled normalised validation image quantile) after
+all requested categories succeed. Per-category image_f1 remains available.
+--prediction-cache optionally shares raw model outputs across postprocessing
+variants with identical model/data/seed configuration. Recorded inference time
+adds the cached model prediction time to each newly measured smoothing pass;
+fit time and model peak memory are inherited and marked in metrics.json.
 Run GPU experiments under scripts/gpu_run.sh; this module does not acquire the GPU lock.
 """
 
@@ -100,7 +108,57 @@ def _image_scores(pred: Prediction, maps: np.ndarray, cfg: dict, mode: str) -> n
     return scores
 
 
-def _run_category(category: str, cfg: dict, result_dir: Path, no_figs: bool) -> dict:
+def _save_raw_prediction(path: Path, prediction: Prediction) -> None:
+    arrays = {"patch_maps": prediction.patch_maps}
+    if prediction.image_scores is not None:
+        arrays["image_scores"] = prediction.image_scores
+    np.savez_compressed(path, **arrays)
+
+
+class _CachedPredictions:
+    """Replay raw model outputs to compare postprocessing without refitting."""
+
+    def __init__(self, path: Path, metadata: dict, device):
+        self.path, self.metadata, self.device = path, metadata, device
+
+    def fit(self, loader):
+        pass
+
+    def predict(self, loader):
+        with np.load(self.path / f"{loader.dataset.split}.npz", allow_pickle=False) as arrays:
+            return Prediction(arrays["patch_maps"], arrays.get("image_scores"))
+
+    def stats(self):
+        return self.metadata["model_stats"]
+
+
+def _apply_global_thresholds(run_dir: Path, categories: dict) -> None:
+    """Calibrate from validation, then delegate all test-label evaluation to metrics."""
+    val_scores = {}
+    for category in categories:
+        with np.load(run_dir / category / "scores.npz", allow_pickle=False) as arrays:
+            val_scores[category] = arrays["val_image_scores"]
+    thresholds = {"global": threshold.global_image_threshold(val_scores),
+                  "global_pooled": threshold.global_image_threshold(val_scores, "pooled_quantile")}
+    for category, result in categories.items():
+        with np.load(run_dir / category / "scores.npz", allow_pickle=False) as arrays:
+            for suffix, value in thresholds.items():
+                measured = metrics.f1_at_threshold(arrays["labels"], arrays["image_scores"], value)
+                result[f"image_threshold_{suffix}"] = value
+                result.update({f"image_{key}_{suffix}": number for key, number in measured.items()})
+        _write_json(run_dir / category / "metrics.json", result)
+    _write_json(run_dir / "global_thresholds.json", {
+        "source": "normal_validation", "categories": list(categories),
+        "image_threshold_global": thresholds["global"],
+        "image_threshold_global_pooled": thresholds["global_pooled"], "pooled_quantile": 0.99,
+        "val_image_count": {key: len(value) for key, value in val_scores.items()}})
+
+
+def _run_category(category: str, cfg: dict, result_dir: Path, no_figs: bool,
+                  prediction_cache: Path | None = None) -> dict:
+    normalize = cfg["scoring"].get("normalize", "none")
+    if normalize not in ("none", "zscore"):
+        raise ValueError("scoring.normalize must be none or zscore")
     np.random.seed(cfg["seed"])
     torch.manual_seed(cfg["seed"])
     data = cfg["data"]
@@ -130,14 +188,28 @@ def _run_category(category: str, cfg: dict, result_dir: Path, no_figs: bool) -> 
         torch.cuda.reset_peak_memory_stats(device)
     model = None
     try:
-        model = build_model(cfg["method"], **cfg["model"])
+        # A cache is opt-in and reusable ONLY when every model/data setting matches.
+        # It holds raw predictions, never labels/masks or calibrated statistics.
+        cache_path = prediction_cache / category if prediction_cache is not None else None
+        identity = {key: value for key, value in cfg.items()
+                    if key not in ("name", "scoring", "threshold")}
+        cached = None
+        if cache_path is not None and (cache_path / "metadata.json").is_file():
+            cached = json.loads((cache_path / "metadata.json").read_text())
+            if cached["identity"] != identity:
+                raise ValueError("prediction cache model/data config differs from this run")
+        if cached is None:
+            model = build_model(cfg["method"], **cfg["model"])
+        else:
+            model = _CachedPredictions(cache_path, cached, device)
         device = torch.device(model.device)
         use_cuda = device.type == "cuda" and torch.cuda.is_available()
         synchronize()
         started = time.perf_counter()
         model.fit(loaders["train"])
         synchronize()
-        fit_seconds = time.perf_counter() - started
+        fit_seconds = (cached["fit_seconds"] if cached is not None
+                       else time.perf_counter() - started)
 
         val_pred = model.predict(loaders["val"])
         model_scores_available = val_pred.image_scores is not None
@@ -149,8 +221,17 @@ def _run_category(category: str, cfg: dict, result_dir: Path, no_figs: bool) -> 
         val_scores = _image_scores(val_pred, val_maps, cfg, score_mode)
         if len(val_maps) != len(datasets["val"]):
             raise ValueError("validation predictions do not match the dataset length")
+        normalization = None
+        if normalize == "zscore":
+            normalization = {"source": "normal_validation", "image": scoring.fit_zscore(val_scores),
+                             "pixel": scoring.fit_zscore(val_maps)}
+            val_scores = scoring.apply_zscore(val_scores, normalization["image"])
+            val_maps = scoring.apply_zscore(val_maps, normalization["pixel"])
         image_thr = threshold.image_threshold(val_scores, cfg["threshold"]["image_quantile"])
         pixel_thr = threshold.pixel_threshold(val_maps, cfg["threshold"]["pixel_quantile"])
+        if cache_path is not None and cached is None:
+            cache_path.mkdir(parents=True, exist_ok=True)
+            _save_raw_prediction(cache_path / "val.npz", val_pred)
         del val_maps, val_pred
 
         synchronize()
@@ -159,16 +240,29 @@ def _run_category(category: str, cfg: dict, result_dir: Path, no_figs: bool) -> 
         synchronize()
         started = time.perf_counter()
         test_pred = model.predict(test_batches)
+        synchronize()
+        predicted = time.perf_counter()
         maps = scoring.upsample_and_smooth(
             test_pred.patch_maps, size=data["crop"], sigma=cfg["scoring"]["sigma"], device=str(device))
         synchronize()
         stopped = time.perf_counter()
-        infer_ms = 1000 * (stopped - started) / len(datasets["test"])
-        infer_ms_e2e = 1000 * (stopped - e2e_started) / len(datasets["test"])
+        predict_seconds = (cached["predict_seconds"] if cached is not None else predicted - started)
+        infer_ms = 1000 * (predict_seconds + stopped - predicted) / len(datasets["test"])
+        infer_ms_e2e = infer_ms + 1000 * (started - e2e_started) / len(datasets["test"])
         peak_gb = torch.cuda.max_memory_allocated(device) / 1024 ** 3 if use_cuda else 0.0
+        if cached is not None:
+            peak_gb = max(peak_gb, cached["peak_gpu_mem_gb"])
+        if cache_path is not None and cached is None:
+            _save_raw_prediction(cache_path / "test.npz", test_pred)
+            _write_json(cache_path / "metadata.json", {
+                "identity": identity, "fit_seconds": fit_seconds, "predict_seconds": predict_seconds,
+                "peak_gpu_mem_gb": peak_gb, "model_stats": model.stats()})
         if (test_pred.image_scores is not None) != model_scores_available:
             raise ValueError("model image_scores availability differs between validation and test")
         image_scores = _image_scores(test_pred, maps, cfg, score_mode)
+        if normalization is not None:
+            image_scores = scoring.apply_zscore(image_scores, normalization["image"])
+            maps = scoring.apply_zscore(maps, normalization["pixel"])
         if len(maps) != len(datasets["test"]):
             raise ValueError("test predictions do not match the dataset length")
 
@@ -193,11 +287,26 @@ def _run_category(category: str, cfg: dict, result_dir: Path, no_figs: bool) -> 
             "is_texture": category in TEXTURE_CATEGORIES,
             "config": cfg,
         })
+        if normalization is not None:
+            result["normalization"] = normalization
+            # The same deployment cutoff is also available for normalised maps.
+            # These pixel metrics include all test images; existing pixel_f1
+            # retains its original anomalous-image-only evaluation convention.
+            result["pixel_threshold_global"] = 3.0
+            result.update({f"pixel_{key}_global": value for key, value in
+                           metrics.f1_at_threshold(masks, maps, 3.0).items()})
+        if cache_path is not None:
+            result["prediction_cache"] = {"path": str(cache_path), "reused": cached is not None,
+                                          "predict_seconds": predict_seconds,
+                                          "timing": "shared model prediction plus measured postprocessing"}
         result_dir.mkdir(parents=True, exist_ok=True)
         np.savez_compressed(result_dir / "scores.npz", image_scores=image_scores, labels=labels,
                             defect_types=np.asarray(defect_types), paths=np.asarray(paths),
                             val_image_scores=val_scores)
-        np.savez_compressed(result_dir / "maps.npz", maps=maps.astype(np.float16), masks=masks)
+        # Keep normalised maps in float32: small validation std can produce z
+        # scores beyond float16 range, and quantisation can change rank metrics.
+        map_dtype = np.float32 if normalization is not None else np.float16
+        np.savez_compressed(result_dir / "maps.npz", maps=maps.astype(map_dtype), masks=masks)
         _write_json(result_dir / "metrics.json", result)
         if not no_figs:
             try:
@@ -221,6 +330,9 @@ def main(argv: list[str] | None = None) -> None:
     parser.add_argument("--max-train", type=int)
     parser.add_argument("--out", type=Path, default=Path("results"))
     parser.add_argument("--no-figs", action="store_true")
+    parser.add_argument("--prediction-cache", type=Path,
+                        help="opt-in raw prediction cache shared by postprocessing variants; "
+                             "timing reuses model prediction cost and measures each smoothing pass")
     parser.add_argument("--set", dest="assignments", action="append", default=[], metavar="KEY=VALUE")
     args = parser.parse_args(argv)
     try:
@@ -247,7 +359,8 @@ def main(argv: list[str] | None = None) -> None:
     for category in cfg["categories"]:
         result_dir = run_dir / category
         try:
-            categories[category] = _run_category(category, cfg, result_dir, args.no_figs)
+            cache_options = {"prediction_cache": args.prediction_cache} if args.prediction_cache else {}
+            categories[category] = _run_category(category, cfg, result_dir, args.no_figs, **cache_options)
             (result_dir / "error.json").unlink(missing_ok=True)
         except Exception as error:
             LOGGER.exception("Category %s failed", category)
@@ -257,9 +370,13 @@ def main(argv: list[str] | None = None) -> None:
             # A failed rerun must not expose old successful metrics to aggregation.
             (result_dir / "metrics.json").unlink(missing_ok=True)
             _write_json(result_dir / "error.json", errors[category])
+    if cfg["scoring"].get("normalize", "none") == "zscore" and not errors:
+        _apply_global_thresholds(run_dir, categories)
+    else:
+        (run_dir / "global_thresholds.json").unlink(missing_ok=True)
     numeric_keys = {key for result in categories.values() for key, value in result.items()
                     if isinstance(value, (int, float)) and not isinstance(value, bool)
-                    and key not in ("image_threshold", "pixel_threshold")}
+                    and "threshold" not in key}
     mean = {}
     for key in sorted(numeric_keys):
         values = [result[key] for result in categories.values()
