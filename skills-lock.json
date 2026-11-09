@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "skills": {
+    "matplotlib": {
+      "source": "K-Dense-AI/scientific-agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/matplotlib/SKILL.md",
+      "computedHash": "018665720fdf586784eeaac4a733ae26c6d9b9579220d7918d6507e07c394e00",
+      "installMode": "copy"
+    },
+    "scientific-schematics": {
+      "source": "K-Dense-AI/scientific-agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/scientific-schematics/SKILL.md",
+      "computedHash": "e7fbd15ab820353b1ab001cccb68b0496252e97c19fa34b38b57b50fd4dbf162",
+      "installMode": "copy"
+    },
+    "scientific-visualization": {
+      "source": "K-Dense-AI/scientific-agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/scientific-visualization/SKILL.md",
+      "computedHash": "5477b78120e75a65aed0f6e15dbf71b8669cca9160c2036847fd7bb45a3344c1",
+      "installMode": "copy"
+    },
+    "seaborn": {
+      "source": "K-Dense-AI/scientific-agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/seaborn/SKILL.md",
+      "computedHash": "582a9db77900c0d59c96a5f0cf556c5ab44b0fa0813baa3e6c2ed747114d172c",
+      "installMode": "copy"
+    }
+  }
+}
