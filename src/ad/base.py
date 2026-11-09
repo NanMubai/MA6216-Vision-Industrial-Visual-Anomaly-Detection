@@ -50,4 +50,7 @@ def build_model(method: str, device: str = "cuda", **kwargs) -> AnomalyModel:
     if method == "patchcore":
         from ad.patchcore import PatchCore
         return PatchCore(device=device, **kwargs)
+    if method == "patchcore_multires":
+        from ad.multiscale import MultiResPatchCore
+        return MultiResPatchCore(device=device, **kwargs)
     raise ValueError(f"unknown method {method!r}")

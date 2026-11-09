@@ -1,0 +1,15 @@
+name: patchcore_ms_res_1_1.5_zmean
+method: patchcore_multires
+model:
+  scales: [1.0, 1.5]
+  fusion: zmean
+  backbone: wrn50
+  layers: [layer2, layer3]
+  patch_size: 3
+  target_dim: 1024
+  coreset_ratio: 0.1
+  proj_dim: 128
+  num_neighbors: 9
+scoring:
+  sigma: 4.0
+  image_score: max     # Shared max; compare against the max-score baseline
