@@ -14,7 +14,7 @@ import io
 import re
 import subprocess
 from dataclasses import dataclass
-from decimal import Decimal
+from decimal import Decimal, ROUND_HALF_UP
 from pathlib import Path
 from statistics import mean
 
@@ -122,11 +122,38 @@ def bold(value: str, is_best: bool) -> str:
     return r"\textbf{" + value + "}" if is_best else value
 
 
-def pair(a: float, b: float, dp=3, lower=False) -> list[str]:
-    best = min(a, b) if lower else max(a, b)
-    # CSV diagnostics are already rounded to four places. Decimal prevents a
-    # stored tie (e.g. 0.5375) from moving due to its binary float representation.
-    return [bold(f"{Decimal(str(v)):.{dp}f}", abs(v - best) < 1e-12) for v in (a, b)]
+def number(value, dp=3) -> str:
+    """Round source decimals half-up; never re-round an exact count ratio."""
+    return f"{Decimal(str(value)).quantize(Decimal(10) ** -dp, rounding=ROUND_HALF_UP):.{dp}f}"
+
+
+def ratio(numerator: int, denominator: int) -> Decimal:
+    assert denominator > 0
+    return Decimal(numerator) / Decimal(denominator)
+
+
+def detection_rates(rows: list[dict[str, str]]) -> dict[str, Decimal]:
+    """Summarise already-evaluated image decisions, without choosing thresholds."""
+    tp = sum(r["label"] == "1" and r["detected"] == "True" for r in rows)
+    fp = sum(r["label"] == "0" and r["detected"] == "True" for r in rows)
+    n_anom = sum(r["label"] == "1" for r in rows)
+    return {"precision": ratio(tp, tp + fp), "recall": ratio(tp, n_anom),
+            "image_f1": ratio(2 * tp, n_anom + tp + fp)}
+
+
+def region_rates(pooled, regions) -> list[Decimal]:
+    rates = []
+    for method in ("PaDiM", "PatchCore"):
+        selected = [r for r in regions if r["method"] == method and r["size_bin"] == pooled["size_bin"]]
+        assert len(selected) == int(pooled["n"])
+        rates.append(ratio(sum(r["region_detected"] == "True" for r in selected), len(selected)))
+    return rates
+
+
+def pair(a: float | Decimal | str, b: float | Decimal | str, dp=3, lower=False) -> list[str]:
+    displayed = [number(v, dp) for v in (a, b)]
+    best = (min if lower else max)(map(Decimal, displayed))
+    return [bold(v, Decimal(v) == best) for v in displayed]
 
 
 def tabular(spec: str, headers: list[str], rows: list[list[str] | None]) -> str:
@@ -160,17 +187,19 @@ def generate(output: Path) -> None:
     tables.mkdir(parents=True, exist_ok=True)
     data = load_metrics()
     main = data["baseline"]
+    images = csv_rows(FAILURES + "per_image.csv")
+    regions = csv_rows(FAILURES + "per_region.csv")
     macros = {}
     for prefix, run in RUNS.items():
         for metric, key in METRICS.items():
             for group, cats in GROUPS.items():
                 dp = 2 if metric in ("Fit", "Infer", "InferEtoE", "Mem") else 4
-                macros[prefix + metric + group] = f"{main.get(run, key, cats):.{dp}f}"
+                macros[prefix + metric + group] = number(main.get(run, key, cats), dp)
     macros.update({k: str(v) for k, v in failure_counts().items()})
     for v in VARIANTS:
         for metric in BONUS_METRICS:
             dp = 2 if metric in ("Infer", "Mem") else 4
-            macros["bn" + v.macro + metric] = f"{variant_value(v, metric, data):.{dp}f}"
+            macros["bn" + v.macro + metric] = number(variant_value(v, metric, data), dp)
     # Cross-check the global F1 values against the published Markdown table.
     global_row = next(r for r in md_tables("reports/bonus/postproc_tables/global_thresholds.md")[0]
                       if r["category"] == "mean (all)")
@@ -194,11 +223,11 @@ def generate(output: Path) -> None:
         types = [r for r in stats if r["category"] == cat and r["defect_type"] != "good"]
         assert len(types) == int(r["defect types"])
         assert sum(int(t["n_test"]) for t in types) == int(r["test defect"])
-        rows.append([cat, "obj." if r["kind"] == "object" else "tex.", r["fit / val"],
+        rows.append([cat, "obj." if r["kind"] == "object" else "tex.", r["fit / val"].replace(" ", ""),
                      r["test good"] + "/" + r["test defect"], str(len(types)),
                      area["area median"].rstrip("%"), r["pix_std"], r["align_corr"]])
-    write("tab_dataset", r"@{}l@{\,}l@{\,}r@{\,}r@{\,}r@{\,}r@{\,}r@{\,}r@{}",
-          [r"Category & Kind & Fit/val & \shortstack{Test\\good/def.} & \shortstack{\#\\types} & \shortstack{Area\\(\%)} & \shortstack{Pixel\\std.} & \shortstack{Align.\\corr.} \\"], rows)
+    write("tab_dataset", r"@{}llrrrrrr@{}",
+          [r"Category & Kind & Fit/val & \shortstack{Test\\G/D} & Types & \shortstack{Area\\\%} & \shortstack{Pix.\\std} & Align \\"], rows)
 
     main_metrics = ("ImgAuroc", "ImgFone", "ImgFmax", "PixAuroc", "Aupro")
     rows = []
@@ -216,23 +245,25 @@ def generate(output: Path) -> None:
 
     cost = ("Fit", "Infer", "InferEtoE", "Mem")
     values = [[main.get(run, METRICS[m]) for m in cost] for run in RUNS.values()]
-    rows = [[label, *[bold(f"{val:.2f}", val == min(values[0][i], values[1][i])) for i, val in enumerate(vals)]]
+    rows = [[label, *[bold(number(val, 2), val == min(values[0][i], values[1][i])) for i, val in enumerate(vals)]]
             for label, vals in zip(("PaDiM", "PatchCore"), values)]
-    write("tab_cost", "@{}lrrrr@{}", [r"Method & \shortstack{Fit\\(s)} & \shortstack{Infer\\(ms/img)} & \shortstack{E2E\\(ms/img)} & \shortstack{GPU\\(GB)} \\"], rows)
+    write("tab_cost", "@{}lrrrr@{}", [r"Method & \shortstack{Fit\\(s)} & \shortstack{Infer\\(ms/img)} & \shortstack{E2E\\(ms/img)} & \shortstack{GPU\\(GiB)} \\"], rows)
 
     rows = []
     calibration = csv_rows(FAILURES + "calibration.csv")
     for method in ("PaDiM", "PatchCore"):
         for cat in ("screw", "tile"):
             r = next(r for r in calibration if r["method"] == method and r["category"] == cat)
-            rows.append([method + "--" + cat, r["n_val"], *[f"{float(r[k]):.3f}" for k in
-                         ("val_median", "val_max", "image_thr", "thr_over_val_median", "test_anom_median", "precision", "recall", "image_f1")]])
+            exact = detection_rates([im for im in images if im["method"] == method and im["category"] == cat])
+            rows.append([method + "--" + cat, r["n_val"], *[number(r[k]) for k in
+                         ("val_median", "val_max", "image_thr", "thr_over_val_median", "test_anom_median")],
+                         *[number(exact[k]) for k in ("precision", "recall", "image_f1")]])
     write("tab_calibration", "@{}l" + "@{\\hspace{4pt}}r" * 9 + "@{}",
           [r"Method--category & $n_{\rm val}$ & \shortstack{Val\\median} & \shortstack{Val\\max} & \shortstack{Image\\thr} & \shortstack{Thr/val\\median} & \shortstack{Anomaly\\median} & Prec. & Recall & F1 \\"], rows)
 
     region_rows = csv_rows(FAILURES + "region_detection_pooled.csv")
     write("tab_regionsize", "@{}lrrr@{}", [r"Region size & $n$ & PaDiM & PatchCore \\"],
-          [[size_label(r["size_bin"]), r["n"], *pair(float(r["PaDiM"]), float(r["PatchCore"]))] for r in region_rows])
+          [[size_label(r["size_bin"]), r["n"], *pair(*region_rates(r, regions))] for r in region_rows])
     overlap = csv_rows(FAILURES + "miss_overlap.csv")
     rows = []
     for label, key in (("Missed by both", "both_missed"), ("Only PaDiM", "padim_only"), ("Only PatchCore", "patchcore_only")):
@@ -248,9 +279,15 @@ def generate(output: Path) -> None:
         fp = [next(r for r in fps if r["category"] == cat and r["method"] == m) for m in ("PaDiM", "PatchCore")]
         ls = [next(r for r in loc if r["category"] == cat and r["method"] == m) for m in ("PaDiM", "PatchCore")]
         rates = [int(r["n_fp"]) / int(r["n_good"]) for r in fp]
+        outside = []
+        for method, row in zip(("PaDiM", "PatchCore"), ls):
+            tps = [r for r in images if r["category"] == cat and r["method"] == method
+                   and r["label"] == "1" and r["detected"] == "True"]
+            assert len(tps) == int(row["n_tp"])
+            outside.append(ratio(sum(r["peak_in_gt"] == "False" for r in tps), len(tps)))
         rows.append([cat, *[bold(r["n_fp"] + "/" + r["n_good"], rate == min(rates)) for r, rate in zip(fp, rates)],
-                     *pair(*(float(r["median_pixel_iou"]) for r in ls)),
-                     *pair(*(float(r["peak_outside_gt"]) for r in ls), lower=True)])
+                     *pair(*(r["median_pixel_iou"] for r in ls)),
+                     *pair(*outside, lower=True)])
     write("tab_fp_loc", "@{}l" + "@{\\hspace{3pt}}r" * 6 + "@{}",
           [r"& \multicolumn{2}{c}{FP/normal} & \multicolumn{2}{c}{TP median IoU} & \multicolumn{2}{c}{Peak outside GT} \\",
            r"\cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7}",
@@ -260,14 +297,17 @@ def generate(output: Path) -> None:
     for v in VARIANTS:
         if previous is not None and previous != v.family:
             rows.append(None)
-        cells = [v.label, r"post-hoc\posthoc" if v.posthoc else "a priori"]
+        cells = [v.label, "post-hoc" if v.posthoc else ("--" if v.macro == "Base" else "a priori")]
         for metric in BONUS_METRICS:
             val = variant_value(v, metric, data)
             candidates = [variant_value(w, metric, data) for w in VARIANTS if not w.posthoc]
-            best = (min if metric in ("Infer", "Mem") else max)(candidates)
+            best = max(candidates)
             dp = 2 if metric in ("Infer", "Mem") else 3
-            # Compare at displayed precision so indistinguishable ties are bold.
-            cells.append(bold(f"{val:.{dp}f}", not v.posthoc and f"{val:.{dp}f}" == f"{best:.{dp}f}"))
+            # Keep meaningful fourth-place differences, especially pixel AUROC.
+            # Cached replay timing and memory are costs, not accuracy winners.
+            is_best = (not v.posthoc and metric not in ("Infer", "Mem")
+                       and number(val, dp) == number(best, dp) and number(val, 4) == number(best, 4))
+            cells.append(bold(number(val, dp), is_best))
         rows.append(cells)
         previous = v.family
     write("tab_bonus", "@{}ll" + "@{\\hspace{5pt}}r" * 6 + "@{}",
@@ -280,7 +320,13 @@ def generate(output: Path) -> None:
             rows.append(None)
         for r in recall:
             if r["category"] == cat and r["defect_type"] != "good (FPR)":
-                rows.append([cat, tex_escape(r["defect_type"]), r["n"], *pair(float(r["PaDiM"]), float(r["PatchCore"]))])
+                rates = []
+                for method in ("PaDiM", "PatchCore"):
+                    selected = [im for im in images if im["category"] == cat and im["method"] == method
+                                and im["defect_type"] == r["defect_type"] and im["label"] == "1"]
+                    assert len(selected) == int(r["n"])
+                    rates.append(ratio(sum(im["detected"] == "True" for im in selected), len(selected)))
+                rows.append([cat, tex_escape(r["defect_type"]), r["n"], *pair(*rates)])
     write("tab_app_recall_type", r"@{}l@{\hspace{4pt}}l@{\hspace{4pt}}rrr@{}",
           [r"Category & Defect & $n$ & PaDiM & PatchCore \\"], rows)
 
@@ -293,7 +339,7 @@ def generate(output: Path) -> None:
             for v in variants:
                 # All appendix baseline rows use the same main-run baseline.
                 vals = [variant_value(v, m, data, (cat,)) for m in ("ImgAuroc", "ImgFone", "Aupro")]
-                rows.append([cat, v.label, *[f"{val:.3f}" for val in vals]])
+                rows.append([cat, v.label, *[number(val) for val in vals]])
         write("tab_app_bonus_" + family, "@{}llrrr@{}",
               [r"Category & Variant & \shortstack{Image\\AUROC} & \shortstack{Image F1\\(val thr)} & AU-PRO \\"], rows)
 
