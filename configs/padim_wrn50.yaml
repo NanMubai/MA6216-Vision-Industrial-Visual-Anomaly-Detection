@@ -1,0 +1,10 @@
+name: padim_wrn50
+method: padim
+model:
+  backbone: wrn50
+  layers: [layer1, layer2, layer3]
+  d_reduced: 550
+  eps: 0.01
+scoring:
+  sigma: 4.0
+  image_score: max
