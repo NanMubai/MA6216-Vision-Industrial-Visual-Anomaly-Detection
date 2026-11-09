@@ -36,12 +36,17 @@
 \draw[arrow] (raw) -- (post);
 \draw[arrow] (post) -- (score);
 % Eq. 7 uses raw patch distances, rather than the smoothed map maximum.
-\draw[score] (raw.east) -- ++(0.45,0) |- (score.south east);
-\draw[score] (val.south) |- node[pos=0.7, above, fill=white, inner sep=1pt] {scores only} (threshold.west);
+\draw[arrow, dotted] (raw.east) -- (15.9,0.3)
+  -- node[midway, left, fill=white, inner sep=2pt] {Eq.~7 (raw)} (15.9,-3.2)
+  -- (score.south east);
+\draw[score] (val.south) -- node[pos=0.8, left, fill=white, inner sep=2pt] {scores only}
+  (2.3,-2.7) -- (threshold.west);
 \draw[arrow] (score.south) -- ++(0,-0.5) -| (decision.north);
 \draw[arrow] (threshold.south) |- (decision.west);
 \draw[arrow] (threshold.south) -- ++(0,-0.6) -| (segment.north west);
 \draw[arrow] (post) -- (segment);
 \draw[arrow] (decision.south) |- (metrics.west);
 \draw[arrow] (segment.south) |- (metrics.east);
+\draw[arrow, dotted] (test.south) -- (0,-6.0)
+  -- node[midway, above, fill=white, inner sep=2pt] {labels, masks} (metrics.west);
 \end{tikzpicture}
