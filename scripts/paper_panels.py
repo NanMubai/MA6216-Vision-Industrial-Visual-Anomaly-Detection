@@ -31,8 +31,9 @@ MVTEC = Path('/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvt
 NORM = TwoSlopeNorm(vmin=.4, vcenter=1., vmax=1.6)
 CMAP = matplotlib.colormaps['RdBu_r'].with_extremes(bad='#777777')
 GT_COLOR = '#F0E442'
+QUAL_CATEGORIES = ('bottle','capsule','screw','carpet','tile','leather')
 PANEL_OUTPUTS = ('fig_failures.pdf','fig_app_failures_1.pdf','fig_app_failures_2.pdf',
-                 'fig_app_qual_1.pdf','fig_app_qual_2.pdf','fig_app_qual_3.pdf')
+                 *(f'fig_app_qual_{cat}.pdf' for cat in QUAL_CATEGORIES))
 SELECTION_RULE = (
     'Post-hoc illustration selection only, using PatchCore scores and test labels: '
     '(1) anomalous image closest to the median PatchCore image score; '
@@ -124,62 +125,64 @@ def pred_contour(ax, mask):
 
 def case_label(case):
     defect,file=case['key'].split('/')
-    return f"({case['letter']}) {case['category']} / {defect} {Path(file).stem}"
+    return f"({case['letter']}) {case['category']}\n{defect} {Path(file).stem}"
 
 
-def render(output, name, cases, categories=None):
-    """Two cases per row, each comprising three native 224-pixel image tiles."""
-    qualitative=categories is not None
-    height=7.0 if qualitative else 5.35
-    fig=plt.figure(figsize=(DOUBLE,height),layout='constrained')
+def render(output, name, cases, category=None):
+    """One case per column; rows are RGB, PaDiM and PatchCore, at final size."""
+    qualitative=category is not None
+    width,height=(5.6,4.4) if qualitative else (DOUBLE,3.85)
+    ncols=len(cases)
+    assert ncols == (4 if qualitative else 6)
+    fig=plt.figure(figsize=(width,height),layout='constrained')
+    fig.get_layout_engine().set(w_pad=.01,h_pad=.01,wspace=.04,hspace=.04)
+    ratios=([.10] if qualitative else []) + [.20,1,1,1,.30]
+    grid=fig.add_gridspec(len(ratios),ncols+1,height_ratios=ratios,
+                         width_ratios=[.30]+[1]*ncols,wspace=.04,hspace=.04)
+    header=1 if qualitative else 0
     if qualitative:
-        ratios=[.16,1.2,1.2,.16,1.2,1.2,.12,.12]
-        case_rows=(1,2,4,5)
-    else:
-        ratios=[1.2,1.2,1.2,.12,.12]
-        case_rows=(0,1,2)
-    grid=fig.add_gridspec(len(ratios),2,height_ratios=ratios,hspace=.02,wspace=.06)
-    if qualitative:
-        for row,cat in zip((0,3),categories):
-            ax=fig.add_subplot(grid[row,:]);ax.axis('off')
-            ax.text(0,.5,cat.title(),ha='left',va='center',fontsize=8,fontweight='bold')
-    for i,case in enumerate(cases):
-        row, col=case_rows[i//2],i%2
-        sub=grid[row,col].subgridspec(4,3,height_ratios=(.15,.12,1,.15),hspace=.01,wspace=.015)
-        title=fig.add_subplot(sub[0,:]); title.axis('off')
-        title.text(0,.1,case_label(case),fontsize=6.5,ha='left',va='bottom')
+        heading=fig.add_subplot(grid[0,:]);heading.axis('off')
+        heading.text(0,.5,category.title(),fontsize=8,fontweight='bold',ha='left',va='center')
+    for row,text in enumerate(('Image + GT','PaDiM','PatchCore')):
+        label=fig.add_subplot(grid[header+1+row,0]);label.axis('off')
+        label.text(.5,.45,text,rotation=90,fontsize=7,ha='center',va='center',transform=label.transAxes)
+        if row:
+            color,marker=('#0072B2','o') if row==1 else ('#D55E00','s')
+            label.plot(.5,.9,marker=marker,color=color,markersize=3,transform=label.transAxes)
+    for column,case in enumerate(cases,1):
+        heading=fig.add_subplot(grid[header,column]);heading.axis('off')
+        heading.text(.5,.05,case_label(case),fontsize=6.5,ha='center',va='bottom',linespacing=1.05)
         gray=np.asarray(case['image'],dtype=float) @ np.array([.2126,.7152,.0722])
-        for j in range(3):
-            header=fig.add_subplot(sub[1,j]); header.axis('off')
-            if i//2==0:
-                header.text(.5,.5,('Image + GT','PaDiM','PatchCore')[j],fontsize=6.5,ha='center',va='center',transform=header.transAxes)
-                if j>0:
-                    color,marker=('#0072B2','o') if j==1 else ('#D55E00','s')
-                    header.plot(.10,.5,marker=marker,color=color,markersize=3,transform=header.transAxes)
-            ax=fig.add_subplot(sub[2,j])
-            if j==0:
+        for row in range(3):
+            ax=fig.add_subplot(grid[header+1+row,column])
+            if row==0:
                 ax.imshow(case['image'],interpolation='nearest')
             else:
-                result=case['results'][j-1]
+                result=case['results'][row-1]
                 ax.imshow(gray,cmap='gray',vmin=0,vmax=255,interpolation='nearest')
                 ax.imshow(result['ratio'],norm=NORM,cmap=CMAP,alpha=.6,interpolation='nearest')
                 pred_contour(ax,result['ratio']>=1.)
-                label=fig.add_subplot(sub[3,j]); label.axis('off')
-                label.text(.5,.9,f"score/thr {result['score_ratio']:.2f} · {result['decision']}",
-                           fontsize=6,ha='center',va='top')
+                ax.text(.025,.025,f"{result['score_ratio']:.2f} · {result['decision']}",
+                        transform=ax.transAxes,fontsize=6,ha='left',va='bottom',zorder=8,
+                        bbox={'facecolor':'white','edgecolor':'none','alpha':.82,'pad':.7})
             gt_contour(ax,case['gt'])
             ax.set(xlim=(-.5,223.5),ylim=(223.5,-.5),xticks=[],yticks=[])
-            for spine in ax.spines.values(): spine.set(linewidth=.4,color='0.4')
-    cax=fig.add_subplot(grid[-2,:])
-    bar=fig.colorbar(ScalarMappable(norm=NORM,cmap=CMAP),cax=cax,orientation='horizontal',extend='both')
+            for spine in ax.spines.values(): spine.set(linewidth=.3,color='0.7',visible=True)
+    footer=fig.add_subplot(grid[-1,:]);footer.axis('off')
+    # Reserve the complete footer in constrained layout; the thin bar's labels
+    # stay inside this reserved cell rather than collapsing a nested GridSpec.
+    cax=footer.inset_axes([.02,.78,.45,.14]);cax.set_in_layout(False)
+    bar=fig.colorbar(ScalarMappable(norm=NORM,cmap=CMAP),cax=cax,orientation='horizontal',
+                    extend='both',extendfrac=.03)
     bar.set_ticks((.4,1.,1.6),labels=('0.4','1 (threshold)','1.6'))
-    bar.ax.tick_params(labelsize=6)
-    bar.set_label('anomaly map / val. pixel threshold',fontsize=6.5,labelpad=2)
-    lax=fig.add_subplot(grid[-1,:]); lax.axis('off')
+    bar.ax.tick_params(labelsize=6,pad=1.5,length=2)
+    bar.set_label('anomaly map / val. pixel threshold',fontsize=6,labelpad=1.5)
+    bar.outline.set_linewidth(.4)
     gt_line=Line2D([],[],color=GT_COLOR,linestyle='--',linewidth=.8,
-                   path_effects=[patheffects.withStroke(linewidth=1.6,foreground='black')],label='GT (dashed + black halo)')
-    pred_line=Line2D([],[],color='black',linewidth=.8,label='Prediction (solid)')
-    lax.legend(handles=[gt_line,pred_line],loc='lower center',bbox_to_anchor=(.5,-.9),ncol=2,fontsize=6.5)
+                   path_effects=[patheffects.withStroke(linewidth=1.6,foreground='black')],label='GT dashed + halo')
+    pred_line=Line2D([],[],color='black',linewidth=.8,label='prediction solid')
+    footer.legend(handles=[gt_line,pred_line],loc='center',bbox_to_anchor=(.75,.72),ncol=2,fontsize=6,
+               columnspacing=.8,handlelength=1.6,handletextpad=.4)
     save(fig,output/name,generator='scripts/paper_panels.py')
     assert (output/name).stat().st_size <= 2_500_000, (name,(output/name).stat().st_size)
     picks=[]
@@ -201,7 +204,9 @@ def render(output, name, cases, categories=None):
            'native 224x224 input arrays, final-size vector labels, 300 dpi embedded rasters.',
            {'illustrative_cases':len(cases),'tiles':3*len(cases)},
            SELECTION_RULE if qualitative else 'Prescribed curated case IDs from analysis_failure_panels.CASES',
-           generator='scripts/paper_panels.py',width_inches=DOUBLE,height_inches=height,
+           generator='scripts/paper_panels.py',width_inches=width,height_inches=height,
+           layout={'case_columns':ncols,'image_rows':3,'decision_labels':'inside map tile, bottom-left',
+                   'colourbar_fraction_approx':.45,'colourbar_extendfrac':.03},
            picks=picks,native_tile_pixels=[224,224],dpi=300,
            normalization={'vmin':.4,'vcenter':1.,'vmax':1.6,'cmap':'RdBu_r','alpha':.6},
            contours={'prediction':'black, solid, 0.8pt','GT':'#F0E442, dashed, 0.8pt, black 1.6pt halo'},
@@ -220,15 +225,23 @@ def generate(output):
                 cases.append(store.case(cat,index,chr(97+i),f'{cid:02d}'))
             render(output,name,cases)
             print(name)
-        for number,cats in enumerate((('bottle','capsule'),('screw','carpet'),('tile','leather')),1):
-            cases=[]
-            for cat in cats:
-                pd,pc=store.category(cat)
-                picks=select_examples(pd['scores'],pc['scores'],pc['labels'],pd['image_thr'],pc['image_thr'])
-                for index in picks:
-                    cases.append(store.case(cat,index,chr(97+len(cases))))
-            render(output,f'fig_app_qual_{number}.pdf',cases,categories=cats)
-            print(f'fig_app_qual_{number}.pdf')
+        for cat in QUAL_CATEGORIES:
+            pd,pc=store.category(cat)
+            picks=select_examples(pd['scores'],pc['scores'],pc['labels'],pd['image_thr'],pc['image_thr'])
+            cases=[store.case(cat,index,chr(97+i)) for i,index in enumerate(picks)]
+            name=f'fig_app_qual_{cat}.pdf'
+            render(output,name,cases,category=cat)
+            print(name)
+    # The coordinator explicitly retired these round-3 combined-category PDFs.
+    # This migration touches neither the legacy JPEGs nor either v1 archive.
+    manifest_path=output/'MANIFEST.json'
+    import json
+    manifest=json.loads(manifest_path.read_text())
+    for number in (1,2,3):
+        obsolete=f'fig_app_qual_{number}.pdf'
+        (output/obsolete).unlink(missing_ok=True)
+        manifest['outputs'].pop(obsolete,None)
+    manifest_path.write_text(json.dumps(manifest,indent=2,sort_keys=True)+'\n')
     names=(*PANEL_OUTPUTS,'fig_main_dumbbell.pdf','fig_defect_area.pdf','fig_regionsize.pdf','fig_tradeoff.pdf')
     total=sum((output/name).stat().st_size for name in names if (output/name).exists())
     assert total <= 15_000_000,total

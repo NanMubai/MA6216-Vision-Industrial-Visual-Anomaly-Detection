@@ -103,6 +103,19 @@ def main_dumbbell(output, data):
            uncertainty='Single-seed estimates; no between-run uncertainty is available.')
 
 
+def log_box_stats(values):
+    """Tukey statistics in log10 space, returned in the original cell units."""
+    values=np.asarray(values,dtype=float)
+    if values.ndim != 1 or not len(values) or not np.isfinite(values).all() or (values<=0).any():
+        raise ValueError('log box plots require a nonempty positive finite vector')
+    logged=np.log10(values)
+    q1,median,q3=np.percentile(logged,[25,50,75])
+    iqr=q3-q1
+    inside=values[(logged>=q1-1.5*iqr)&(logged<=q3+1.5*iqr)]
+    return {'q1':float(10**q1),'med':float(10**median),'q3':float(10**q3),
+            'whislo':float(inside.min()),'whishi':float(inside.max()),'fliers':[]}
+
+
 def defect_area(output):
     rows = [r for r in csv_rows(PER_REGION) if r['method'] == 'PatchCore']
     vals = [[float(r['area_cells']) for r in rows if r['category'] == cat] for cat in CATEGORIES]
@@ -114,8 +127,9 @@ def defect_area(output):
                    alpha=.35, linewidths=0, zorder=2)
         ax.text(1.015, i, f'n = {len(group)}', transform=ax.get_yaxis_transform(),
                 ha='left', va='center', fontsize=6)
-    ax.boxplot(vals, positions=np.arange(6), orientation='horizontal', widths=.48,
-               showfliers=False, whis=1.5, patch_artist=False,
+    stats=[log_box_stats(group) for group in vals]
+    ax.bxp(stats, positions=np.arange(6), orientation='horizontal', widths=.48,
+               showfliers=False, patch_artist=False,
                boxprops={'color': '0.15', 'linewidth': .7}, medianprops={'color':'black', 'linewidth':1},
                whiskerprops={'color':'0.3', 'linewidth':.7}, capprops={'color':'0.3', 'linewidth':.7})
     for edge in (3, 10, 30, 100):
@@ -131,11 +145,12 @@ def defect_area(output):
     ax.legend(loc='lower center', bbox_to_anchor=(.5, 1.01), fontsize=6.5)
     save(fig, output / CHARTS[1])
     record(output, CHARTS[1], [PER_REGION],
-           'PatchCore rows only (each GT region once); area_cells in the 224 crop; unfilled boxes (1.5 IQR whiskers) plus every region with vertical U(-0.16,0.16) jitter, seed 0; log10 x axis.',
+           'PatchCore rows only (each GT region once); area_cells in the 224 crop; unfilled boxes with quartiles and 1.5 IQR whiskers computed in log10(area_cells) and back-transformed plus every region with vertical U(-0.16,0.16) jitter, seed 0; log10 x axis.',
            {'regions': len(rows), 'by_category': dict(zip(CATEGORIES,map(len,vals)))},
            'method == PatchCore; all rows; no exclusions', width_inches=SINGLE, height_inches=2.4,
            unit='8-connected GT region inside the 224 crop', reference_cell_pixels=64,
-           reference_cell_crop_percent=100*64/224**2, jitter_seed=0)
+           reference_cell_crop_percent=100*64/224**2, jitter_seed=0,
+           box_statistics=dict(zip(CATEGORIES,stats)),box_statistics_space='log10(area_cells)')
 
 
 def wilson(k: int, n: int, z: float = 1.959964) -> tuple[float, float]:
@@ -213,7 +228,7 @@ def tradeoff(output, data):
             outside=yy < lim[0]
             if outside:
                 ax.plot(xx,lim[0],marker=marker,color=color,markersize=4,clip_on=False)
-                ax.annotate(f'▼ {yy:.3f}  L2+3+4',(xx,lim[0]),xytext=(4,5),
+                ax.annotate(f'L2+3+4 ({yy:.3f}, off-scale ↓)',(xx,lim[0]),xytext=(4,5),
                             textcoords='offset points',fontsize=6,ha='left',va='bottom')
             else:
                 ax.plot(xx,yy,marker=marker,color=color,linestyle='none',markersize=4,

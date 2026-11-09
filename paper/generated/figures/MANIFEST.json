@@ -18,8 +18,15 @@
       },
       "dpi": 300,
       "generator": "scripts/paper_panels.py",
-      "height_inches": 5.35,
+      "height_inches": 3.85,
       "interpretation": "Post-hoc illustrations only; cases are not a representative performance sample.",
+      "layout": {
+        "case_columns": 6,
+        "colourbar_extendfrac": 0.03,
+        "colourbar_fraction_approx": 0.45,
+        "decision_labels": "inside map tile, bottom-left",
+        "image_rows": 3
+      },
       "n": {
         "illustrative_cases": 6,
         "tiles": 18
@@ -224,8 +231,15 @@
       },
       "dpi": 300,
       "generator": "scripts/paper_panels.py",
-      "height_inches": 5.35,
+      "height_inches": 3.85,
       "interpretation": "Post-hoc illustrations only; cases are not a representative performance sample.",
+      "layout": {
+        "case_columns": 6,
+        "colourbar_extendfrac": 0.03,
+        "colourbar_fraction_approx": 0.45,
+        "decision_labels": "inside map tile, bottom-left",
+        "image_rows": 3
+      },
       "n": {
         "illustrative_cases": 6,
         "tiles": 18
@@ -431,18 +445,25 @@
       "transformation": "RGB input crop; greyscale base for maps; resize 256 -> crop 224 using ad.visualize._load_image; GT from MVTecDataset; ratio=stored map / unchanged validation pixel threshold; TwoSlopeNorm(0.4,1.0,1.6), RdBu_r, alpha=0.6, saturated ends shown by colourbar extensions; solid black predicted contour at ratio>=1; dashed yellow GT with black halo; native 224x224 input arrays, final-size vector labels, 300 dpi embedded rasters.",
       "width_inches": 7.16
     },
-    "fig_app_qual_1.pdf": {
+    "fig_app_qual_bottle.pdf": {
       "contours": {
         "GT": "#F0E442, dashed, 0.8pt, black 1.6pt halo",
         "prediction": "black, solid, 0.8pt"
       },
       "dpi": 300,
       "generator": "scripts/paper_panels.py",
-      "height_inches": 7.0,
+      "height_inches": 4.4,
       "interpretation": "Post-hoc illustrations only; cases are not a representative performance sample.",
+      "layout": {
+        "case_columns": 4,
+        "colourbar_extendfrac": 0.03,
+        "colourbar_fraction_approx": 0.45,
+        "decision_labels": "inside map tile, bottom-left",
+        "image_rows": 3
+      },
       "n": {
-        "illustrative_cases": 8,
-        "tiles": 24
+        "illustrative_cases": 4,
+        "tiles": 12
       },
       "native_tile_pixels": [
         224,
@@ -551,14 +572,66 @@
             }
           },
           "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/bottle/test/good/001.png"
-        },
+        }
+      ],
+      "selection_rule": "Post-hoc illustration selection only, using PatchCore scores and test labels: (1) anomalous image closest to the median PatchCore image score; (2) lowest-scoring anomaly; (3) largest absolute PaDiM-PatchCore score/threshold difference among unpicked anomalies; (4) highest PatchCore score/threshold normal. Ties use lowest index. If an even-sized anomaly set brackets the median, choose the equidistant lower-index image. No fitted parameter or threshold is selected.",
+      "sources": [
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/bottle/maps.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/bottle/scores.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/bottle/metrics.json",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/bottle/maps.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/bottle/scores.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/bottle/metrics.json",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/bottle/test/broken_large/016.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/bottle/test/contamination/003.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/bottle/test/contamination/014.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/bottle/test/good/001.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/bottle/ground_truth/broken_large/016_mask.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/bottle/ground_truth/contamination/003_mask.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/bottle/ground_truth/contamination/014_mask.png"
+      ],
+      "transformation": "RGB input crop; greyscale base for maps; resize 256 -> crop 224 using ad.visualize._load_image; GT from MVTecDataset; ratio=stored map / unchanged validation pixel threshold; TwoSlopeNorm(0.4,1.0,1.6), RdBu_r, alpha=0.6, saturated ends shown by colourbar extensions; solid black predicted contour at ratio>=1; dashed yellow GT with black halo; native 224x224 input arrays, final-size vector labels, 300 dpi embedded rasters.",
+      "width_inches": 5.6
+    },
+    "fig_app_qual_capsule.pdf": {
+      "contours": {
+        "GT": "#F0E442, dashed, 0.8pt, black 1.6pt halo",
+        "prediction": "black, solid, 0.8pt"
+      },
+      "dpi": 300,
+      "generator": "scripts/paper_panels.py",
+      "height_inches": 4.4,
+      "interpretation": "Post-hoc illustrations only; cases are not a representative performance sample.",
+      "layout": {
+        "case_columns": 4,
+        "colourbar_extendfrac": 0.03,
+        "colourbar_fraction_approx": 0.45,
+        "decision_labels": "inside map tile, bottom-left",
+        "image_rows": 3
+      },
+      "n": {
+        "illustrative_cases": 4,
+        "tiles": 12
+      },
+      "native_tile_pixels": [
+        224,
+        224
+      ],
+      "normalization": {
+        "alpha": 0.6,
+        "cmap": "RdBu_r",
+        "vcenter": 1.0,
+        "vmax": 1.6,
+        "vmin": 0.4
+      },
+      "picks": [
         {
           "category": "capsule",
           "id": null,
           "index": 109,
           "key": "scratch/020.png",
           "label": 1,
-          "letter": "e",
+          "letter": "a",
           "mask_path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/capsule/ground_truth/scratch/020_mask.png",
           "methods": {
             "PaDiM": {
@@ -582,7 +655,7 @@
           "index": 106,
           "key": "scratch/017.png",
           "label": 1,
-          "letter": "f",
+          "letter": "b",
           "mask_path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/capsule/ground_truth/scratch/017_mask.png",
           "methods": {
             "PaDiM": {
@@ -606,7 +679,7 @@
           "index": 92,
           "key": "scratch/003.png",
           "label": 1,
-          "letter": "g",
+          "letter": "c",
           "mask_path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/capsule/ground_truth/scratch/003_mask.png",
           "methods": {
             "PaDiM": {
@@ -630,7 +703,7 @@
           "index": 66,
           "key": "good/021.png",
           "label": 0,
-          "letter": "h",
+          "letter": "d",
           "mask_path": null,
           "methods": {
             "PaDiM": {
@@ -651,48 +724,338 @@
       ],
       "selection_rule": "Post-hoc illustration selection only, using PatchCore scores and test labels: (1) anomalous image closest to the median PatchCore image score; (2) lowest-scoring anomaly; (3) largest absolute PaDiM-PatchCore score/threshold difference among unpicked anomalies; (4) highest PatchCore score/threshold normal. Ties use lowest index. If an even-sized anomaly set brackets the median, choose the equidistant lower-index image. No fitted parameter or threshold is selected.",
       "sources": [
-        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/bottle/maps.npz",
-        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/bottle/scores.npz",
-        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/bottle/metrics.json",
-        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/bottle/maps.npz",
-        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/bottle/scores.npz",
-        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/bottle/metrics.json",
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/capsule/maps.npz",
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/capsule/scores.npz",
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/capsule/metrics.json",
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/capsule/maps.npz",
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/capsule/scores.npz",
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/capsule/metrics.json",
-        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/bottle/test/broken_large/016.png",
-        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/bottle/test/contamination/003.png",
-        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/bottle/test/contamination/014.png",
-        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/bottle/test/good/001.png",
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/capsule/test/scratch/020.png",
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/capsule/test/scratch/017.png",
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/capsule/test/scratch/003.png",
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/capsule/test/good/021.png",
-        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/bottle/ground_truth/broken_large/016_mask.png",
-        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/bottle/ground_truth/contamination/003_mask.png",
-        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/bottle/ground_truth/contamination/014_mask.png",
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/capsule/ground_truth/scratch/020_mask.png",
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/capsule/ground_truth/scratch/017_mask.png",
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/capsule/ground_truth/scratch/003_mask.png"
       ],
       "transformation": "RGB input crop; greyscale base for maps; resize 256 -> crop 224 using ad.visualize._load_image; GT from MVTecDataset; ratio=stored map / unchanged validation pixel threshold; TwoSlopeNorm(0.4,1.0,1.6), RdBu_r, alpha=0.6, saturated ends shown by colourbar extensions; solid black predicted contour at ratio>=1; dashed yellow GT with black halo; native 224x224 input arrays, final-size vector labels, 300 dpi embedded rasters.",
-      "width_inches": 7.16
+      "width_inches": 5.6
     },
-    "fig_app_qual_2.pdf": {
+    "fig_app_qual_carpet.pdf": {
       "contours": {
         "GT": "#F0E442, dashed, 0.8pt, black 1.6pt halo",
         "prediction": "black, solid, 0.8pt"
       },
       "dpi": 300,
       "generator": "scripts/paper_panels.py",
-      "height_inches": 7.0,
+      "height_inches": 4.4,
       "interpretation": "Post-hoc illustrations only; cases are not a representative performance sample.",
+      "layout": {
+        "case_columns": 4,
+        "colourbar_extendfrac": 0.03,
+        "colourbar_fraction_approx": 0.45,
+        "decision_labels": "inside map tile, bottom-left",
+        "image_rows": 3
+      },
       "n": {
-        "illustrative_cases": 8,
-        "tiles": 24
+        "illustrative_cases": 4,
+        "tiles": 12
+      },
+      "native_tile_pixels": [
+        224,
+        224
+      ],
+      "normalization": {
+        "alpha": 0.6,
+        "cmap": "RdBu_r",
+        "vcenter": 1.0,
+        "vmax": 1.6,
+        "vmin": 0.4
+      },
+      "picks": [
+        {
+          "category": "carpet",
+          "id": null,
+          "index": 102,
+          "key": "thread/004.png",
+          "label": 1,
+          "letter": "a",
+          "mask_path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/carpet/ground_truth/thread/004_mask.png",
+          "methods": {
+            "PaDiM": {
+              "decision": "TP",
+              "image_threshold": 15.113607406616211,
+              "pixel_threshold": 13.498601913452148,
+              "score_ratio": 1.6305080476327074
+            },
+            "PatchCore": {
+              "decision": "TP",
+              "image_threshold": 1.1775676012039185,
+              "pixel_threshold": 1.1480698585510254,
+              "score_ratio": 1.5757314145670756
+            }
+          },
+          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/carpet/test/thread/004.png"
+        },
+        {
+          "category": "carpet",
+          "id": null,
+          "index": 116,
+          "key": "thread/018.png",
+          "label": 1,
+          "letter": "b",
+          "mask_path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/carpet/ground_truth/thread/018_mask.png",
+          "methods": {
+            "PaDiM": {
+              "decision": "FN",
+              "image_threshold": 15.113607406616211,
+              "pixel_threshold": 13.498601913452148,
+              "score_ratio": 0.9904394726676302
+            },
+            "PatchCore": {
+              "decision": "FN",
+              "image_threshold": 1.1775676012039185,
+              "pixel_threshold": 1.1480698585510254,
+              "score_ratio": 0.9736896158623985
+            }
+          },
+          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/carpet/test/thread/018.png"
+        },
+        {
+          "category": "carpet",
+          "id": null,
+          "index": 13,
+          "key": "color/013.png",
+          "label": 1,
+          "letter": "c",
+          "mask_path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/carpet/ground_truth/color/013_mask.png",
+          "methods": {
+            "PaDiM": {
+              "decision": "TP",
+              "image_threshold": 15.113607406616211,
+              "pixel_threshold": 13.498601913452148,
+              "score_ratio": 1.9484450994543963
+            },
+            "PatchCore": {
+              "decision": "TP",
+              "image_threshold": 1.1775676012039185,
+              "pixel_threshold": 1.1480698585510254,
+              "score_ratio": 1.1775887658350706
+            }
+          },
+          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/carpet/test/color/013.png"
+        },
+        {
+          "category": "carpet",
+          "id": null,
+          "index": 42,
+          "key": "good/006.png",
+          "label": 0,
+          "letter": "d",
+          "mask_path": null,
+          "methods": {
+            "PaDiM": {
+              "decision": "FP",
+              "image_threshold": 15.113607406616211,
+              "pixel_threshold": 13.498601913452148,
+              "score_ratio": 1.0268596217283874
+            },
+            "PatchCore": {
+              "decision": "FP",
+              "image_threshold": 1.1775676012039185,
+              "pixel_threshold": 1.1480698585510254,
+              "score_ratio": 1.1462285510256827
+            }
+          },
+          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/carpet/test/good/006.png"
+        }
+      ],
+      "selection_rule": "Post-hoc illustration selection only, using PatchCore scores and test labels: (1) anomalous image closest to the median PatchCore image score; (2) lowest-scoring anomaly; (3) largest absolute PaDiM-PatchCore score/threshold difference among unpicked anomalies; (4) highest PatchCore score/threshold normal. Ties use lowest index. If an even-sized anomaly set brackets the median, choose the equidistant lower-index image. No fitted parameter or threshold is selected.",
+      "sources": [
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/carpet/maps.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/carpet/scores.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/carpet/metrics.json",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/carpet/maps.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/carpet/scores.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/carpet/metrics.json",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/carpet/test/thread/004.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/carpet/test/thread/018.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/carpet/test/color/013.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/carpet/test/good/006.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/carpet/ground_truth/thread/004_mask.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/carpet/ground_truth/thread/018_mask.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/carpet/ground_truth/color/013_mask.png"
+      ],
+      "transformation": "RGB input crop; greyscale base for maps; resize 256 -> crop 224 using ad.visualize._load_image; GT from MVTecDataset; ratio=stored map / unchanged validation pixel threshold; TwoSlopeNorm(0.4,1.0,1.6), RdBu_r, alpha=0.6, saturated ends shown by colourbar extensions; solid black predicted contour at ratio>=1; dashed yellow GT with black halo; native 224x224 input arrays, final-size vector labels, 300 dpi embedded rasters.",
+      "width_inches": 5.6
+    },
+    "fig_app_qual_leather.pdf": {
+      "contours": {
+        "GT": "#F0E442, dashed, 0.8pt, black 1.6pt halo",
+        "prediction": "black, solid, 0.8pt"
+      },
+      "dpi": 300,
+      "generator": "scripts/paper_panels.py",
+      "height_inches": 4.4,
+      "interpretation": "Post-hoc illustrations only; cases are not a representative performance sample.",
+      "layout": {
+        "case_columns": 4,
+        "colourbar_extendfrac": 0.03,
+        "colourbar_fraction_approx": 0.45,
+        "decision_labels": "inside map tile, bottom-left",
+        "image_rows": 3
+      },
+      "n": {
+        "illustrative_cases": 4,
+        "tiles": 12
+      },
+      "native_tile_pixels": [
+        224,
+        224
+      ],
+      "normalization": {
+        "alpha": 0.6,
+        "cmap": "RdBu_r",
+        "vcenter": 1.0,
+        "vmax": 1.6,
+        "vmin": 0.4
+      },
+      "picks": [
+        {
+          "category": "leather",
+          "id": null,
+          "index": 45,
+          "key": "fold/007.png",
+          "label": 1,
+          "letter": "a",
+          "mask_path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/ground_truth/fold/007_mask.png",
+          "methods": {
+            "PaDiM": {
+              "decision": "TP",
+              "image_threshold": 18.528865814208984,
+              "pixel_threshold": 13.064669609069824,
+              "score_ratio": 1.3319226530506785
+            },
+            "PatchCore": {
+              "decision": "TP",
+              "image_threshold": 1.099655270576477,
+              "pixel_threshold": 1.0813825130462646,
+              "score_ratio": 1.790997896163694
+            }
+          },
+          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/test/fold/007.png"
+        },
+        {
+          "category": "leather",
+          "id": null,
+          "index": 59,
+          "key": "glue/004.png",
+          "label": 1,
+          "letter": "b",
+          "mask_path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/ground_truth/glue/004_mask.png",
+          "methods": {
+            "PaDiM": {
+              "decision": "TP",
+              "image_threshold": 18.528865814208984,
+              "pixel_threshold": 13.064669609069824,
+              "score_ratio": 1.3787633324418789
+            },
+            "PatchCore": {
+              "decision": "TP",
+              "image_threshold": 1.099655270576477,
+              "pixel_threshold": 1.0813825130462646,
+              "score_ratio": 1.2901625733082396
+            }
+          },
+          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/test/glue/004.png"
+        },
+        {
+          "category": "leather",
+          "id": null,
+          "index": 41,
+          "key": "fold/003.png",
+          "label": 1,
+          "letter": "c",
+          "mask_path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/ground_truth/fold/003_mask.png",
+          "methods": {
+            "PaDiM": {
+              "decision": "TP",
+              "image_threshold": 18.528865814208984,
+              "pixel_threshold": 13.064669609069824,
+              "score_ratio": 1.3603174318866038
+            },
+            "PatchCore": {
+              "decision": "TP",
+              "image_threshold": 1.099655270576477,
+              "pixel_threshold": 1.0813825130462646,
+              "score_ratio": 1.9447363277470608
+            }
+          },
+          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/test/fold/003.png"
+        },
+        {
+          "category": "leather",
+          "id": null,
+          "index": 98,
+          "key": "good/024.png",
+          "label": 0,
+          "letter": "d",
+          "mask_path": null,
+          "methods": {
+            "PaDiM": {
+              "decision": "TN",
+              "image_threshold": 18.528865814208984,
+              "pixel_threshold": 13.064669609069824,
+              "score_ratio": 0.8872784720347869
+            },
+            "PatchCore": {
+              "decision": "FP",
+              "image_threshold": 1.099655270576477,
+              "pixel_threshold": 1.0813825130462646,
+              "score_ratio": 1.1170416811524257
+            }
+          },
+          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/test/good/024.png"
+        }
+      ],
+      "selection_rule": "Post-hoc illustration selection only, using PatchCore scores and test labels: (1) anomalous image closest to the median PatchCore image score; (2) lowest-scoring anomaly; (3) largest absolute PaDiM-PatchCore score/threshold difference among unpicked anomalies; (4) highest PatchCore score/threshold normal. Ties use lowest index. If an even-sized anomaly set brackets the median, choose the equidistant lower-index image. No fitted parameter or threshold is selected.",
+      "sources": [
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/leather/maps.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/leather/scores.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/leather/metrics.json",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/leather/maps.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/leather/scores.npz",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/leather/metrics.json",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/test/fold/007.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/test/glue/004.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/test/fold/003.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/test/good/024.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/ground_truth/fold/007_mask.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/ground_truth/glue/004_mask.png",
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/ground_truth/fold/003_mask.png"
+      ],
+      "transformation": "RGB input crop; greyscale base for maps; resize 256 -> crop 224 using ad.visualize._load_image; GT from MVTecDataset; ratio=stored map / unchanged validation pixel threshold; TwoSlopeNorm(0.4,1.0,1.6), RdBu_r, alpha=0.6, saturated ends shown by colourbar extensions; solid black predicted contour at ratio>=1; dashed yellow GT with black halo; native 224x224 input arrays, final-size vector labels, 300 dpi embedded rasters.",
+      "width_inches": 5.6
+    },
+    "fig_app_qual_screw.pdf": {
+      "contours": {
+        "GT": "#F0E442, dashed, 0.8pt, black 1.6pt halo",
+        "prediction": "black, solid, 0.8pt"
+      },
+      "dpi": 300,
+      "generator": "scripts/paper_panels.py",
+      "height_inches": 4.4,
+      "interpretation": "Post-hoc illustrations only; cases are not a representative performance sample.",
+      "layout": {
+        "case_columns": 4,
+        "colourbar_extendfrac": 0.03,
+        "colourbar_fraction_approx": 0.45,
+        "decision_labels": "inside map tile, bottom-left",
+        "image_rows": 3
+      },
+      "n": {
+        "illustrative_cases": 4,
+        "tiles": 12
       },
       "native_tile_pixels": [
         224,
@@ -801,102 +1164,6 @@
             }
           },
           "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/screw/test/good/004.png"
-        },
-        {
-          "category": "carpet",
-          "id": null,
-          "index": 102,
-          "key": "thread/004.png",
-          "label": 1,
-          "letter": "e",
-          "mask_path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/carpet/ground_truth/thread/004_mask.png",
-          "methods": {
-            "PaDiM": {
-              "decision": "TP",
-              "image_threshold": 15.113607406616211,
-              "pixel_threshold": 13.498601913452148,
-              "score_ratio": 1.6305080476327074
-            },
-            "PatchCore": {
-              "decision": "TP",
-              "image_threshold": 1.1775676012039185,
-              "pixel_threshold": 1.1480698585510254,
-              "score_ratio": 1.5757314145670756
-            }
-          },
-          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/carpet/test/thread/004.png"
-        },
-        {
-          "category": "carpet",
-          "id": null,
-          "index": 116,
-          "key": "thread/018.png",
-          "label": 1,
-          "letter": "f",
-          "mask_path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/carpet/ground_truth/thread/018_mask.png",
-          "methods": {
-            "PaDiM": {
-              "decision": "FN",
-              "image_threshold": 15.113607406616211,
-              "pixel_threshold": 13.498601913452148,
-              "score_ratio": 0.9904394726676302
-            },
-            "PatchCore": {
-              "decision": "FN",
-              "image_threshold": 1.1775676012039185,
-              "pixel_threshold": 1.1480698585510254,
-              "score_ratio": 0.9736896158623985
-            }
-          },
-          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/carpet/test/thread/018.png"
-        },
-        {
-          "category": "carpet",
-          "id": null,
-          "index": 13,
-          "key": "color/013.png",
-          "label": 1,
-          "letter": "g",
-          "mask_path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/carpet/ground_truth/color/013_mask.png",
-          "methods": {
-            "PaDiM": {
-              "decision": "TP",
-              "image_threshold": 15.113607406616211,
-              "pixel_threshold": 13.498601913452148,
-              "score_ratio": 1.9484450994543963
-            },
-            "PatchCore": {
-              "decision": "TP",
-              "image_threshold": 1.1775676012039185,
-              "pixel_threshold": 1.1480698585510254,
-              "score_ratio": 1.1775887658350706
-            }
-          },
-          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/carpet/test/color/013.png"
-        },
-        {
-          "category": "carpet",
-          "id": null,
-          "index": 42,
-          "key": "good/006.png",
-          "label": 0,
-          "letter": "h",
-          "mask_path": null,
-          "methods": {
-            "PaDiM": {
-              "decision": "FP",
-              "image_threshold": 15.113607406616211,
-              "pixel_threshold": 13.498601913452148,
-              "score_ratio": 1.0268596217283874
-            },
-            "PatchCore": {
-              "decision": "FP",
-              "image_threshold": 1.1775676012039185,
-              "pixel_threshold": 1.1480698585510254,
-              "score_ratio": 1.1462285510256827
-            }
-          },
-          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/carpet/test/good/006.png"
         }
       ],
       "selection_rule": "Post-hoc illustration selection only, using PatchCore scores and test labels: (1) anomalous image closest to the median PatchCore image score; (2) lowest-scoring anomaly; (3) largest absolute PaDiM-PatchCore score/threshold difference among unpicked anomalies; (4) highest PatchCore score/threshold normal. Ties use lowest index. If an even-sized anomaly set brackets the median, choose the equidistant lower-index image. No fitted parameter or threshold is selected.",
@@ -907,42 +1174,36 @@
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/screw/maps.npz",
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/screw/scores.npz",
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/screw/metrics.json",
-        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/carpet/maps.npz",
-        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/carpet/scores.npz",
-        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/carpet/metrics.json",
-        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/carpet/maps.npz",
-        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/carpet/scores.npz",
-        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/carpet/metrics.json",
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/screw/test/manipulated_front/016.png",
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/screw/test/thread_side/004.png",
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/screw/test/thread_top/005.png",
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/screw/test/good/004.png",
-        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/carpet/test/thread/004.png",
-        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/carpet/test/thread/018.png",
-        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/carpet/test/color/013.png",
-        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/carpet/test/good/006.png",
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/screw/ground_truth/manipulated_front/016_mask.png",
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/screw/ground_truth/thread_side/004_mask.png",
-        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/screw/ground_truth/thread_top/005_mask.png",
-        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/carpet/ground_truth/thread/004_mask.png",
-        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/carpet/ground_truth/thread/018_mask.png",
-        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/carpet/ground_truth/color/013_mask.png"
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/screw/ground_truth/thread_top/005_mask.png"
       ],
       "transformation": "RGB input crop; greyscale base for maps; resize 256 -> crop 224 using ad.visualize._load_image; GT from MVTecDataset; ratio=stored map / unchanged validation pixel threshold; TwoSlopeNorm(0.4,1.0,1.6), RdBu_r, alpha=0.6, saturated ends shown by colourbar extensions; solid black predicted contour at ratio>=1; dashed yellow GT with black halo; native 224x224 input arrays, final-size vector labels, 300 dpi embedded rasters.",
-      "width_inches": 7.16
+      "width_inches": 5.6
     },
-    "fig_app_qual_3.pdf": {
+    "fig_app_qual_tile.pdf": {
       "contours": {
         "GT": "#F0E442, dashed, 0.8pt, black 1.6pt halo",
         "prediction": "black, solid, 0.8pt"
       },
       "dpi": 300,
       "generator": "scripts/paper_panels.py",
-      "height_inches": 7.0,
+      "height_inches": 4.4,
       "interpretation": "Post-hoc illustrations only; cases are not a representative performance sample.",
+      "layout": {
+        "case_columns": 4,
+        "colourbar_extendfrac": 0.03,
+        "colourbar_fraction_approx": 0.45,
+        "decision_labels": "inside map tile, bottom-left",
+        "image_rows": 3
+      },
       "n": {
-        "illustrative_cases": 8,
-        "tiles": 24
+        "illustrative_cases": 4,
+        "tiles": 12
       },
       "native_tile_pixels": [
         224,
@@ -1051,102 +1312,6 @@
             }
           },
           "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/tile/test/good/017.png"
-        },
-        {
-          "category": "leather",
-          "id": null,
-          "index": 45,
-          "key": "fold/007.png",
-          "label": 1,
-          "letter": "e",
-          "mask_path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/ground_truth/fold/007_mask.png",
-          "methods": {
-            "PaDiM": {
-              "decision": "TP",
-              "image_threshold": 18.528865814208984,
-              "pixel_threshold": 13.064669609069824,
-              "score_ratio": 1.3319226530506785
-            },
-            "PatchCore": {
-              "decision": "TP",
-              "image_threshold": 1.099655270576477,
-              "pixel_threshold": 1.0813825130462646,
-              "score_ratio": 1.790997896163694
-            }
-          },
-          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/test/fold/007.png"
-        },
-        {
-          "category": "leather",
-          "id": null,
-          "index": 59,
-          "key": "glue/004.png",
-          "label": 1,
-          "letter": "f",
-          "mask_path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/ground_truth/glue/004_mask.png",
-          "methods": {
-            "PaDiM": {
-              "decision": "TP",
-              "image_threshold": 18.528865814208984,
-              "pixel_threshold": 13.064669609069824,
-              "score_ratio": 1.3787633324418789
-            },
-            "PatchCore": {
-              "decision": "TP",
-              "image_threshold": 1.099655270576477,
-              "pixel_threshold": 1.0813825130462646,
-              "score_ratio": 1.2901625733082396
-            }
-          },
-          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/test/glue/004.png"
-        },
-        {
-          "category": "leather",
-          "id": null,
-          "index": 41,
-          "key": "fold/003.png",
-          "label": 1,
-          "letter": "g",
-          "mask_path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/ground_truth/fold/003_mask.png",
-          "methods": {
-            "PaDiM": {
-              "decision": "TP",
-              "image_threshold": 18.528865814208984,
-              "pixel_threshold": 13.064669609069824,
-              "score_ratio": 1.3603174318866038
-            },
-            "PatchCore": {
-              "decision": "TP",
-              "image_threshold": 1.099655270576477,
-              "pixel_threshold": 1.0813825130462646,
-              "score_ratio": 1.9447363277470608
-            }
-          },
-          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/test/fold/003.png"
-        },
-        {
-          "category": "leather",
-          "id": null,
-          "index": 98,
-          "key": "good/024.png",
-          "label": 0,
-          "letter": "h",
-          "mask_path": null,
-          "methods": {
-            "PaDiM": {
-              "decision": "TN",
-              "image_threshold": 18.528865814208984,
-              "pixel_threshold": 13.064669609069824,
-              "score_ratio": 0.8872784720347869
-            },
-            "PatchCore": {
-              "decision": "FP",
-              "image_threshold": 1.099655270576477,
-              "pixel_threshold": 1.0813825130462646,
-              "score_ratio": 1.1170416811524257
-            }
-          },
-          "path": "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/test/good/024.png"
         }
       ],
       "selection_rule": "Post-hoc illustration selection only, using PatchCore scores and test labels: (1) anomalous image closest to the median PatchCore image score; (2) lowest-scoring anomaly; (3) largest absolute PaDiM-PatchCore score/threshold difference among unpicked anomalies; (4) highest PatchCore score/threshold normal. Ties use lowest index. If an even-sized anomaly set brackets the median, choose the equidistant lower-index image. No fitted parameter or threshold is selected.",
@@ -1157,31 +1322,69 @@
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/tile/maps.npz",
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/tile/scores.npz",
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/tile/metrics.json",
-        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/leather/maps.npz",
-        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/leather/scores.npz",
-        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/padim_wrn50/leather/metrics.json",
-        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/leather/maps.npz",
-        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/leather/scores.npz",
-        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/results/patchcore_wrn50/leather/metrics.json",
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/tile/test/glue_strip/010.png",
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/tile/test/gray_stroke/012.png",
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/tile/test/glue_strip/017.png",
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/tile/test/good/017.png",
-        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/test/fold/007.png",
-        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/test/glue/004.png",
-        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/test/fold/003.png",
-        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/test/good/024.png",
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/tile/ground_truth/glue_strip/010_mask.png",
         "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/tile/ground_truth/gray_stroke/012_mask.png",
-        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/tile/ground_truth/glue_strip/017_mask.png",
-        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/ground_truth/fold/007_mask.png",
-        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/ground_truth/glue/004_mask.png",
-        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/leather/ground_truth/fold/003_mask.png"
+        "/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad/tile/ground_truth/glue_strip/017_mask.png"
       ],
       "transformation": "RGB input crop; greyscale base for maps; resize 256 -> crop 224 using ad.visualize._load_image; GT from MVTecDataset; ratio=stored map / unchanged validation pixel threshold; TwoSlopeNorm(0.4,1.0,1.6), RdBu_r, alpha=0.6, saturated ends shown by colourbar extensions; solid black predicted contour at ratio>=1; dashed yellow GT with black halo; native 224x224 input arrays, final-size vector labels, 300 dpi embedded rasters.",
-      "width_inches": 7.16
+      "width_inches": 5.6
     },
     "fig_defect_area.pdf": {
+      "box_statistics": {
+        "bottle": {
+          "fliers": [],
+          "med": 47.627544018351415,
+          "q1": 21.36704268814132,
+          "q3": 126.79288197887038,
+          "whishi": 272.359,
+          "whislo": 2.0625
+        },
+        "capsule": {
+          "fliers": [],
+          "med": 3.414056055485908,
+          "q1": 2.1404522329061613,
+          "q3": 6.914017266022008,
+          "whishi": 40.1094,
+          "whislo": 0.40625
+        },
+        "carpet": {
+          "fliers": [],
+          "med": 12.765599999999997,
+          "q1": 4.500000000000001,
+          "q3": 29.2656,
+          "whishi": 82.0938,
+          "whislo": 0.96875
+        },
+        "leather": {
+          "fliers": [],
+          "med": 3.9531199999999997,
+          "q1": 2.179559015030334,
+          "q3": 8.873885902782389,
+          "whishi": 63.5469,
+          "whislo": 0.359375
+        },
+        "screw": {
+          "fliers": [],
+          "med": 2.7654534410110756,
+          "q1": 1.59375,
+          "q3": 3.741969129994423,
+          "whishi": 10.2969,
+          "whislo": 0.453125
+        },
+        "tile": {
+          "fliers": [],
+          "med": 50.4751484566415,
+          "q1": 18.499999999999996,
+          "q3": 126.78899038949585,
+          "whishi": 357.875,
+          "whislo": 1.70312
+        }
+      },
+      "box_statistics_space": "log10(area_cells)",
       "generator": "scripts/paper_figures.py",
       "height_inches": 2.4,
       "jitter_seed": 0,
@@ -1202,7 +1405,7 @@
       "sources": [
         "reports/figures/failure_cases/tables/per_region.csv"
       ],
-      "transformation": "PatchCore rows only (each GT region once); area_cells in the 224 crop; unfilled boxes (1.5 IQR whiskers) plus every region with vertical U(-0.16,0.16) jitter, seed 0; log10 x axis.",
+      "transformation": "PatchCore rows only (each GT region once); area_cells in the 224 crop; unfilled boxes with quartiles and 1.5 IQR whiskers computed in log10(area_cells) and back-transformed plus every region with vertical U(-0.16,0.16) jitter, seed 0; log10 x axis.",
       "unit": "8-connected GT region inside the 224 crop",
       "width_inches": 3.5
     },
@@ -1213,8 +1416,15 @@
       },
       "dpi": 300,
       "generator": "scripts/paper_panels.py",
-      "height_inches": 5.35,
+      "height_inches": 3.85,
       "interpretation": "Post-hoc illustrations only; cases are not a representative performance sample.",
+      "layout": {
+        "case_columns": 6,
+        "colourbar_extendfrac": 0.03,
+        "colourbar_fraction_approx": 0.45,
+        "decision_labels": "inside map tile, bottom-left",
+        "image_rows": 3
+      },
       "n": {
         "illustrative_cases": 6,
         "tiles": 18

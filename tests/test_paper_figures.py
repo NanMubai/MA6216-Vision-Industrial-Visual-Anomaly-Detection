@@ -12,7 +12,8 @@ import matplotlib.pyplot as plt
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
-from paper_figures import CHARTS, EXPECTED_BINS, region_counts, wilson, output_root
+from paper_figures import (CHARTS, EXPECTED_BINS, region_counts, wilson, output_root,
+                           log_box_stats, csv_rows, PER_REGION, CATEGORIES)
 from paper_panels import PANEL_OUTPUTS, select_examples, gt_contour
 
 
@@ -74,6 +75,23 @@ def test_contour_retains_crop_pixel_coordinates():
     plt.close(fig)
 
 
+def test_log_space_box_whiskers_use_extreme_observations_inside_fences():
+    rows = csv_rows(PER_REGION)
+    groups = [[float(r["area_cells"]) for r in rows if r["method"] == "PatchCore" and r["category"] == cat]
+              for cat in CATEGORIES]
+    groups.append([1, 1, 1, 2, 4, 8, 16, 256])  # Log and linear fences differ.
+    for values in groups:
+        logged = np.log10(values)
+        q1, q3 = np.quantile(logged, [.25, .75])
+        inside = np.asarray(values)[(logged >= q1 - 1.5 * (q3 - q1)) & (logged <= q3 + 1.5 * (q3 - q1))]
+        stats = log_box_stats(values)
+        assert stats["whislo"] == min(inside)
+        assert stats["whishi"] == max(inside)
+        assert np.log10(stats["q1"]) == pytest.approx(q1)
+        assert np.log10(stats["q3"]) == pytest.approx(q3)
+    assert log_box_stats(groups[-1])["whishi"] == 256
+
+
 def test_manifest_and_physical_dimensions():
     folder = ROOT / "paper/generated/figures"
     manifest = json.loads((folder / "MANIFEST.json").read_text())
@@ -90,10 +108,18 @@ def test_manifest_and_physical_dimensions():
         width, height = map(float, re.search(r"Page size:\s*([\d.]+) x ([\d.]+) pts", info).groups())
         assert width / 72 == pytest.approx(entry["width_inches"], abs=.001)
         assert height / 72 == pytest.approx(entry["height_inches"], abs=.001)
-        assert entry["width_inches"] in (3.5, 7.16)
+        assert entry["width_inches"] in (3.5, 5.6, 7.16)
         if name in PANEL_OUTPUTS:
             assert path.stat().st_size <= 2_500_000
             assert entry["normalization"] == {"vmin": .4, "vcenter": 1., "vmax": 1.6, "cmap": "RdBu_r", "alpha": .6}
+            assert entry["layout"]["image_rows"] == 3
+            if name.startswith("fig_app_qual_"):
+                assert entry["width_inches"] == 5.6 and entry["height_inches"] <= 4.4
+                assert entry["layout"]["case_columns"] == 4
+                assert [p["letter"] for p in entry["picks"]] == ["a", "b", "c", "d"]
+            else:
+                assert entry["height_inches"] <= 3.9
+                assert entry["layout"]["case_columns"] == 6
     assert total <= 15_000_000
     assert [p["id"] for p in manifest["outputs"]["fig_failures.pdf"]["picks"]] == ["01", "04", "05", "07", "08", "12"]
 
