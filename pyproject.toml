@@ -1,0 +1,24 @@
+[project]
+name = "ad"
+version = "0.1.0"
+description = "MVTec AD industrial visual anomaly detection: PaDiM baseline and PatchCore"
+requires-python = ">=3.12"
+dependencies = [
+  "torch>=2.7", "torchvision", "timm>=1.0", "numpy", "scipy", "scikit-learn",
+  "opencv-python-headless", "matplotlib", "pandas", "pyyaml", "tqdm",
+]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+markers = ["gpu: needs CUDA", "data: needs MVTec AD on disk (MVTEC_ROOT)"]
