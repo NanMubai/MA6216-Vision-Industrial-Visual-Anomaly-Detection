@@ -1,66 +1,59 @@
 \begin{tikzpicture}[
   font=\footnotesize, >=Latex,
-  box/.style={draw=black!65, rounded corners=1pt, align=center,
-    fill=white, inner sep=3pt, minimum height=8mm},
-  data/.style={->, line width=0.5pt},
-  fitonly/.style={->, dashed, line width=0.6pt},
-  labels/.style={->, densely dotted, line width=0.7pt},
+  box/.style={draw=black!65,rounded corners=1pt,align=center,
+    fill=white,inner sep=3pt,minimum height=8mm},
+  data/.style={->,line width=0.5pt},
+  wire/.style={line width=0.5pt},
+  fitonly/.style={->,dashed,line width=0.6pt},
+  labels/.style={->,densely dotted,line width=0.7pt},
 ]
-% Fixed centimetre coordinates: the complete drawing is narrower than 516 pt.
-% Top band: a common per-image path. Branch junctions are intentional joins.
+% (a) Model: arrowheads terminate only at box borders, never at junctions.
+\node[anchor=west,font=\footnotesize\bfseries] at (0,2.0) {(a) Per-image scoring};
 \node[box,text width=10mm] (input) at (0.6,0) {Input\\image};
 \node[box,text width=21mm] (pre) at (2.9,0) {Preprocess\\Resize 256\\Crop 224\\ImageNet norm};
 \node[box,text width=17mm] (wrn) at (5.2,0) {Frozen\\WRN50-2};
-\node[box,text width=31mm] (pd) at (8.15,0.95) {\textbf{PaDiM}\\L1--3, 550 ch\\Gaussian $\mu,\Sigma$\\Mahalanobis};
-\node[box,text width=31mm] (pc) at (8.15,-0.95) {\textbf{PatchCore}\\L2+3, $3\!\times\!3$ agg.\\1024-d; 10\% coreset\\NN distance};
-\node[draw=black!25,rounded corners=2pt,fit=(pd)(pc),inner sep=3pt] (models) {};
+\node[box,text width=31mm] (pd) at (8.15,0.85) {\textbf{PaDiM}\\L1--3, 550 ch\\Gaussian $\mu,\Sigma$\\Mahalanobis};
+\node[box,text width=31mm] (pc) at (8.15,-0.85) {\textbf{PatchCore}\\L2+3, $3\!\times\!3$ agg.\\1024-d; 10\% coreset\\NN distance};
 \node[box,text width=15mm] (raw) at (10.8,0) {Raw\\patch map};
-\node[box,text width=20mm] (post) at (12.85,0) {Bilinear $\uparrow224$\\Gaussian\\$\sigma=4$};
+\node[box,text width=20mm] (post) at (12.85,0) {Bilinear $\uparrow224$\\Gaussian $\sigma=4$};
 \node[box,text width=25mm] (out) at (15.9,0) {Anomaly map\\and image score\\PaDiM: map max\\PatchCore: Eq.~7\\(raw distances)};
 \draw[data] (input) -- (pre);
 \draw[data] (pre) -- (wrn);
-\draw[data] (wrn.east) -- (6.3,0) |- (pd.west);
+\draw[wire] (wrn.east) -- (6.3,0);
+\draw[data] (6.3,0) |- (pd.west);
 \draw[data] (6.3,0) |- (pc.west);
-\fill (6.3,0) circle (1pt);
-\draw[data] (pd.east) -- (9.9,0.95) |- (raw.west);
-\draw[data] (pc.east) -- (9.9,-0.95) -- (9.9,0);
-\fill (9.9,0) circle (1pt);
+\draw[wire] (pd.east) -- (9.9,0.85) -- (9.9,-0.85) -- (pc.east);
+\draw[data] (9.9,0) -- (raw.west);
 \draw[data] (raw) -- (post);
 \draw[data] (post) -- (out);
 
-% Bottom band: protocol. Scalar cutoffs and maps/scores join only at the apply
-% junction, downstream of normal-only threshold calibration (never at its input).
-\node[box,fill=black!3,text width=22mm] (fit) at (1.4,-3.2) {Fit split\\90\% train/good};
-\node[box,fill=black!8,text width=24mm] (val) at (5.2,-3.2) {Normal val\\10\% train/good};
-\node[box,fill=black!15,text width=23mm] (test) at (9,-3.2) {Test\\good + defects};
-\node[box,text width=25mm] (thr) at (11.8,-3.2) {Thresholds\\Image: 99\% quantile\\Pixel: 99.9\% quantile};
-\node[box,text width=23mm] (dec) at (15.9,-2.9) {Decision\\score $\geq$ thr};
-\node[box,text width=23mm] (seg) at (15.9,-4.15) {Segmentation\\map $\geq$ thr};
+% (b) Protocol: independent, straight rows refer to model (a).
+\node[anchor=west,font=\footnotesize\bfseries] at (0,-2.05) {(b) Data protocol};
+\node[box,fill=black!3,text width=24mm] (fit) at (1.3,-3.1) {Fit split\\90\% train/good};
+\node[box,fill=black!8,text width=24mm] (val) at (1.3,-4.5) {Normal val\\10\% train/good};
+\node[box,fill=black!15,text width=24mm] (test) at (1.3,-6.3) {Test\\good + defects};
+\node[box,text width=30mm] (fitmodel) at (4.8,-3.1) {model (a)\\Fitted Gaussians / bank};
+\node[box,text width=30mm] (valmodel) at (4.8,-4.5) {model (a)};
+\node[box,text width=30mm] (testmodel) at (4.8,-6.3) {model (a)};
+\node[box,text width=20mm] (mapscore) at (7.9,-6.3) {Map \& score};
+\node[box,text width=32mm] (thr) at (11.2,-4.5) {Thresholds\\Image: 99\% q.\\Pixel: 99.9\% q.};
+\node[box,text width=30mm] (apply) at (11.2,-6.3) {\textbf{Decision}\\score $\geq$ thr\\\textbf{Segmentation}\\map $\geq$ thr};
 \definecolor{pipelineaccent}{HTML}{0072B2}
-\node[box,draw=pipelineaccent,fill=pipelineaccent!12,line width=0.8pt,text width=28mm] (met) at (15.9,-5.4)
-  {\textbf{\texttt{ad.metrics}}\\Test labels/masks\\read only here};
-\draw[fitonly] (fit.north) -- (1.4,-1.95)
-  -- node[midway,above,fill=white,inner sep=1pt] {fit only} (8.15,-1.95) -- (models.south);
-\draw[data] (val.north) -- (5.2,-2.35)
-  -- node[midway,above,fill=white,inner sep=1pt] {scores only} (11.8,-2.35) -- (thr.north);
-\coordinate (apply) at (14.1,-2.0);
-\draw[data] (out.south) -- (15.9,-2.0) -- (apply);
-\draw[data] (thr.east) -- (13.45,-3.2) |- (apply);
-\fill (apply) circle (1.2pt);
-\draw[data] (apply) -- (14.1,-2.9) -- (dec.west);
-\draw[data] (14.1,-2.9) -- (14.1,-4.15) -- (seg.west);
-\fill (14.1,-2.9) circle (1pt);
-\draw[data] (dec.east) -- (17.65,-2.9) -- (17.65,-5.4) -- (met.east);
-\draw[data] (seg.east) -- (17.65,-4.15);
-\fill (17.65,-4.15) circle (1pt);
-\draw[data] (test.south) -- (9,-6.05) -- (-0.3,-6.05) |- (input.west);
-\draw[labels] (test.south east) -- (10.2,-3.7) -- (10.2,-5.4)
-  -- node[midway,above,fill=white,inner sep=1pt] {Test labels \& masks} (met.west);
+\node[box,draw=pipelineaccent,fill=pipelineaccent!12,line width=0.8pt,text width=25mm] (met) at (15.4,-6.3)
+  {\textbf{\texttt{ad.metrics}}\\Labels/masks\\read only here};
+\draw[fitonly] (fit) -- node[midway,above] {fit} (fitmodel);
+\draw[data] (val) -- (valmodel);
+\draw[data] (valmodel) -- node[midway,above] {val scores} (thr);
+\draw[data] (test) -- (testmodel);
+\draw[data] (testmodel) -- (mapscore);
+\draw[data] (mapscore) -- (apply);
+\draw[data] (thr) -- (apply);
+\draw[data] (apply) -- (met);
+\draw[labels] (test.south) -- (1.3,-7.5)
+  -- node[midway,below] {Test labels \& masks} (15.4,-7.5) -- (met.south);
 
-% Edge legend occupies otherwise empty protocol space; all labels are >= 6 pt.
-\begin{scope}[font=\fontsize{6}{7}\selectfont]
-\draw[data] (0.7,-4.3) -- (1.6,-4.3) node[right] {image data / scores};
-\draw[fitonly] (0.7,-4.8) -- (1.6,-4.8) node[right] {fit time only};
-\draw[labels] (0.7,-5.3) -- (1.6,-5.3) node[right] {labels / masks};
-\end{scope}
+% Edge legend uses exactly the same footnotesize as the nodes.
+\draw[data] (0.2,-8.5) -- (1.1,-8.5) node[right] {image data / scores};
+\draw[fitonly] (6.0,-8.5) -- (6.9,-8.5) node[right] {fit time only};
+\draw[labels] (11.0,-8.5) -- (11.9,-8.5) node[right] {labels / masks};
 \end{tikzpicture}
