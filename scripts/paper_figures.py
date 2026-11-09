@@ -1,222 +1,260 @@
 #!/usr/bin/env python3
-"""Create publication figures using only committed report CSVs and PNGs.
+"""Publication charts from committed evaluation reports; never fit a model.
 
-No model inference, dataset loading, metric computation or threshold fitting is
-performed here. JPEG composites preserve the existing failure/qualitative panels.
+The v1 archive and legacy bars/JPEGs are immutable. Only the four named chart
+PDFs and their provenance records are written at the requested output root.
 """
 from __future__ import annotations
 
 import argparse
-import io
+import json
+import math
 from pathlib import Path
 
 import matplotlib
-
-matplotlib.use("Agg")
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib import font_manager
 from matplotlib.lines import Line2D
 from matplotlib.ticker import NullFormatter
-from PIL import Image, ImageDraw, ImageFont
 
-from paper_tables import (CATEGORIES, ROOT, RUNS, VARIANTS, csv_rows, load_metrics,
-                          region_rates, source_bytes, variant_value)
+from paper_tables import CATEGORIES, ROOT, RUNS, VARIANTS, csv_rows, load_metrics, variant_value
 
-COLORS = ("#0072B2", "#D55E00")  # Okabe--Ito blue and vermilion
+STYLE = ROOT / 'paper/style/ieee.mplstyle'
 SINGLE, DOUBLE = 3.5, 7.16
-plt.rcParams.update({
-    "pdf.fonttype": 42, "ps.fonttype": 42, "font.family": "serif",
-    "font.serif": ["STIXGeneral", "Nimbus Roman", "DejaVu Serif"],
-    "mathtext.fontset": "stix", "font.size": 8, "axes.titlesize": 8,
-    "axes.labelsize": 8, "xtick.labelsize": 8, "ytick.labelsize": 8,
-    "legend.fontsize": 8, "axes.spines.top": False, "axes.spines.right": False,
-    "savefig.pad_inches": 0.02,
-})
+METHODS = {'PaDiM': ('#0072B2', 'o'), 'PatchCore': ('#D55E00', 's')}
+FAMILIES = {'baseline': ('#000000', '*'), 'dinov2': ('#009E73', 'D'),
+            'multiscale': ('#CC79A7', '^')}
+PER_REGION = 'reports/figures/failure_cases/tables/per_region.csv'
+POOLED = 'reports/figures/failure_cases/tables/region_detection_pooled.csv'
+MAIN_SOURCE = 'reports/tables/metrics_long.csv'
+EXPECTED_BINS = ('<1 cell', '1-3 cells', '3-10 cells', '10-30 cells', '30-100 cells', '>=100 cells')
+CHARTS = ('fig_main_dumbbell.pdf', 'fig_defect_area.pdf', 'fig_regionsize.pdf', 'fig_tradeoff.pdf')
+TRADEOFF_VARIANTS = ('Base', 'MsMaxCtrl', 'DinoB', 'DinoS', 'WrnDino', 'DinoNoLN',
+                     'MsLOneTwoThree', 'MsLTwoThreeFour', 'PyrMean')
 
 
-def save(fig, path):
-    fig.savefig(path, metadata={"Creator": "scripts/paper_figures.py", "CreationDate": None})
+def output_root(output: Path) -> Path:
+    output = output.resolve()
+    if 'v1' in output.parts:
+        raise ValueError('the v1 archives are immutable')
+    output.mkdir(parents=True, exist_ok=True)
+    return output
+
+
+def save(fig, path: Path, generator='scripts/paper_figures.py'):
+    output_root(path.parent)
+    fig.savefig(path, dpi=300, bbox_inches=None, facecolor='white', transparent=False,
+                metadata={'Creator': generator, 'CreationDate': None})
     plt.close(fig)
 
 
-def bars(output, data):
-    fig, axes = plt.subplots(1, 2, figsize=(DOUBLE, 2.05), layout="constrained")
-    x = np.arange(len(CATEGORIES))
-    for ax, metric, title in zip(axes, ("image_auroc", "aupro"),
-                                 ("(a) Image AUROC", "(b) AU-PRO")):
-        for i, (method, run) in enumerate(RUNS.items()):
-            vals = [data["baseline"].get(run, metric, (cat,)) for cat in CATEGORIES]
-            ax.bar(x + (i - 0.5) * 0.36, vals, 0.36, color=COLORS[i],
-                   label=("PaDiM", "PatchCore")[i], hatch=("///", "")[i],
-                   edgecolor="black", linewidth=0.4, zorder=3)
-        ax.set(ylim=(0.75, 1.006), xticks=x, xticklabels=CATEGORIES, title=title)
-        ax.tick_params(axis="x", rotation=25)
-        ax.axvline(2.5, linestyle="--", color="0.35", linewidth=0.7)
-        ax.grid(axis="y", color="0.88", linewidth=0.5, zorder=0)
-    handles, labels = axes[0].get_legend_handles_labels()
-    fig.legend(handles, labels, loc="outside upper center", ncol=2, frameon=False)
-    save(fig, output / "fig_bars.pdf")
+def record(output: Path, name: str, sources: list[str], transformation: str, n,
+           selection_rule=None, generator='scripts/paper_figures.py', **extra):
+    """Merge only top-level outputs, so charts and panels can run separately."""
+    path = output / 'MANIFEST.json'
+    manifest = json.loads(path.read_text()) if path.exists() else {
+        'schema_version': 1, 'style': 'paper/style/ieee.mplstyle', 'minimum_text_pt': 6,
+        'style_basis': 'scientific-visualization publication.mplstyle (copied values)',
+        'method_encoding': {k: {'color': v[0], 'marker': v[1]} for k, v in METHODS.items()},
+        'outputs': {},
+    }
+    assert '/' not in name and name.endswith('.pdf')
+    manifest['outputs'][name] = dict(sources=sources, transformation=transformation, n=n,
+        selection_rule=selection_rule, generator=generator, **extra)
+    path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + '\n')
+
+
+def method_handles():
+    return [Line2D([], [], color=c, marker=m, linestyle='none', markersize=4,
+                   markerfacecolor=c if method == 'PaDiM' else 'white', label=method)
+            for method, (c, m) in METHODS.items()]
+
+
+def main_dumbbell(output, data):
+    fig, axes = plt.subplots(1, 3, figsize=(DOUBLE, 2.1), layout='constrained', sharey=True)
+    y = np.arange(6)
+    for ax, key, title in zip(axes, ('image_auroc', 'image_f1', 'aupro'),
+                             ('Image AUROC', 'Image F1 (val. threshold)', 'AU-PRO')):
+        vals = [[data['baseline'].get(run, key, (cat,)) for cat in CATEGORIES] for run in RUNS.values()]
+        ax.hlines(y, vals[0], vals[1], color='0.65', linewidth=0.7, zorder=2)
+        for i, (method, (color, marker)) in enumerate(METHODS.items()):
+            ax.plot(vals[i], y, linestyle='none', marker=marker, markersize=4,
+                    color=color, markerfacecolor=color if i == 0 else 'none',
+                    markeredgewidth=0.85, zorder=3+i, clip_on=False)
+        ax.set(title=title, yticks=y, yticklabels=CATEGORIES, ylim=(5.55, -0.55))
+        if key == 'image_f1':
+            ax.set(xlim=(0, 1), xticks=(0, .25, .5, .75, 1))
+        else:
+            ax.set(xlim=(.75, 1), xticks=(.75, .875, 1), xticklabels=('0.75', '0.875', '1.00'))
+        ax.grid(axis='x', color='0.9', linewidth=.5)
+        ax.axhline(2.5, color='0.65', linewidth=.5)
+        ax.spines['left'].set_visible(False)
+        ax.tick_params(axis='y', length=0, pad=3)
+    axes[0].text(-.48, .75, 'Objects', rotation=90, transform=axes[0].transAxes,
+                 ha='center', va='center', fontsize=6)
+    axes[0].text(-.48, .25, 'Textures', rotation=90, transform=axes[0].transAxes,
+                 ha='center', va='center', fontsize=6)
+    fig.legend(handles=method_handles(), loc='outside upper center', ncol=2)
+    save(fig, output / CHARTS[0])
+    record(output, CHARTS[0], [MAIN_SOURCE],
+           'Per-category point estimates on a common row; hollow PatchCore squares retain visible ties; no rescaling of metric values.',
+           {'categories': 6, 'methods': 2}, width_inches=DOUBLE, height_inches=2.1,
+           uncertainty='Single-seed estimates; no between-run uncertainty is available.')
 
 
 def defect_area(output):
-    rows = csv_rows("reports/dataset/defect_regions_per_image.csv")
-    vals = [[float(r["area_frac"]) * 100 for r in rows if r["category"] == c]
-            for c in CATEGORIES]
-    fig, ax = plt.subplots(figsize=(SINGLE, 2.35), layout="constrained")
-    boxes = ax.boxplot(vals, orientation="horizontal", tick_labels=CATEGORIES,
-                       patch_artist=True, widths=0.55, showfliers=True,
-                       flierprops={"marker": ".", "markersize": 2, "markeredgecolor": "0.4"},
-                       medianprops={"color": "black", "linewidth": 1.1})
-    for i, box in enumerate(boxes["boxes"]):
-        box.set(facecolor="0.8" if i < 3 else "0.95", edgecolor="0.3")
-    ax.invert_yaxis()
-    # The source area_frac is measured on the full image, before centre crop.
-    # One 8x8 cell of the 224 crop occupies 64/256^2 of the resized full image.
-    ax.axvline(64 / 224**2 * (224 / 256)**2 * 100, color=COLORS[1], linestyle="--", linewidth=1,
-               label="1 feature cell (≈0.098% of image)")
-    ax.set(xscale="log", xlabel="GT defect area (% of full image)")
-    ax.legend(loc="lower center", bbox_to_anchor=(0.5, 1.01), frameon=False, fontsize=7)
-    ax.grid(axis="x", color="0.9", linewidth=0.5)
-    save(fig, output / "fig_defect_area.pdf")
+    rows = [r for r in csv_rows(PER_REGION) if r['method'] == 'PatchCore']
+    vals = [[float(r['area_cells']) for r in rows if r['category'] == cat] for cat in CATEGORIES]
+    assert all(v > 0 for group in vals for v in group), 'log area requires positive regions'
+    fig, ax = plt.subplots(figsize=(SINGLE, 2.4), layout='constrained')
+    rng = np.random.default_rng(0)
+    for i, group in enumerate(vals):
+        ax.scatter(group, i + rng.uniform(-.16, .16, len(group)), s=3, color='0.25',
+                   alpha=.35, linewidths=0, zorder=2)
+        ax.text(1.015, i, f'n = {len(group)}', transform=ax.get_yaxis_transform(),
+                ha='left', va='center', fontsize=6)
+    ax.boxplot(vals, positions=np.arange(6), orientation='horizontal', widths=.48,
+               showfliers=False, whis=1.5, patch_artist=False,
+               boxprops={'color': '0.15', 'linewidth': .7}, medianprops={'color':'black', 'linewidth':1},
+               whiskerprops={'color':'0.3', 'linewidth':.7}, capprops={'color':'0.3', 'linewidth':.7})
+    for edge in (3, 10, 30, 100):
+        ax.axvline(edge, color='0.9', linewidth=.5, zorder=0)
+    ax.axvline(1, color='0.15', linestyle='--', linewidth=.8, zorder=1,
+               label='1 feature cell (0.128% of crop)')
+    ax.axhline(2.5, color='0.65', linewidth=.5)
+    ax.set(xscale='log', xlim=(min(.09, min(map(min, vals))/1.2), 1300), ylim=(5.55, -.55),
+           yticks=np.arange(6), yticklabels=CATEGORIES,
+           xlabel='GT region area (stride-8 feature cells, log scale)')
+    ax.set_xticks((.1,1,10,100,1000), labels=('0.1','1','10','100','1000'))
+    ax.xaxis.set_minor_formatter(NullFormatter())
+    ax.legend(loc='lower center', bbox_to_anchor=(.5, 1.01), fontsize=6.5)
+    save(fig, output / CHARTS[1])
+    record(output, CHARTS[1], [PER_REGION],
+           'PatchCore rows only (each GT region once); area_cells in the 224 crop; unfilled boxes (1.5 IQR whiskers) plus every region with vertical U(-0.16,0.16) jitter, seed 0; log10 x axis.',
+           {'regions': len(rows), 'by_category': dict(zip(CATEGORIES,map(len,vals)))},
+           'method == PatchCore; all rows; no exclusions', width_inches=SINGLE, height_inches=2.4,
+           unit='8-connected GT region inside the 224 crop', reference_cell_pixels=64,
+           reference_cell_crop_percent=100*64/224**2, jitter_seed=0)
+
+
+def wilson(k: int, n: int, z: float = 1.959964) -> tuple[float, float]:
+    if not 0 <= k <= n or n <= 0:
+        raise ValueError('Wilson interval requires 0 <= k <= n and n > 0')
+    p, z2 = k/n, z*z
+    center = (p + z2/(2*n)) / (1 + z2/n)
+    half = z * math.sqrt(p*(1-p)/n + z2/(4*n*n)) / (1 + z2/n)
+    return max(0., center-half), min(1., center+half)
+
+
+def region_counts():
+    pooled, regions = csv_rows(POOLED), csv_rows(PER_REGION)
+    assert tuple(r['size_bin'] for r in pooled) == EXPECTED_BINS
+    counts = {}
+    for method in METHODS:
+        counts[method] = []
+        for row in pooled:
+            selected = [r for r in regions if r['method'] == method and r['size_bin'] == row['size_bin']]
+            k, n = sum(r['region_detected'] == 'True' for r in selected), len(selected)
+            assert n == int(row['n'])
+            assert abs(k/n-float(row[method])) <= .00005 + 1e-12, (method,row,k,n)
+            counts[method].append((k,n))
+    return pooled, counts
 
 
 def region_size(output):
-    rows = csv_rows("reports/figures/failure_cases/tables/region_detection_pooled.csv")
-    regions = csv_rows("reports/figures/failure_cases/tables/per_region.csv")
-    fig, ax = plt.subplots(figsize=(SINGLE, 2.25), layout="constrained")
-    x = np.arange(len(rows))
-    for i, method in enumerate(("PaDiM", "PatchCore")):
-        ax.plot(x, [float(region_rates(r, regions)[i]) for r in rows], color=COLORS[i],
-                marker=("o", "s")[i], markersize=4, linestyle=("--", "-")[i], label=method)
-    for i, r in enumerate(rows):
-        ax.text(i, 1.035, "$n=" + r["n"] + "$", ha="center", fontsize=7)
-    tick_labels = [r["size_bin"].removesuffix(" cells").removesuffix(" cell")
-                   .replace(">=", "≥").replace("-", "–") for r in rows]
-    ax.set(xticks=x, xticklabels=tick_labels, xlim=(-0.5, len(rows) - 0.5),
-           xlabel="GT region size (stride-8 cells)", ylabel="Region detection rate",
-           ylim=(0.25, 1.13))
-    ax.legend(loc="lower right", frameon=False)
-    ax.grid(axis="y", color="0.9", linewidth=0.5)
-    save(fig, output / "fig_regionsize.pdf")
+    pooled, counts = region_counts()
+    fig, ax = plt.subplots(figsize=(SINGLE, 2.3), layout='constrained')
+    x = np.arange(len(pooled))
+    for i, (method, (color, marker)) in enumerate(METHODS.items()):
+        vals = np.array([k/n for k,n in counts[method]])
+        ci = np.array([wilson(k,n) for k,n in counts[method]])
+        xx = x + (-.12 if i == 0 else .12)
+        ax.plot(xx, vals, color=color, linewidth=.7, alpha=.5, linestyle='-' if i == 0 else '--')
+        ax.errorbar(xx, vals, yerr=[vals-ci[:,0],ci[:,1]-vals], color=color, marker=marker,
+                     linestyle='none', markersize=3.5, capsize=2, linewidth=.8, label=method)
+    labels = [r['size_bin'].removesuffix(' cells').removesuffix(' cell').replace('>=','≥').replace('-','–')
+              + '\n' + f"n={r['n']}" for r in pooled]
+    ax.set(xticks=x, xticklabels=labels, xlim=(-.5,5.5), ylim=(0,1.05),
+           xlabel='GT region size (stride-8 feature cells)', ylabel='Region detection rate')
+    ax.grid(axis='y', color='0.9', linewidth=.5)
+    ax.legend(loc='lower right', fontsize=7)
+    save(fig, output / CHARTS[2])
+    record(output, CHARTS[2], [PER_REGION, POOLED],
+           'Exact region_detected/n per method and bin; 95% Wilson score intervals, z=1.959964; horizontal dodge ±0.12; lines are ordinal guides only.',
+           {'regions_per_method': sum(int(r['n']) for r in pooled),
+            'by_bin': {r['size_bin']:int(r['n']) for r in pooled}},
+           'All regions; prescribed bins ordered as in pooled CSV', width_inches=SINGLE, height_inches=2.3,
+           counts={m:[{'detected':k,'n':n} for k,n in v] for m,v in counts.items()},
+           uncertainty='Nominal region-level Wilson intervals; regions within an image may be dependent (not an image-cluster interval).')
 
 
 def tradeoff(output, data):
-    fig, ax = plt.subplots(figsize=(SINGLE, 3.15), layout="constrained")
-    markers = {"baseline": "*", "dinov2": "o", "multiscale": "^", "postproc": "s"}
-    colors = {"baseline": "black", "dinov2": COLORS[0], "multiscale": COLORS[1], "postproc": "0.45"}
-    # Global thresholds affect F1, not AU-PRO; omit their coincident points.
-    # Show the coarse-layer outlier with an explicit off-scale arrow so that
-    # the useful AU-PRO range is legible at single-column width.
-    labels = {
-        "DinoB": ("ViT-B", (7, 2)),
-        "DinoS": ("ViT-S", (-15, -12)), "WrnDino": ("WRN+ViT-B", (7, 0)),
-        "DinoNoLN": ("No-LN†", (7, -8)),
-        "MsLOneTwoThree": ("L1+2+3", (-35, 8)),
-        "PyrMean": ("Pyr / z-Pyr", (-41, 11)),
-        "PpSigEight": ("σ=8", (7, -8)),
-    }
-    for v in VARIANTS:
-        if v.macro in ("PpGlobalZ", "PpGlobalPooled", "MsLTwoThreeFour"):
-            continue
-        x, y = (variant_value(v, metric, data) for metric in ("Infer", "Aupro"))
-        ax.scatter(x, y, marker=markers[v.family], s=37 if v.family != "baseline" else 70,
-                   facecolors="white" if v.posthoc else colors[v.family],
-                   edgecolors=colors[v.family], linewidths=0.8,
-                   zorder=6 if v.family == "baseline" else 4)
-        if v.macro in labels:
-            label, offset = labels[v.macro]
-            ax.annotate(label, (x, y), xytext=offset, textcoords="offset points", fontsize=7,
-                        arrowprops={"arrowstyle": "-", "color": "0.5", "lw": 0.45}, zorder=5)
-    base = VARIANTS[0]
-    ax.annotate("Baseline + post-proc.\n(σ≤4, max, top-1%)",
-                (variant_value(base, "Infer", data), variant_value(base, "Aupro", data)),
-                xytext=(2.6, 0.958), textcoords="data", ha="left", va="top", fontsize=7,
-                arrowprops={"arrowstyle": "-", "color": "0.5", "lw": 0.45})
-    coarse = next(v for v in VARIANTS if v.macro == "MsLTwoThreeFour")
-    ax.annotate(f"L2+3+4: {variant_value(coarse, 'Aupro', data):.3f}\n(below axis)",
-                (variant_value(coarse, "Infer", data), 0), xycoords=ax.get_xaxis_transform(),
-                xytext=(0, 19), textcoords="offset points", ha="left", va="bottom", fontsize=7,
-                arrowprops={"arrowstyle": "->", "color": colors["multiscale"], "lw": 0.8})
-    handles = [Line2D([], [], color=colors[family], marker=markers[family], linestyle="none", markersize=5, label=label)
-               for family, label in (("baseline", "Baseline"), ("dinov2", "DINOv2"),
-                                     ("multiscale", "Multiscale"), ("postproc", "Post-proc."))]
-    handles.append(Line2D([], [], marker="o", color=COLORS[0], markerfacecolor="white",
-                          linestyle="none", markersize=5, label="Hollow: post-hoc"))
-    ax.set(xscale="log", xlim=(2.3, 35), ylim=(0.895, 0.963),
-           xlabel="Inference (ms/image, log scale)", ylabel="AU-PRO")
-    ax.set_xticks((3, 6, 12, 24), labels=("3", "6", "12", "24"))
-    ax.xaxis.set_minor_formatter(NullFormatter())
-    ax.grid(color="0.9", linewidth=0.5)
-    fig.legend(handles=handles, loc="outside lower center", ncol=3, frameon=False,
-               fontsize=7, handletextpad=0.3, columnspacing=0.8)
-    save(fig, output / "fig_tradeoff.pdf")
-
-
-def panel(path):
-    return Image.open(io.BytesIO(source_bytes(path))).convert("RGB")
-
-
-def font(size):
-    path = font_manager.findfont(font_manager.FontProperties(family="DejaVu Serif", weight="bold"))
-    return ImageFont.truetype(path, size)
-
-
-def failure_composite(output, numbers, name):
-    # Fixed dimensions retain every source panel's aspect ratio and full content.
-    names = subprocess_report_pngs("reports/figures/failure_cases/")
-    images = [panel(next(p for p in names if Path(p).name.startswith(f"{n:02d}_"))) for n in numbers]
-    tile_w, tile_h, heading, gap = 1030, 375, 32, 12
-    assert len(images) == 6, "failure composites require six panels"
-    assert all(im.size == (tile_w, tile_h) for im in images), [im.size for im in images]
-    canvas = Image.new("RGB", (2 * tile_w + gap, 3 * (tile_h + heading) + 2 * gap), "white")
-    draw = ImageDraw.Draw(canvas)
-    for i, im in enumerate(images):
-        x, y = (i % 2) * (tile_w + gap), (i // 2) * (tile_h + heading + gap)
-        draw.text((x + 5, y), f"({chr(97+i)})", fill="black", font=font(27))
-        canvas.paste(im, (x, y + heading))
-    canvas.save(output / name, quality=85, optimize=True, dpi=(290, 290))
-    assert (output / name).stat().st_size <= 1_500_000
-
-
-def subprocess_report_pngs(prefix):
-    import subprocess
-    names = subprocess.check_output(["git", "ls-tree", "-r", "--name-only", "HEAD", "--", prefix], cwd=ROOT)
-    return [p for p in names.decode().splitlines() if p.endswith(".png")]
-
-
-def qualitative(output):
-    for cat in CATEGORIES:
-        ims = [panel(f"reports/figures/qualitative/{run}_{cat}_summary.png") for run in RUNS.values()]
-        # 2,000 px / 7.16 in = 279 dpi; retain fine labels in the source grids.
-        width, heading, gap = 994, 42, 12
-        ims = [im.resize((width, round(im.height * width / im.width)), Image.Resampling.LANCZOS) for im in ims]
-        canvas = Image.new("RGB", (2 * width + gap, max(im.height for im in ims) + heading), "white")
-        draw = ImageDraw.Draw(canvas)
-        for i, (label, im) in enumerate(zip(("PaDiM", "PatchCore"), ims)):
-            x = i * (width + gap)
-            draw.text((x + width / 2, 2), label, fill="black", font=font(30), anchor="mt")
-            canvas.paste(im, (x, heading))
-        canvas.save(output / f"fig_app_qual_{cat}.jpg", quality=85, optimize=True, dpi=(280, 280))
+    fig, axes = plt.subplots(2,1,figsize=(SINGLE,3.65),layout='constrained',sharex=True)
+    vs = [next(v for v in VARIANTS if v.macro == name) for name in TRADEOFF_VARIANTS]
+    labels = {'Base':'Baseline','MsMaxCtrl':'Max ctrl','DinoB':'ViT-B','DinoS':'ViT-S',
+              'WrnDino':'WRN+ViT-B','DinoNoLN':'No-LN†','MsLOneTwoThree':'L1+2+3',
+              'MsLTwoThreeFour':'L2+3+4','PyrMean':'Pyramid'}
+    offsets = [
+        {'Base':(-4,-16),'MsMaxCtrl':(8,3),'DinoB':(5,2),'DinoS':(-12,-14),
+         'WrnDino':(5,-4),'DinoNoLN':(6,0),'MsLOneTwoThree':(-30,-12),
+         'MsLTwoThreeFour':(6,2),'PyrMean':(-36,6)},
+        {'Base':(-5,8),'MsMaxCtrl':(7,-12),'DinoB':(5,-1),'DinoS':(-20,-12),
+         'WrnDino':(5,-2),'DinoNoLN':(5,-10),'MsLOneTwoThree':(-32,5),'PyrMean':(-36,7)}]
+    for panel, (ax, metric, title, lim) in enumerate(zip(axes,('ImgAuroc','Aupro'),
+              ('(a) Image AUROC','(b) AU-PRO'),((.915,1.004),(.895,.958)))):
+        baseline=variant_value(vs[0],metric,data)
+        ax.axhline(baseline,color='0.55',linestyle=':',linewidth=.7)
+        for v in vs:
+            xx, yy=variant_value(v,'Infer',data),variant_value(v,metric,data)
+            family='baseline' if v.macro in ('Base','MsMaxCtrl') else v.family
+            color, marker=FAMILIES[family]
+            if v.macro=='MsMaxCtrl': marker='+'
+            outside=yy < lim[0]
+            if outside:
+                ax.plot(xx,lim[0],marker=marker,color=color,markersize=4,clip_on=False)
+                ax.annotate(f'▼ {yy:.3f}  L2+3+4',(xx,lim[0]),xytext=(4,5),
+                            textcoords='offset points',fontsize=6,ha='left',va='bottom')
+            else:
+                ax.plot(xx,yy,marker=marker,color=color,linestyle='none',markersize=4,
+                         markerfacecolor='white' if v.posthoc else color,
+                         markeredgewidth=.8,zorder=4,clip_on=False)
+                ax.annotate(labels[v.macro],(xx,yy),xytext=offsets[panel][v.macro],
+                             textcoords='offset points',fontsize=6,
+                             arrowprops={'arrowstyle':'-','color':'0.55','lw':.4},zorder=5)
+        ax.set(ylim=lim,title=title,xscale='log',xlim=(2,36))
+        ax.set_xscale('log',base=2)
+        ax.set_xticks((2,4,8,16,32),labels=('2','4','8','16','32'))
+        ax.xaxis.set_minor_formatter(NullFormatter())
+        ax.grid(axis='x',color='0.92',linewidth=.5)
+    axes[1].set_xlabel('Inference (ms/image, log base 2)')
+    handles=[Line2D([],[],color=c,marker=m,linestyle='none',markersize=4,label=label)
+             for (c,m),label in zip(FAMILIES.values(),('Baseline / control','DINOv2','Multi-scale'))]
+    handles.append(Line2D([],[],color=FAMILIES['dinov2'][0],marker='D',markerfacecolor='white',
+                          linestyle='none',markersize=4,label='hollow = post-hoc'))
+    fig.legend(handles=handles,loc='outside lower center',ncol=2,fontsize=6.5)
+    save(fig,output/CHARTS[3])
+    record(output,CHARTS[3],[MAIN_SOURCE,'reports/bonus/dinov2_tables/metrics_long.csv',
+                            'reports/bonus/multiscale_tables/metrics_long.csv'],
+           'Six-category arithmetic means, identical to bn* macros; model variants only; log2 latency; baseline reference lines; out-of-range L2+3+4 AU-PRO explicitly marked on the lower spine.',
+           {'variants':len(vs),'categories_per_variant':6},
+           'Prescribed nine model/control variants; no post-processing points; z-mean ≈ mean, so only pyramid mean is drawn.',
+           width_inches=SINGLE,height_inches=3.65,variants={v.macro:{m:variant_value(v,m,data) for m in ('Infer','ImgAuroc','Aupro')} for v in vs},
+           uncertainty='Single-seed category means; no repeated-run uncertainty available.')
 
 
 def generate(output):
-    output.mkdir(parents=True, exist_ok=True)
-    data = load_metrics()
-    bars(output, data)
-    defect_area(output)
-    region_size(output)
-    tradeoff(output, data)
-    failure_composite(output, (1, 4, 5, 7, 8, 12), "fig_failures.jpg")
-    failure_composite(output, range(1, 7), "fig_app_failures_1.jpg")
-    failure_composite(output, range(7, 13), "fig_app_failures_2.jpg")
-    qualitative(output)
-    total = sum(p.stat().st_size for p in output.iterdir() if p.is_file())
-    assert total < 12_000_000, total
-    print(f"{output}: {total / 1_000_000:.2f} MB")
+    output=output_root(output)
+    with plt.style.context(STYLE):
+        data=load_metrics()
+        main_dumbbell(output,data)
+        defect_area(output)
+        region_size(output)
+        tradeoff(output,data)
+    print(f'Wrote {len(CHARTS)} chart PDFs to {output}; legacy figures and v1 unchanged.')
 
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--output-dir", type=Path, default=ROOT / "paper/generated/figures")
-    generate(parser.parse_args().output_dir)
+if __name__=='__main__':
+    ap=argparse.ArgumentParser(description=__doc__)
+    ap.add_argument('--output-dir',type=Path,default=ROOT/'paper/generated/figures')
+    generate(ap.parse_args().output_dir)

@@ -13,6 +13,7 @@ tables:
 
 figures:
 	MPLCONFIGDIR=/tmp/ma6216-paper-matplotlib $(PYTHON) ../scripts/paper_figures.py
+	CUDA_VISIBLE_DEVICES='' HF_HUB_OFFLINE=1 MPLCONFIGDIR=/tmp/ma6216-paper-matplotlib $(PYTHON) ../scripts/paper_panels.py
 
 clean:
 	latexmk -C
