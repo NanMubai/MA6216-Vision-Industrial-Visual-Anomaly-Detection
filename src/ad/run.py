@@ -26,11 +26,15 @@ Thresholds come only from the normal validation split (ad.threshold).
 scoring.normalize defaults to none; zscore fits separate image/pixel statistics
 on normal validation and reports image_f1_global (fixed z=3) and
 image_f1_global_pooled (99% pooled normalised validation image quantile) after
-all requested categories succeed. Per-category image_f1 remains available.
+all six standard categories succeed together. Other category sets warn and skip
+pooled metrics; fixed-z metrics and per-category image_f1 remain available.
 --prediction-cache optionally shares raw model outputs across postprocessing
-variants with identical model/data/seed configuration. Recorded inference time
+variants with identical model/data/seed configuration, torch/timm versions and
+model/data source hashes; category lists do not affect per-category reuse.
+Legacy caches without these version fields are rejected. Recorded inference time
 adds the cached model prediction time to each newly measured smoothing pass;
-fit time and model peak memory are inherited and marked in metrics.json.
+fit time and model peak memory are inherited and marked in metrics.json with
+the source run, cache creation timestamp and copied-metric flags.
 Run GPU experiments under scripts/gpu_run.sh; this module does not acquire the GPU lock.
 """
 
@@ -38,11 +42,14 @@ from __future__ import annotations
 
 import argparse
 import gc
+import hashlib
 import json
 import logging
 import math
 import time
 import traceback
+from datetime import datetime, timezone
+from importlib.metadata import version as package_version
 from pathlib import Path
 
 import numpy as np
@@ -55,6 +62,12 @@ from ad.config import deep_merge, load_config
 from ad.data import CATEGORIES, TEXTURE_CATEGORIES, MVTecDataset, get_root, make_loader
 
 LOGGER = logging.getLogger(__name__)
+_CACHE_SOURCE_DIR = Path(__file__).resolve().parent
+# Fingerprint model/data implementations and the model factory, including new
+# backbone modules after merges. Postprocessing changes can reuse raw predictions.
+_CACHE_POSTPROCESSING_FILES = {
+    "run.py", "scoring.py", "threshold.py", "aggregate.py", "visualize.py", "metrics.py", "config.py",
+}
 
 
 def _parse_overrides(assignments: list[str]) -> dict:
@@ -108,6 +121,19 @@ def _image_scores(pred: Prediction, maps: np.ndarray, cfg: dict, mode: str) -> n
     return scores
 
 
+def _prediction_cache_identity(cfg: dict) -> dict:
+    """Bind per-category predictions to config, libraries and model/data sources."""
+    identity = {key: value for key, value in cfg.items()
+                if key not in ("name", "scoring", "threshold", "categories")}
+    identity["code_version"] = {
+        "torch": str(torch.__version__), "timm": package_version("timm"),
+        "source_sha256": {path.name: hashlib.sha256(path.read_bytes()).hexdigest()
+                          for path in sorted(_CACHE_SOURCE_DIR.glob("*.py"))
+                          if path.name not in _CACHE_POSTPROCESSING_FILES},
+    }
+    return identity
+
+
 def _save_raw_prediction(path: Path, prediction: Prediction) -> None:
     arrays = {"patch_maps": prediction.patch_maps}
     if prediction.image_scores is not None:
@@ -133,14 +159,31 @@ class _CachedPredictions:
 
 
 def _apply_global_thresholds(run_dir: Path, categories: dict) -> None:
-    """Calibrate from validation, then delegate all test-label evaluation to metrics."""
+    """Evaluate z=3 everywhere; pool validation ONLY over the six standard products.
+
+    Partial/custom category invocations retain fixed-z metrics but warn and skip
+    pooled metrics, so a single-category rerun cannot redefine the global pool.
+    """
     val_scores = {}
     for category in categories:
         with np.load(run_dir / category / "scores.npz", allow_pickle=False) as arrays:
             val_scores[category] = arrays["val_image_scores"]
-    thresholds = {"global": threshold.global_image_threshold(val_scores),
-                  "global_pooled": threshold.global_image_threshold(val_scores, "pooled_quantile")}
+    thresholds = {"global": threshold.global_image_threshold(val_scores)}
+    complete_pool = set(categories) == set(CATEGORIES)
+    if complete_pool:
+        thresholds["global_pooled"] = threshold.global_image_threshold(val_scores, "pooled_quantile")
+    else:
+        LOGGER.warning("Pooled global threshold requires exactly the six standard categories %s; "
+                       "got %s, so pooled metrics are skipped (fixed z=3 is still evaluated)",
+                       list(CATEGORIES), list(categories))
     for category, result in categories.items():
+        # Remove stale pooled fields if a caller reuses an earlier result dict.
+        for key in list(result):
+            if key.startswith("image_") and key.endswith("_global_pooled"):
+                del result[key]
+        result["global_threshold_categories"] = list(categories)
+        result["global_pooled_status"] = ("standard_categories" if complete_pool
+                                          else "skipped_requires_standard_categories")
         with np.load(run_dir / category / "scores.npz", allow_pickle=False) as arrays:
             for suffix, value in thresholds.items():
                 measured = metrics.f1_at_threshold(arrays["labels"], arrays["image_scores"], value)
@@ -150,7 +193,9 @@ def _apply_global_thresholds(run_dir: Path, categories: dict) -> None:
     _write_json(run_dir / "global_thresholds.json", {
         "source": "normal_validation", "categories": list(categories),
         "image_threshold_global": thresholds["global"],
-        "image_threshold_global_pooled": thresholds["global_pooled"], "pooled_quantile": 0.99,
+        "image_threshold_global_pooled": thresholds.get("global_pooled"), "pooled_quantile": 0.99,
+        "pooled_threshold_categories": list(CATEGORIES),
+        "pooled_status": "standard_categories" if complete_pool else "skipped_requires_standard_categories",
         "val_image_count": {key: len(value) for key, value in val_scores.items()}})
 
 
@@ -191,13 +236,12 @@ def _run_category(category: str, cfg: dict, result_dir: Path, no_figs: bool,
         # A cache is opt-in and reusable ONLY when every model/data setting matches.
         # It holds raw predictions, never labels/masks or calibrated statistics.
         cache_path = prediction_cache / category if prediction_cache is not None else None
-        identity = {key: value for key, value in cfg.items()
-                    if key not in ("name", "scoring", "threshold")}
+        identity = _prediction_cache_identity(cfg) if cache_path is not None else None
         cached = None
         if cache_path is not None and (cache_path / "metadata.json").is_file():
             cached = json.loads((cache_path / "metadata.json").read_text())
             if cached["identity"] != identity:
-                raise ValueError("prediction cache model/data config differs from this run")
+                raise ValueError("prediction cache model/data config differs or code/library version changed")
         if cached is None:
             model = build_model(cfg["method"], **cfg["model"])
         else:
@@ -252,10 +296,13 @@ def _run_category(category: str, cfg: dict, result_dir: Path, no_figs: bool,
         peak_gb = torch.cuda.max_memory_allocated(device) / 1024 ** 3 if use_cuda else 0.0
         if cached is not None:
             peak_gb = max(peak_gb, cached["peak_gpu_mem_gb"])
+        cache_created_at = cached["created_at"] if cached is not None else None
         if cache_path is not None and cached is None:
             _save_raw_prediction(cache_path / "test.npz", test_pred)
+            cache_created_at = datetime.now(timezone.utc).isoformat()
             _write_json(cache_path / "metadata.json", {
-                "identity": identity, "fit_seconds": fit_seconds, "predict_seconds": predict_seconds,
+                "identity": identity, "source_run": cfg["name"], "created_at": cache_created_at,
+                "fit_seconds": fit_seconds, "predict_seconds": predict_seconds,
                 "peak_gpu_mem_gb": peak_gb, "model_stats": model.stats()})
         if (test_pred.image_scores is not None) != model_scores_available:
             raise ValueError("model image_scores availability differs between validation and test")
@@ -296,9 +343,17 @@ def _run_category(category: str, cfg: dict, result_dir: Path, no_figs: bool,
             result.update({f"pixel_{key}_global": value for key, value in
                            metrics.f1_at_threshold(masks, maps, 3.0).items()})
         if cache_path is not None:
-            result["prediction_cache"] = {"path": str(cache_path), "reused": cached is not None,
-                                          "predict_seconds": predict_seconds,
-                                          "timing": "shared model prediction plus measured postprocessing"}
+            result["prediction_cache"] = {
+                "path": str(cache_path), "reused": cached is not None,
+                "source_run": cached["source_run"] if cached is not None else cfg["name"],
+                "created_at": cache_created_at,
+                "fit_seconds_copied": cached is not None,
+                "peak_gpu_mem_gb_copied": cached is not None and peak_gb == cached["peak_gpu_mem_gb"],
+                "peak_gpu_mem_gb_source": ("cached_source_run" if cached is not None
+                                           and peak_gb == cached["peak_gpu_mem_gb"] else "current_run"),
+                "predict_seconds": predict_seconds,
+                "timing": "shared model prediction plus measured postprocessing",
+            }
         result_dir.mkdir(parents=True, exist_ok=True)
         np.savez_compressed(result_dir / "scores.npz", image_scores=image_scores, labels=labels,
                             defect_types=np.asarray(defect_types), paths=np.asarray(paths),

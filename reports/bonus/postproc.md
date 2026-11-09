@@ -2,9 +2,9 @@
 
 Protocol: PatchCore-WRN50, layer2 + layer3, resize 256 then centre crop 224, evaluation at 224, patch size 3, target dimension 1024, 10% coreset, projection dimension 128, nine support neighbours, seed 0, and the standard 10% normal training holdout for validation. All six categories and all six requested variants are included; every variant changes one scoring factor from the baseline. Values were specified before test evaluation: top 1% mean; plain smoothed-map max; Gaussian sigma 2, 8, or 0 instead of 4; or validation z-scoring with the fixed global z=3 cutoff and an additional pooled-normal-validation 99% cutoff. Adaptive smoothing was omitted because stride/2 equals the baseline sigma 4 at WRN50 layer2 stride 8.
 
-Image and pixel statistics use separate population means and standard deviations fitted per category only on normal validation outputs, before predicting the test split. A constant reference uses scale 1. The pooled cutoff weights normal validation images equally across all six products; it uses neither test scores nor test annotations. `image_f1` retains each category's validation 99% threshold, `image_f1_global` uses z=3 everywhere, and `image_f1_global_pooled` uses the same pooled validation cutoff everywhere. Pixel maps also support fixed z=3, with `pixel_f1_global` measured over all test images; the existing `pixel_f1` convention remains restricted to anomalous images. All oracle maximum-F1 values in the aggregate tables are test-label oracle references, never deployment thresholds.
+Image and pixel statistics use separate population means and standard deviations fitted per category only on normal validation outputs, before predicting the test split. A constant reference uses scale 1. The pooled cutoff is defined over exactly the six standard categories (bottle, capsule, screw, carpet, tile and leather), weights normal validation images equally, and uses neither test scores nor test annotations. Partial or custom category invocations warn and skip pooled calibration and pooled metrics; fixed z=3 and category-specific metrics remain available. `image_f1` retains each category's validation 99% threshold, `image_f1_global` uses z=3 everywhere, and `image_f1_global_pooled` uses the same pooled validation cutoff everywhere. Pixel maps also support fixed z=3, with `pixel_f1_global` measured over all test images; the existing `pixel_f1` convention remains restricted to anomalous images. All oracle maximum-F1 values in the aggregate tables are test-label oracle references, never deployment thresholds.
 
-The baseline was fitted once per category and cached raw validation/test patch maps plus model image scores; the variants replayed exactly those predictions using `--prediction-cache results/postproc_raw_cache`. Cache reuse checks that all model, data, and seed settings match, and the cache contains no labels or masks. Fit time and peak GPU memory are inherited from that common baseline measurement; inference time adds the shared measured model prediction cost to a newly measured GPU upsampling/smoothing pass for each variant. These are controlled post-processing cost estimates rather than independent retraining measurements, and the runner's timing convention excludes image-score aggregation, z-score application, calibration, and evaluation. The six-category GPU experiments and the GPU-inclusive test suite all used `scripts/gpu_run.sh`.
+The baseline was fitted once per category and cached raw validation/test patch maps plus model image scores; the variants replayed exactly those predictions using `--prediction-cache results/postproc_raw_cache`. Cache reuse checks all model, data and seed settings, torch/timm versions, and SHA-256 hashes of model/data source files, including the model factory and backbone modules; per-category entries can be reused when the invocation selects a different subset of categories. The cache contains no labels or masks. New cache metadata and cached-run metrics identify the source run, UTC creation time, and whether fit time and peak memory were copied. Legacy caches without source/library fingerprints are rejected; use a fresh cache directory for the reproduction below. The original sweep predates these metadata fields, so its source run and copied-field flags are backfilled from the known baseline source, with the unrecorded creation timestamp explicitly left null. Fit time and peak GPU memory are inherited from that common baseline measurement; inference time adds the shared measured model prediction cost to a newly measured GPU upsampling/smoothing pass for each variant. These are controlled post-processing cost estimates rather than independent retraining measurements, and the runner's timing convention excludes image-score aggregation, z-score application, calibration, and evaluation. The six-category GPU experiments and the GPU-inclusive test suite all used `scripts/gpu_run.sh`.
 
 ## All-category means
 
@@ -20,6 +20,8 @@ All means give each category equal weight; object and texture means each contain
 | pp_nosmooth | 0.9874 | 0.9189 | 0.9851 | 0.9324 | 3.6261 | 2.7531 | 1.5023 |
 | pp_zscore_global | 0.9874 | 0.9189 | 0.9853 | 0.9308 | 3.6261 | 2.7912 | 1.5023 |
 
+*Timing/memory provenance: every `pp_*` run inherits `fit_seconds` and `peak_gpu_mem_gb` from `patchcore_wrn50` (shared raw predictions); the baseline values are measured.*
+
 ## Analysis
 
 Top-1% mean raises macro image F1 from 0.9189 to 0.9347, with plain smoothed-map max close at 0.9341, while their image AUROC changes are small.
@@ -28,8 +30,8 @@ At 224×224, top-1% averages 501 pixels, so sustained spatial evidence can suppr
 The requested max comparison also moves aggregation from the raw feature map to the smoothed pixel map, so its difference from the baseline does not isolate Eq 7 reweighting alone.
 Changing sigma leaves image metrics identical because those variants retain model-provided Eq 7 image scores, and changing image aggregation leaves pixel metrics identical.
 
-Sigma 2 raises mean AU-PRO from 0.9308 to 0.9322 while slightly lowering pixel AUROC from 0.9853 to 0.9852; removing Gaussian blur gives 0.9324 AU-PRO and 0.9851 pixel AUROC, with tile showing the largest pixel-AUROC cost (0.9602 to 0.9589).
-Sigma 8 lowers AU-PRO in all six categories and lowers its mean to 0.9233, consistent with excess spreading of anomaly evidence into background and loss of fine region boundaries.
+Sigma 0 and 2 give practically negligible macro AU-PRO gains (+0.0016 and +0.0014) with pixel-AUROC differences of about 2×10⁻⁴ and 1×10⁻⁴; tile's sigma-2 AU-PRO difference is within threshold discretisation noise, and this single-seed sweep shows no real pixel-AUROC/AU-PRO trade-off for sigma ≤ 4.
+The only clear smoothing effect is that sigma 8 lowers AU-PRO in all six categories (macro −0.0075, to 0.9233), consistent with excess spreading of anomaly evidence into background and loss of fine region boundaries.
 Validation z-scoring preserves image AUROC exactly and changes pixel AUROC and AU-PRO by at most 5.4×10⁻¹² and 1.6×10⁻⁸ respectively in this sweep, as expected for a positive affine transform up to float32 rounding.
 One image cutoff reduces macro F1 from 0.9189 to 0.8898 at z=3 and 0.8685 at the pooled cutoff 3.326997, with capsule recall falling to 0.5505 and 0.4771, while leather F1 improves slightly.
 Normal validation has 4/151 images above z=3 (2.65%) and 2/151 above the pooled cutoff (1.32%), so the Gaussian 0.13% tail reference does not describe these small category holdouts; a shared operating cutoff still needs category-specific calibration and incurs a measurable recall cost on this product mix.
@@ -124,6 +126,8 @@ Each block includes bottle, capsule and screw objects, carpet, tile and leather 
 | pp_zscore_global | mean (textures) | 0.9921 | 0.9312 | 0.9810 | 0.9139 | 3.6545 | 2.7928 | 1.4837 |
 | pp_zscore_global | mean (all) | 0.9874 | 0.9189 | 0.9853 | 0.9308 | 3.6261 | 2.7912 | 1.5023 |
 
+*Timing/memory provenance: every `pp_*` run inherits `fit_seconds` and `peak_gpu_mem_gb` from `patchcore_wrn50` (shared raw predictions); the baseline values are measured.*
+
 The aggregate output is [postproc_tables/summary.md](postproc_tables/summary.md), with all numeric results in [metrics_long.csv](postproc_tables/metrics_long.csv). Separate aggregate tables include [image AUROC](postproc_tables/image_auroc.md), [image F1](postproc_tables/image_f1.md), [pixel AUROC](postproc_tables/pixel_auroc.md), [AU-PRO](postproc_tables/aupro.md), [fit seconds](postproc_tables/fit_seconds.md), [inference milliseconds per image](postproc_tables/infer_ms_per_image.md), and [peak GPU GB](postproc_tables/peak_gpu_mem_gb.md). Aggregate plots are in [postproc_figures](postproc_figures), including [image AUROC](postproc_figures/bar_image_auroc.png), [pixel AUROC](postproc_figures/bar_pixel_auroc.png), and [AU-PRO](postproc_figures/bar_aupro.png). No per-category winner or test-tuned setting was selected.
 
 
@@ -134,9 +138,9 @@ export HF_HUB_OFFLINE=1
 export MVTEC_ROOT=/home/eva/code/ma6216/industrial-visual-anomaly-detection/data/mvtec_ad
 export PYTHONPATH=src
 PYTHON=/home/eva/code/ma6216/industrial-visual-anomaly-detection/.venv/bin/python
-scripts/gpu_run.sh "$PYTHON" -m ad.run --config configs/patchcore_wrn50.yaml --no-figs --prediction-cache results/postproc_raw_cache
+scripts/gpu_run.sh "$PYTHON" -m ad.run --config configs/patchcore_wrn50.yaml --no-figs --prediction-cache results/postproc_raw_cache_v2
 for variant in topk1 max sigma2 sigma8 nosmooth zscore_global; do
-  scripts/gpu_run.sh "$PYTHON" -m ad.run --config "configs/patchcore_pp_${variant}.yaml" --no-figs --prediction-cache results/postproc_raw_cache
+  scripts/gpu_run.sh "$PYTHON" -m ad.run --config "configs/patchcore_pp_${variant}.yaml" --no-figs --prediction-cache results/postproc_raw_cache_v2
 done
 # Stage inside the postproc-owned tree because aggregate uses a sibling figures/ directory.
 "$PYTHON" -m ad.aggregate --runs patchcore_wrn50 pp_topk1 pp_max pp_sigma2 pp_sigma8 pp_nosmooth pp_zscore_global --out reports/bonus/postproc_tables/generated
@@ -148,4 +152,4 @@ rmdir reports/bonus/postproc_tables/generated
 scripts/gpu_run.sh "$PYTHON" -m pytest -q
 ```
 
-Validation: `122 passed in 20.35s` with `HF_HUB_OFFLINE=1`, including GPU and MVTec smoke tests. The focused tests cover requested scoring/sigma effects, calibration before test prediction, frozen statistics under a 10000x change in test scores, one cutoff across products, pooled validation calibration, global image/pixel F1, affine metric invariance, cache reuse, and cache identity rejection.
+Validation: `131 passed in 21.54s` with `HF_HUB_OFFLINE=1`, including GPU and MVTec smoke tests. The focused tests cover requested scoring/sigma effects, calibration before test prediction, frozen statistics under a 10000x change in test scores, one cutoff across products, pooled validation calibration, global image/pixel F1, unit and end-to-end affine metric invariance, category-subset cache reuse, rejection after model/source/library changes or missing legacy fingerprints, copied-metric provenance, and six-category pooled-calibration guards.

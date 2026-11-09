@@ -85,3 +85,5 @@ image_f1 uses normal-validation thresholds; image_f1_max_oracle is an oracle ref
 | mean (objects) | 0.9478 [n=3] | 0.9478 [n=3] | 0.9478 [n=3] | 0.9493 [n=3] | 0.9392 [n=3] | 0.9495 [n=3] | 0.9478 [n=3] |
 | mean (textures) | 0.9139 [n=3] | 0.9139 [n=3] | 0.9139 [n=3] | 0.9150 [n=3] | 0.9075 [n=3] | 0.9153 [n=3] | 0.9139 [n=3] |
 | mean (all) | 0.9308 [n=6] | 0.9308 [n=6] | 0.9308 [n=6] | 0.9322 [n=6] | 0.9233 [n=6] | 0.9324 [n=6] | 0.9308 [n=6] |
+
+*Timing/memory provenance: every `pp_*` run inherits `fit_seconds` and `peak_gpu_mem_gb` from `patchcore_wrn50` (shared raw predictions); the baseline values are measured.*

@@ -63,3 +63,5 @@
 | pp_zscore_global | mean (objects) | 0.9827 | 0.9066 | 0.9896 | 0.9478 | 3.5977 | 2.7895 | 1.5208 |
 | pp_zscore_global | mean (textures) | 0.9921 | 0.9312 | 0.9810 | 0.9139 | 3.6545 | 2.7928 | 1.4837 |
 | pp_zscore_global | mean (all) | 0.9874 | 0.9189 | 0.9853 | 0.9308 | 3.6261 | 2.7912 | 1.5023 |
+
+*Timing/memory provenance: every `pp_*` run inherits `fit_seconds` and `peak_gpu_mem_gb` from `patchcore_wrn50` (shared raw predictions); the baseline values are measured.*

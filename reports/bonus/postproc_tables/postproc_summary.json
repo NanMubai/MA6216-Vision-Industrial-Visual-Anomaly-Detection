@@ -96,6 +96,32 @@
       "carpet": 28,
       "tile": 23,
       "leather": 25
-    }
+    },
+    "pooled_threshold_categories": [
+      "bottle",
+      "capsule",
+      "screw",
+      "carpet",
+      "tile",
+      "leather"
+    ],
+    "pooled_status": "standard_categories"
+  },
+  "prediction_cache_provenance": {
+    "source_run": "patchcore_wrn50",
+    "reused_by": [
+      "pp_topk1",
+      "pp_max",
+      "pp_sigma2",
+      "pp_sigma8",
+      "pp_nosmooth",
+      "pp_zscore_global"
+    ],
+    "copied_fields": [
+      "fit_seconds",
+      "peak_gpu_mem_gb"
+    ],
+    "created_at": null,
+    "created_at_note": "Original sweep predates timestamp capture; fresh caches record UTC creation time"
   }
 }

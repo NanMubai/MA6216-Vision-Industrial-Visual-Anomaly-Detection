@@ -9,3 +9,5 @@
 | mean (objects) | 1.5208 [n=3] | 1.5208 [n=3] | 1.5208 [n=3] | 1.5208 [n=3] | 1.5208 [n=3] | 1.5208 [n=3] | 1.5208 [n=3] |
 | mean (textures) | 1.4837 [n=3] | 1.4837 [n=3] | 1.4837 [n=3] | 1.4837 [n=3] | 1.4837 [n=3] | 1.4837 [n=3] | 1.4837 [n=3] |
 | mean (all) | 1.5023 [n=6] | 1.5023 [n=6] | 1.5023 [n=6] | 1.5023 [n=6] | 1.5023 [n=6] | 1.5023 [n=6] | 1.5023 [n=6] |
+
+*Timing/memory provenance: every `pp_*` run inherits `fit_seconds` and `peak_gpu_mem_gb` from `patchcore_wrn50` (shared raw predictions); the baseline values are measured.*

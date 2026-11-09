@@ -1,5 +1,7 @@
 """Postprocessing ablations and deployment thresholds, without GPU or test fitting."""
 import json
+import shutil
+from datetime import datetime
 
 import numpy as np
 import pytest
@@ -9,6 +11,7 @@ import yaml
 from ad import metrics, run, scoring, threshold
 from ad.base import AnomalyModel, Prediction
 from ad.config import load_config
+from ad.data import CATEGORIES
 
 
 @pytest.fixture(autouse=True)
@@ -115,19 +118,20 @@ def test_run_fits_zscore_before_test_and_only_on_val(config_path, tmp_path, monk
         expected = (model.predictions["test"].image_scores - 12) / 2
         np.testing.assert_array_equal(arrays["image_scores"], expected)
         assert result["image_f1_global"] == metrics.f1_at_threshold(arrays["labels"], expected, 3)["f1"]
-        assert result["image_f1_global_pooled"] == metrics.f1_at_threshold(
-            arrays["labels"], expected, 0.98)["f1"]
     assert result["image_threshold_global"] == 3
-    assert result["image_threshold_global_pooled"] == pytest.approx(0.98)
+    assert "image_f1_global_pooled" not in result
+    assert result["global_pooled_status"] == "skipped_requires_standard_categories"
     summary = json.loads((tmp_path / "pp_test" / "summary.json").read_text())
     assert summary["mean"]["image_f1_global"] == result["image_f1_global"]
     assert not any("threshold" in key for key in summary["mean"])
 
 
 def test_one_global_threshold_and_pooled_calibration_from_validation_only(tmp_path, monkeypatch):
-    categories = {"a": {}, "b": {}}
-    vals = {"a": np.array([-1, 0, 1]), "b": np.array([-2, 2])}
-    scores = {"a": np.array([0, 3, 4]), "b": np.array([3, 2, 0])}
+    categories = {category: {} for category in CATEGORIES}
+    vals = {category: np.array([-1, 0, 1]) if index == 0 else np.array([-2, 2])
+            for index, category in enumerate(CATEGORIES)}
+    scores = {category: np.array([0, 3, 4]) if index == 0 else np.array([3, 2, 0])
+              for index, category in enumerate(CATEGORIES)}
     labels = np.array([0, 1, 1])
     for category in categories:
         directory = tmp_path / category
@@ -143,8 +147,8 @@ def test_one_global_threshold_and_pooled_calibration_from_validation_only(tmp_pa
 
     monkeypatch.setattr(threshold, "global_image_threshold", checked)
     run._apply_global_thresholds(tmp_path, categories)
-    assert categories["a"]["image_f1_global"] == 1
-    assert categories["b"]["image_f1_global"] == 0
+    assert categories[CATEGORIES[0]]["image_f1_global"] == 1
+    assert categories[CATEGORIES[1]]["image_f1_global"] == 0
     pooled = np.quantile(np.concatenate(list(vals.values())), 0.99)
     for category in categories:
         assert categories[category]["image_threshold_global"] == 3
@@ -178,6 +182,19 @@ def test_prediction_cache_preserves_raw_outputs_and_rejects_other_models(config_
             "--prediction-cache", str(cache)]
     run.main(args + ["--set", "scoring.normalize=none"])
     assert model.events == ["fit", "val", "test"]
+    raw_result = json.loads((tmp_path / "pp_test" / "toy" / "metrics.json").read_text())
+    metadata = json.loads((cache / "toy" / "metadata.json").read_text())
+    assert metadata["source_run"] == "pp_test"
+    assert datetime.fromisoformat(metadata["created_at"]).utcoffset().total_seconds() == 0
+    version = metadata["identity"]["code_version"]
+    assert version["torch"] == str(torch.__version__)
+    assert version["timm"] == run.package_version("timm")
+    assert {"backbones.py", "patchcore.py", "padim.py", "coreset.py", "data.py", "base.py"}.issubset(
+        version["source_sha256"])
+    assert all(len(value) == 64 for value in version["source_sha256"].values())
+    assert "categories" not in metadata["identity"]
+    assert raw_result["prediction_cache"]["fit_seconds_copied"] is False
+    assert raw_result["prediction_cache"]["peak_gpu_mem_gb_copied"] is False
     with np.load(cache / "toy" / "val.npz") as arrays:
         np.testing.assert_array_equal(arrays["image_scores"], [10, 14])
         assert set(arrays.files) == {"patch_maps", "image_scores"}
@@ -189,6 +206,15 @@ def test_prediction_cache_preserves_raw_outputs_and_rejects_other_models(config_
     run.main(args + ["--set", "name=normalized"])
     result = json.loads((tmp_path / "normalized" / "toy" / "metrics.json").read_text())
     assert result["prediction_cache"]["reused"] is True
+    assert result["prediction_cache"]["source_run"] == "pp_test"
+    assert result["prediction_cache"]["created_at"] == metadata["created_at"]
+    assert result["prediction_cache"]["fit_seconds_copied"] is True
+    assert result["prediction_cache"]["peak_gpu_mem_gb_copied"] is True
+    assert result["fit_seconds"] == raw_result["fit_seconds"]
+    assert result["peak_gpu_mem_gb"] == raw_result["peak_gpu_mem_gb"]
+    # End-to-end: the same cached raw predictions go through both runner paths.
+    for metric in ("image_auroc", "pixel_auroc", "aupro"):
+        assert result[metric] == pytest.approx(raw_result[metric], abs=1e-7)
     assert result["normalization"]["image"]["mean"] == 12
     run.main(args + ["--set", "name=topk", "--set", "scoring.image_score=topk_mean"])
     with np.load(tmp_path / "topk" / "toy" / "scores.npz") as arrays:
@@ -202,6 +228,93 @@ def test_prediction_cache_preserves_raw_outputs_and_rejects_other_models(config_
     error = json.loads((tmp_path / "pp_test" / "toy" / "error.json").read_text())
     assert "cache model/data config differs" in error["error"]
     assert not (tmp_path / "pp_test" / "global_thresholds.json").exists()
+
+
+@pytest.mark.parametrize("category_names", [CATEGORIES[:1], CATEGORIES[:-1], [*CATEGORIES, "custom"]])
+def test_partial_or_custom_pool_warns_and_skips_pooled_metrics(tmp_path, monkeypatch, caplog, category_names):
+    categories = {category: {"image_f1_global_pooled": 0.99, "image_threshold_global_pooled": 99}
+                  for category in category_names}
+    for category in categories:
+        directory = tmp_path / category
+        directory.mkdir()
+        np.savez(directory / "scores.npz", image_scores=[0, 3, 4], labels=[0, 1, 1],
+                 val_image_scores=[-1, 1])
+    original = threshold.global_image_threshold
+
+    def fixed_only(references, mode="z3"):
+        assert mode == "z3", "a partial pool must never calibrate a pooled threshold"
+        return original(references, mode)
+
+    monkeypatch.setattr(threshold, "global_image_threshold", fixed_only)
+    run._apply_global_thresholds(tmp_path, categories)
+    assert "requires exactly the six standard categories" in caplog.text
+    assert "pooled metrics are skipped" in caplog.text
+    for category, result in categories.items():
+        assert result["image_f1_global"] == 1
+        assert result["global_threshold_categories"] == list(categories)
+        assert not any(key.endswith("_global_pooled") for key in result)
+        assert json.loads((tmp_path / category / "metrics.json").read_text()) == result
+    metadata = json.loads((tmp_path / "global_thresholds.json").read_text())
+    assert metadata["image_threshold_global_pooled"] is None
+    assert metadata["pooled_threshold_categories"] == list(CATEGORIES)
+
+
+def test_single_category_can_reuse_cache_from_multiple_categories(config_path, fake_mvtec, tmp_path, monkeypatch):
+    shutil.copytree(fake_mvtec / "toy", fake_mvtec / "tile")
+    monkeypatch.setattr(run, "build_model", lambda *args, **kwargs: ControlledModel())
+    args = ["--config", str(config_path), "--out", str(tmp_path), "--no-figs",
+            "--set", "scoring.normalize=none", "--prediction-cache", str(tmp_path / "cache")]
+    run.main(args + ["--categories", "toy", "tile"])
+
+    def unexpected_fit(*args, **kwargs):
+        pytest.fail("changing the category list must not invalidate a per-category cache")
+
+    monkeypatch.setattr(run, "build_model", unexpected_fit)
+    run.main(args + ["--categories", "toy", "--set", "name=single"])
+    result = json.loads((tmp_path / "single" / "toy" / "metrics.json").read_text())
+    assert result["prediction_cache"]["reused"] is True
+    assert result["prediction_cache"]["source_run"] == "pp_test"
+
+
+@pytest.mark.parametrize("change", ["model", "source", "torch", "timm", "legacy"])
+def test_cache_rejects_model_source_and_library_changes(config_path, tmp_path, monkeypatch, change):
+    sources = tmp_path / "ad_sources"
+    sources.mkdir()
+    for path in run._CACHE_SOURCE_DIR.glob("*.py"):
+        shutil.copy(path, sources / path.name)
+    monkeypatch.setattr(run, "_CACHE_SOURCE_DIR", sources)
+    monkeypatch.setattr(run, "build_model", lambda *args, **kwargs: ControlledModel())
+    cache = tmp_path / "cache"
+    args = ["--config", str(config_path), "--out", str(tmp_path), "--no-figs",
+            "--prediction-cache", str(cache), "--set", "scoring.normalize=none"]
+    run.main(args)
+    overrides = []
+    if change == "model":
+        overrides = ["--set", "model.coreset_ratio=0.2"]
+    elif change == "source":
+        # Change a temporary source copy, never the actual shared model files.
+        path = sources / "patchcore.py"
+        path.write_text(path.read_text() + "\n# simulated model code change\n")
+    elif change == "torch":
+        monkeypatch.setattr(run.torch, "__version__", "changed")
+    elif change == "timm":
+        monkeypatch.setattr(run, "package_version", lambda name: "changed")
+    else:
+        path = cache / "toy" / "metadata.json"
+        metadata = json.loads(path.read_text())
+        del metadata["identity"]["code_version"]
+        path.write_text(json.dumps(metadata))
+
+    def unexpected_fit(*args, **kwargs):
+        pytest.fail("stale cache must fail instead of silently rebuilding or replaying")
+
+    monkeypatch.setattr(run, "build_model", unexpected_fit)
+    with pytest.raises(SystemExit, match="1"):
+        run.main(args + overrides)
+    result_dir = tmp_path / "pp_test" / "toy"
+    assert not (result_dir / "metrics.json").exists()
+    error = json.loads((result_dir / "error.json").read_text())
+    assert "cache model/data config differs or code/library version changed" in error["error"]
 
 
 @pytest.mark.parametrize("reference", [[], [float("nan")], [float("inf")]])

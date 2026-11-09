@@ -9,3 +9,5 @@
 | mean (objects) | 0.9066 | 0.8593 | 0.8212 | 0.9964 | 0.7745 | 0.9960 | 0.7248 |
 | mean (textures) | 0.9312 | 0.9203 | 0.9158 | 0.9452 | 0.9092 | 0.9516 | 0.8973 |
 | mean (all) | 0.9189 | 0.8898 | 0.8685 | 0.9708 | 0.8418 | 0.9738 | 0.8111 |
+
+The pooled cutoff is calibrated only when exactly the six standard categories are run together; partial or custom category sets warn and skip pooled metrics while retaining fixed z=3.
