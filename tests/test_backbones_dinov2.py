@@ -11,7 +11,7 @@ from torch.nn import functional as F
 from torch.utils.data import DataLoader
 
 import ad.backbones as backbones
-from ad.backbones import DINOv2Features, WRN50DINOv2Concat, build_backbone
+from ad.backbones import DINOv2Features, WRN50DINOv2Concat, WRN50Features, build_backbone
 from ad.config import load_config
 from ad.data import MVTecDataset
 from ad.patchcore import PatchCore
@@ -21,6 +21,8 @@ from ad.patchcore import PatchCore
     ("wrn50", "WRN50Features", {}),
     ("dinov2_vitb14", "DINOv2Features",
      {"model_name": "vit_base_patch14_dinov2.lvd142m"}),
+    ("dinov2_vitb14_raw", "DINOv2Features",
+     {"model_name": "vit_base_patch14_dinov2.lvd142m", "norm": False}),
     ("dinov2_vits14", "DINOv2Features",
      {"model_name": "vit_small_patch14_dinov2.lvd142m"}),
     ("wrn50+dinov2_vitb14", "WRN50DINOv2Concat", {}),
@@ -104,11 +106,17 @@ def test_dinov2_register_tokens_excluded():
 @pytest.mark.gpu
 def test_wrn50_dinov2_common_grid_and_channels():
     model = WRN50DINOv2Concat().cuda()
-    output = model(torch.randn(1, 3, 224, 224, device="cuda"))
+    images = torch.randn(1, 3, 224, 224, device="cuda")
+    output = model(images)
     assert model.channels == [512, 1024, 768, 768, 768]
     assert [tuple(feature.shape) for feature in output] == [
         (1, channels, 28, 28) for channels in model.channels]
     assert all(torch.isfinite(feature).all() for feature in output)
+    wrn = WRN50Features(layers=("layer2", "layer3")).cuda()
+    reference = wrn(images)
+    for actual, original in zip(output[:2], reference):
+        expected = F.interpolate(original, (28, 28), mode="bilinear", align_corners=False)
+        torch.testing.assert_close(actual, expected, rtol=0, atol=0)
 
 
 @pytest.mark.gpu
@@ -133,3 +141,46 @@ def test_patchcore_dinov2_bottle_smoke():
     assert np.isfinite(prediction.image_scores).all()
     assert (prediction.patch_maps >= 0).all()
     assert (prediction.image_scores >= 0).all()
+
+
+def test_posthoc_config_only_disables_final_layernorm():
+    baseline = load_config("configs/patchcore_dinov2_vitb14.yaml")
+    posthoc = load_config("configs/patchcore_dinov2_vitb14_noln.yaml")
+    assert posthoc["model"]["backbone"] == "dinov2_vitb14_raw"
+    posthoc["name"] = baseline["name"]
+    posthoc["model"]["backbone"] = baseline["model"]["backbone"]
+    assert posthoc == baseline
+
+
+def test_concat_passes_norm_kwarg(monkeypatch):
+    # No additional checkpoint is needed to check constructor propagation.
+    wrn = Mock(return_value=torch.nn.Identity())
+    dino = Mock(return_value=torch.nn.Identity())
+    monkeypatch.setattr(backbones, "WRN50Features", wrn)
+    monkeypatch.setattr(backbones, "DINOv2Features", dino)
+    WRN50DINOv2Concat(norm=False, pretrained=False)
+    wrn.assert_called_once_with(layers=("layer2", "layer3"), pretrained=False)
+    dino.assert_called_once_with(layers=("block5", "block8", "block11"),
+                                 input_size=448, pretrained=False, norm=False)
+
+
+@pytest.mark.gpu
+@pytest.mark.parametrize("norm", [True, False])
+def test_dinov2_norm_kwarg_matches_requested_intermediates(norm):
+    model = DINOv2Features(layers=("block5", "block8", "block11"), norm=norm).cuda()
+    assert model.norm is norm
+    images = torch.randn(1, 3, 224, 224, device="cuda")
+    actual = model(images)
+    with torch.inference_mode():
+        resized = F.interpolate(images, (448, 448), mode="bilinear", align_corners=False)
+        raw = model.model.forward_intermediates(
+            resized, indices=[5, 8, 11], norm=False, output_fmt="NLC", intermediates_only=True)
+        for feature, tokens in zip(actual, raw):
+            expected = model.model.norm(tokens) if norm else tokens
+            torch.testing.assert_close(feature.flatten(2).transpose(1, 2), expected)
+
+
+@pytest.mark.gpu
+def test_raw_build_name_disables_norm_even_if_explicitly_requested():
+    model = build_backbone("dinov2_vitb14_raw", norm=True)
+    assert model.norm is False
