@@ -5,6 +5,8 @@ Owner: branch feat/eval. Signatures are fixed contracts; keep them.
 
 from __future__ import annotations
 
+from contextlib import nullcontext
+
 import numpy as np
 import torch
 from torch.nn import functional as F
@@ -23,11 +25,14 @@ def _smooth_batch(maps: torch.Tensor, kernel: torch.Tensor) -> torch.Tensor:
     return maps
 
 
-def upsample_and_smooth(patch_maps: np.ndarray, size: int, sigma: float = 4.0) -> np.ndarray:
+def upsample_and_smooth(patch_maps: np.ndarray, size: int, sigma: float = 4.0,
+                        *, device: str | None = None) -> np.ndarray:
     """(N,h,w) raw patch maps -> (N,size,size) float32 maps.
 
     Bilinear upsampling (align_corners=False), then per-image Gaussian blur with std ``sigma``
     pixels (sigma <= 0 disables smoothing). Use a truncate of 4*sigma like scipy's default.
+    ``device=None`` selects CUDA if available, falling back to CPU on CUDA failure.
+    An explicit device is honoured; ``device="cpu"`` avoids probing or initialising CUDA.
     """
     patch_maps = np.asarray(patch_maps, dtype=np.float32)
     if patch_maps.ndim != 3 or min(patch_maps.shape[1:]) < 1:
@@ -42,23 +47,27 @@ def upsample_and_smooth(patch_maps: np.ndarray, size: int, sigma: float = 4.0) -
         return result
     radius = int(4.0 * sigma + 0.5) if sigma > 0 else 0
 
-    def process(device: torch.device) -> np.ndarray:
+    def process(target_device: torch.device) -> np.ndarray:
         kernel = None
         if radius:
-            positions = torch.arange(-radius, radius + 1, dtype=torch.float64, device=device)
+            positions = torch.arange(-radius, radius + 1, dtype=torch.float64, device=target_device)
             kernel = torch.exp(-0.5 * (positions / sigma).square())
             kernel = (kernel / kernel.sum()).to(torch.float32)
         # Bound intermediate storage independently of the number of test images.
-        with torch.inference_mode(), torch.backends.cudnn.flags(allow_tf32=False):
+        cudnn_flags = (torch.backends.cudnn.flags(allow_tf32=False)
+                       if target_device.type == "cuda" else nullcontext())
+        with torch.inference_mode(), cudnn_flags:
             for start in range(0, len(patch_maps), 32):
                 batch = torch.from_numpy(np.ascontiguousarray(patch_maps[start:start + 32]))
-                batch = F.interpolate(batch[:, None].to(device), size=(size, size),
+                batch = F.interpolate(batch[:, None].to(target_device), size=(size, size),
                                       mode="bilinear", align_corners=False)
                 if kernel is not None:
                     batch = _smooth_batch(batch, kernel)
                 result[start:start + len(batch)] = batch[:, 0].cpu().numpy()
         return result
 
+    if device is not None:
+        return process(torch.device(device))
     if torch.cuda.is_available():
         try:
             return process(torch.device("cuda"))

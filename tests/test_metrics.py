@@ -39,6 +39,17 @@ def test_f1_max_is_oracle_over_actual_thresholds():
     assert f1_max(labels, np.ones(4))["f1"] == pytest.approx(2 / 3)
 
 
+def test_f1_max_oracle_keeps_tied_scores_in_one_prediction_group():
+    labels = np.array([1, 0, 1, 0], dtype=np.uint8)
+    scores = np.array([0.9, 0.9, 0.4, 0.1], dtype=np.float32)
+    # The tied .9 scores include one normal sample and cannot be separated.
+    # At .4 there are two true positives and one false positive: F1 = 4/5.
+    result = f1_max(labels, scores)
+    assert result["threshold"] == pytest.approx(0.4)
+    assert result["f1"] == pytest.approx(0.8)
+    assert f1_at_threshold(labels, scores, result["threshold"])["f1"] == result["f1"]
+
+
 def _region_masks():
     masks = np.zeros((3, 64, 64), dtype=np.uint8)
     masks[0, 3:13, 5:17] = 1
@@ -57,6 +68,26 @@ def test_aupro_perfect(fpr_limit):
 def test_aupro_constant_has_no_localisation(constant):
     masks = _region_masks()
     assert aupro(masks, np.full(masks.shape, constant, dtype=np.float32)) == 0.0
+
+
+@pytest.mark.parametrize("constant", [None, 0.0, 3.0])
+def test_aupro_without_gt_regions_is_nan(constant):
+    masks = np.zeros((2, 8, 8), dtype=np.uint8)
+    maps = (np.random.default_rng(0).random(masks.shape, dtype=np.float32)
+            if constant is None else np.full(masks.shape, constant, dtype=np.float32))
+    result = aupro(masks, maps)
+    assert type(result) is float and np.isnan(result)
+
+
+def test_aupro_default_resolution_handles_an_outlier_pixel():
+    masks = _region_masks()
+    maps = np.random.default_rng(42).random(masks.shape, dtype=np.float32)
+    maps[masks != 0] += 0.5
+    maps[2, 0, 0] = 50.0
+    reference = aupro(masks, maps, num_thresholds=10000)
+    result = aupro(masks, maps)
+    assert result == aupro(masks, maps, num_thresholds=1000)
+    assert result == pytest.approx(reference, abs=1e-3)
 
 
 def test_aupro_random_maps_follow_chance_curve():

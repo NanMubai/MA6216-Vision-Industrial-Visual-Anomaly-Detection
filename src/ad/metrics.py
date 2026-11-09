@@ -65,14 +65,16 @@ def pixel_auroc(masks: np.ndarray, maps: np.ndarray) -> float:
     return float(roc_auc_score(masks, maps))
 
 
-def aupro(masks: np.ndarray, maps: np.ndarray, fpr_limit: float = 0.3, num_thresholds: int = 200) -> float:
+def aupro(masks: np.ndarray, maps: np.ndarray, fpr_limit: float = 0.3, num_thresholds: int = 1000) -> float:
     """Normalised area under the per-region-overlap curve up to ``fpr_limit``.
 
     For each threshold t: PRO(t) = mean over every connected GT region (8-connectivity,
     over all anomalous test images) of |region ∩ {map >= t}| / |region|;
     FPR(t) = fraction of normal pixels (mask == 0, all test images) with map >= t.
+    Use ``num_thresholds`` thresholds (default 1000), evenly spaced from the minimum
+    to the maximum map score, to reduce sensitivity to isolated extreme scores.
     Integrate PRO over FPR in [0, fpr_limit] (interpolate at the limit) and divide by
-    ``fpr_limit`` so a perfect map scores 1.0.
+    ``fpr_limit`` so a perfect map scores 1.0. Return NaN when there are no GT regions.
     """
     masks = np.asarray(masks, dtype=np.uint8)
     maps = np.asarray(maps, dtype=np.float32)
@@ -85,7 +87,9 @@ def aupro(masks: np.ndarray, maps: np.ndarray, fpr_limit: float = 0.3, num_thres
     minimum, maximum = float(maps.min()), float(maps.max())
     if not np.isfinite(minimum) or not np.isfinite(maximum):
         raise ValueError("maps must contain finite scores")
-    if minimum == maximum or not np.any(masks):
+    if not np.any(masks):
+        return float("nan")
+    if minimum == maximum:
         return 0.0
 
     thresholds = np.linspace(minimum, maximum, num_thresholds)

@@ -71,8 +71,20 @@ def test_cuda_failure_falls_back_to_cpu_without_allocating_gpu(monkeypatch):
     assert devices[0] == "cuda" and set(devices[1:]) == {"cpu"}
 
 
+def test_explicit_cpu_avoids_cuda_probe_and_initialisation(monkeypatch):
+    def unexpected_cuda_call(*args, **kwargs):
+        raise AssertionError("explicit CPU scoring must not access CUDA")
+
+    monkeypatch.setattr(torch.cuda, "is_available", unexpected_cuda_call)
+    monkeypatch.setattr(torch.cuda, "_lazy_init", unexpected_cuda_call)
+    patches = np.arange(12, dtype=np.float32).reshape(1, 3, 4)
+    actual = upsample_and_smooth(patches, 9, sigma=1.0, device="cpu")
+    np.testing.assert_allclose(actual, _scipy_reference(patches, 9, 1.0), atol=1e-4, rtol=0)
+
+
 @pytest.mark.gpu
-def test_cuda_smoothing_matches_scipy(monkeypatch):
+@pytest.mark.parametrize("device", [None, "cuda"])
+def test_cuda_smoothing_matches_scipy(monkeypatch, device):
     import ad.scoring as scoring
 
     devices = []
@@ -84,7 +96,7 @@ def test_cuda_smoothing_matches_scipy(monkeypatch):
 
     monkeypatch.setattr(scoring, "_smooth_batch", record_device)
     patches = np.random.default_rng(7).normal(size=(35, 3, 5)).astype(np.float32) * 100
-    actual = upsample_and_smooth(patches, 23, sigma=4.0)
+    actual = upsample_and_smooth(patches, 23, sigma=4.0, device=device)
     np.testing.assert_allclose(actual, _scipy_reference(patches, 23, 4.0), atol=1e-4, rtol=0)
     assert devices == ["cuda", "cuda"]
 
