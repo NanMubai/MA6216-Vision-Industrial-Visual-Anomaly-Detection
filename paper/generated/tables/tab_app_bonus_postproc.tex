@@ -1,0 +1,59 @@
+\begin{tabular}{@{}llrrr@{}}
+\toprule
+Category & Variant & \shortstack{Image\\AUROC} & \shortstack{Image F1\\(val thr)} & AU-PRO \\
+\midrule
+bottle & WRN50 baseline (Eq.~7) & 1.000 & 1.000 & 0.949 \\
+bottle & Top-1\% mean & 1.000 & 1.000 & 0.949 \\
+bottle & Smoothed max & 1.000 & 1.000 & 0.949 \\
+bottle & Smoothing $\sigma=0$ & 1.000 & 1.000 & 0.951 \\
+bottle & Smoothing $\sigma=2$ & 1.000 & 1.000 & 0.951 \\
+bottle & Smoothing $\sigma=8$ & 1.000 & 1.000 & 0.942 \\
+bottle & Global threshold $z=3$ & 1.000 & 1.000 & 0.949 \\
+bottle & Global pooled val & 1.000 & 1.000 & 0.949 \\
+\midrule
+capsule & WRN50 baseline (Eq.~7) & 0.978 & 0.836 & 0.931 \\
+capsule & Top-1\% mean & 0.976 & 0.922 & 0.931 \\
+capsule & Smoothed max & 0.974 & 0.866 & 0.931 \\
+capsule & Smoothing $\sigma=0$ & 0.978 & 0.836 & 0.933 \\
+capsule & Smoothing $\sigma=2$ & 0.978 & 0.836 & 0.933 \\
+capsule & Smoothing $\sigma=8$ & 0.978 & 0.836 & 0.921 \\
+capsule & Global threshold $z=3$ & 0.978 & 0.710 & 0.931 \\
+capsule & Global pooled val & 0.978 & 0.646 & 0.931 \\
+\midrule
+screw & WRN50 baseline (Eq.~7) & 0.970 & 0.884 & 0.963 \\
+screw & Top-1\% mean & 0.975 & 0.829 & 0.963 \\
+screw & Smoothed max & 0.978 & 0.868 & 0.963 \\
+screw & Smoothing $\sigma=0$ & 0.970 & 0.884 & 0.964 \\
+screw & Smoothing $\sigma=2$ & 0.970 & 0.884 & 0.964 \\
+screw & Smoothing $\sigma=8$ & 0.970 & 0.884 & 0.955 \\
+screw & Global threshold $z=3$ & 0.970 & 0.868 & 0.963 \\
+screw & Global pooled val & 0.970 & 0.818 & 0.963 \\
+\midrule
+carpet & WRN50 baseline (Eq.~7) & 0.987 & 0.935 & 0.950 \\
+carpet & Top-1\% mean & 0.983 & 0.937 & 0.950 \\
+carpet & Smoothed max & 0.987 & 0.937 & 0.950 \\
+carpet & Smoothing $\sigma=0$ & 0.987 & 0.935 & 0.952 \\
+carpet & Smoothing $\sigma=2$ & 0.987 & 0.935 & 0.952 \\
+carpet & Smoothing $\sigma=8$ & 0.987 & 0.935 & 0.942 \\
+carpet & Global threshold $z=3$ & 0.987 & 0.935 & 0.950 \\
+carpet & Global pooled val & 0.987 & 0.941 & 0.950 \\
+\midrule
+tile & WRN50 baseline (Eq.~7) & 0.989 & 0.895 & 0.819 \\
+tile & Top-1\% mean & 0.992 & 0.982 & 0.819 \\
+tile & Smoothed max & 0.991 & 0.976 & 0.819 \\
+tile & Smoothing $\sigma=0$ & 0.989 & 0.895 & 0.819 \\
+tile & Smoothing $\sigma=2$ & 0.989 & 0.895 & 0.819 \\
+tile & Smoothing $\sigma=8$ & 0.989 & 0.895 & 0.816 \\
+tile & Global threshold $z=3$ & 0.989 & 0.857 & 0.819 \\
+tile & Global pooled val & 0.989 & 0.833 & 0.819 \\
+\midrule
+leather & WRN50 baseline (Eq.~7) & 1.000 & 0.963 & 0.972 \\
+leather & Top-1\% mean & 1.000 & 0.939 & 0.972 \\
+leather & Smoothed max & 1.000 & 0.958 & 0.972 \\
+leather & Smoothing $\sigma=0$ & 1.000 & 0.963 & 0.975 \\
+leather & Smoothing $\sigma=2$ & 1.000 & 0.963 & 0.974 \\
+leather & Smoothing $\sigma=8$ & 1.000 & 0.963 & 0.965 \\
+leather & Global threshold $z=3$ & 1.000 & 0.968 & 0.972 \\
+leather & Global pooled val & 1.000 & 0.974 & 0.972 \\
+\bottomrule
+\end{tabular}
