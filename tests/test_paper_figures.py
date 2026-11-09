@@ -175,7 +175,7 @@ def test_manifest_and_physical_dimensions():
                     assert label["overlap_pixels"] == label["candidate_overlap_pixels"][label["corner"]]
             assert entry["layout"]["image_rows"] == 3
             if name.startswith("fig_app_qual_"):
-                assert entry["width_inches"] == 5.6 and entry["height_inches"] <= 4.4
+                assert entry["width_inches"] == 5.6 and entry["height_inches"] <= 3.45
                 assert entry["layout"]["case_columns"] == 4
                 assert [p["letter"] for p in entry["picks"]] == ["a", "b", "c", "d"]
             else:
