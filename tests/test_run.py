@@ -146,12 +146,121 @@ def test_run_end_to_end(tiny_config, tmp_path, fake_mvtec, monkeypatch, mode, pr
     assert result["pixel_threshold"] == pytest.approx(np.quantile(expected_val, 0.9))
     for key in ("image_auroc", "image_f1", "image_f1_max_oracle", "pixel_auroc", "aupro", "pixel_f1", "pixel_iou"):
         assert 0 <= result[key] <= 1
-    for key in ("fit_seconds", "infer_ms_per_image", "peak_gpu_mem_gb"):
+    for key in ("fit_seconds", "infer_ms_per_image", "infer_ms_per_image_e2e", "peak_gpu_mem_gb"):
         assert result[key] >= 0
+    assert result["infer_ms_per_image_e2e"] >= result["infer_ms_per_image"]
     assert result["peak_gpu_mem_gb"] == 0
     summary = json.loads((output / "tiny" / "summary.json").read_text())
     assert summary["categories"]["toy"] == result
     assert summary["mean"]["image_auroc"] == result["image_auroc"]
+    assert summary["errors"] == {}
+    assert "image_threshold" not in summary["mean"]
+    assert "pixel_threshold" not in summary["mean"]
+
+
+def test_latency_excludes_loading_and_metadata_avoids_second_image_pass(tiny_config, tmp_path, monkeypatch):
+    clock = [0.0]
+    test_reads = []
+    original_getitem = MVTecDataset.__getitem__
+    original_loader = run.make_loader
+    original_smooth = scoring.upsample_and_smooth
+
+    def getitem(dataset, index):
+        batch = original_getitem(dataset, index)
+        if dataset.split == "test":
+            test_reads.append(index)
+            # Saved annotations must come from samples, not batch metadata.
+            batch.update(label=99, defect_type="wrong", path=batch["path"] + "?batch")
+        return batch
+
+    def loader(dataset, **kwargs):
+        real_loader = original_loader(dataset, **kwargs)
+
+        class DelayedLoader:
+            def __init__(self):
+                self.dataset = dataset
+
+            def __iter__(self):
+                if dataset.split == "test":
+                    clock[0] += 50.0
+                yield from real_loader
+
+        return DelayedLoader()
+
+    class TimedModel(FakeModel):
+        def predict(self, loader):
+            if loader.dataset.split == "test":
+                clock[0] += 5.0
+            return super().predict(loader)
+
+    def smooth(patches, *args, **kwargs):
+        if len(patches) == 5:
+            clock[0] += 2.0
+        return original_smooth(patches, *args, **kwargs)
+
+    monkeypatch.setattr(MVTecDataset, "__getitem__", getitem)
+    monkeypatch.setattr(run, "make_loader", loader)
+    monkeypatch.setattr(run, "build_model", lambda *a, **kw: TimedModel())
+    monkeypatch.setattr(scoring, "upsample_and_smooth", smooth)
+    monkeypatch.setattr(run.time, "perf_counter", lambda: clock[0])
+    run.main(["--config", str(tiny_config), "--out", str(tmp_path), "--no-figs"])
+    directory = tmp_path / "tiny" / "toy"
+    result = json.loads((directory / "metrics.json").read_text())
+    assert result["infer_ms_per_image"] == pytest.approx(1000 * 7 / 5)
+    assert result["infer_ms_per_image_e2e"] == pytest.approx(1000 * 57 / 5)
+    assert test_reads == list(range(5))
+    with np.load(directory / "scores.npz") as scores:
+        np.testing.assert_array_equal(scores["labels"], [1, 1, 0, 0, 0])
+        assert scores["defect_types"].tolist() == ["crack", "crack", "good", "good", "good"]
+        assert all(not path.endswith("?batch") for path in scores["paths"])
+
+
+@pytest.mark.parametrize("val_has_scores", [False, True])
+@pytest.mark.parametrize("mode", ["model", "max"])
+def test_inconsistent_image_score_source_is_a_category_error(
+        tiny_config, tmp_path, monkeypatch, val_has_scores, mode):
+    class InconsistentModel(FakeModel):
+        def predict(self, loader):
+            self.provided_scores = val_has_scores if loader.dataset.split == "val" else not val_has_scores
+            return super().predict(loader)
+
+    monkeypatch.setattr(run, "build_model", lambda *a, **kw: InconsistentModel())
+    with pytest.raises(SystemExit, match="1"):
+        run.main(["--config", str(tiny_config), "--out", str(tmp_path), "--no-figs",
+                  "--set", f"scoring.image_score={mode}"])
+    error = json.loads((tmp_path / "tiny" / "toy" / "error.json").read_text())
+    assert error["error_type"] == "ValueError"
+    assert "image_scores availability differs" in error["error"]
+    assert "Traceback" in error["traceback"]
+    summary = json.loads((tmp_path / "tiny" / "summary.json").read_text())
+    assert summary["categories"] == summary["mean"] == {}
+    assert summary["errors"]["toy"] == error
+
+
+def test_failed_category_continues_writes_summary_and_clears_stale_metrics(
+        tiny_config, tmp_path, monkeypatch, caplog):
+    monkeypatch.setattr(run, "build_model", lambda *a, **kw: FakeModel())
+    stale = tmp_path / "tiny" / "missing"
+    stale.mkdir(parents=True)
+    (stale / "metrics.json").write_text('{"image_auroc": 1}')
+    with pytest.raises(SystemExit, match="1"):
+        run.main(["--config", str(tiny_config), "--out", str(tmp_path), "--no-figs",
+                  "--categories", "missing", "toy"])
+    assert not (stale / "metrics.json").exists()
+    error = json.loads((stale / "error.json").read_text())
+    assert error["error_type"] == "FileNotFoundError"
+    assert error["category"] == "missing"
+    assert "Traceback" in caplog.text
+    summary = json.loads((tmp_path / "tiny" / "summary.json").read_text())
+    assert list(summary["categories"]) == ["toy"]
+    assert summary["errors"] == {"missing": error}
+    assert summary["mean"]["image_auroc"] == summary["categories"]["toy"]["image_auroc"]
+    assert "image_threshold" not in summary["mean"]
+    # A successful retry replaces an earlier error marker.
+    successful = tmp_path / "tiny" / "toy"
+    (successful / "error.json").write_text('{"error": "old failure"}')
+    run.main(["--config", str(tiny_config), "--out", str(tmp_path), "--no-figs"])
+    assert not (successful / "error.json").exists()
 
 
 def test_set_overrides_and_visualize_stub(tiny_config, tmp_path, monkeypatch, caplog):

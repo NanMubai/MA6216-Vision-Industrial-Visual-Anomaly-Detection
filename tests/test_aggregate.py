@@ -39,9 +39,10 @@ def test_aggregate_tables_and_plots(results_tree, tmp_path):
         assert "| category | patchcore | padim |" in text
         for category in (*CATEGORIES, *aggregate.MEAN_ROWS):
             assert f"| {category} |" in text
-        assert "| mean (objects) | 0.6100 | 0.5100 |" in text
-        assert "| mean (textures) | 0.6400 | 0.5400 |" in text
-        assert "| mean (all) | 0.6250 | 0.5250 |" in text
+        assert "| mean (objects) | 0.6100 [n=3] | 0.5100 [n=3] |" in text
+        assert "| mean (textures) | 0.6400 [n=3] | 0.5400 [n=3] |" in text
+        assert "| mean (all) | 0.6250 [n=6] | 0.5250 [n=6] |" in text
+        assert "Incomplete mean" not in text
     summary = (out / "summary.md").read_text()
     for metric in aggregate.MAIN_METRICS:
         assert metric in summary
@@ -68,9 +69,10 @@ def test_partial_results_missing_metrics_and_run_selection(tmp_path):
     assert len(frame.loc[frame["metric"] == "aupro"]) == 1
     image = (out / "image_auroc.md").read_text()
     assert "| bottle | 0.8000 |" in image
-    assert "| mean (objects) | 0.8000 |" in image
-    assert "| mean (textures) | — |" in image
-    assert "| mean (all) | 0.8000 |" in image
+    assert "| mean (objects) | 0.8000* [n=1] |" in image
+    assert "| mean (textures) | —* [n=0] |" in image
+    assert "| mean (all) | 0.8000* [n=1] |" in image
+    assert "Incomplete mean" in image
     assert "| bottle | — |" in (out / "pixel_auroc.md").read_text()
 
 
@@ -83,8 +85,24 @@ def test_undefined_and_nonfinite_values_do_not_pollute_means(tmp_path):
     out = tmp_path / "tables"
     aggregate.main(["--results", str(root), "--out", str(out)])
     table = (out / "image_auroc.md").read_text()
-    assert "| mean (all) | 0.8000 |" in table
+    assert "| mean (all) | 0.8000* [n=1] |" in table
     assert "| capsule | — |" in table
+
+
+def test_partial_and_complete_means_show_counts_per_run(results_tree, tmp_path):
+    (results_tree / "patchcore" / "leather" / "metrics.json").unlink()
+    out = tmp_path / "tables"
+    aggregate.main(["--results", str(results_tree), "--out", str(out), "--runs", "patchcore", "padim"])
+    table = (out / "image_auroc.md").read_text()
+    assert "| mean (all) | 0.6200* [n=5] | 0.5250 [n=6] |" in table
+    assert "| mean (objects) | 0.6100* [n=3] | 0.5100 [n=3] |" in table
+    assert "| mean (textures) | 0.6350* [n=2] | 0.5400 [n=3] |" in table
+    assert "six standard categories" in table
+    summary = (out / "summary.md").read_text()
+    patchcore_row = next(line for line in summary.splitlines() if line.startswith("| patchcore |"))
+    padim_row = next(line for line in summary.splitlines() if line.startswith("| padim |"))
+    assert patchcore_row.count("* [n=5]") == len(aggregate.KEY_METRICS)
+    assert padim_row.count(" [n=6]") == len(aggregate.KEY_METRICS)
 
 
 def test_missing_results_and_unknown_runs(results_tree, tmp_path):

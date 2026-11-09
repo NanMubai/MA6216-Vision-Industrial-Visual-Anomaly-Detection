@@ -6,7 +6,9 @@ CLI: python -m ad.aggregate [--results results] [--out reports/tables] [--runs r
 Writes metrics_long.csv, one Markdown table per metric (rows: category + mean,
 object mean, texture mean; columns: runs), and grouped bar charts.
 Charts are written to <out>/../figures/bar_<metric>.png. Missing values are shown
-as an em dash; means use the available categories with finite metric values.
+as an em dash; mean cells include the number of categories with finite metric
+values as [n=...]. A mean marked * lacks at least one of the six standard categories
+with a finite metric value and must not be compared silently against a complete run.
 """
 
 from __future__ import annotations
@@ -27,7 +29,7 @@ from ad.data import CATEGORIES, TEXTURE_CATEGORIES
 
 KEY_METRICS = (
     "image_auroc", "image_f1", "image_f1_max_oracle", "pixel_auroc", "aupro",
-    "fit_seconds", "infer_ms_per_image", "peak_gpu_mem_gb",
+    "fit_seconds", "infer_ms_per_image", "infer_ms_per_image_e2e", "peak_gpu_mem_gb",
 )
 MAIN_METRICS = KEY_METRICS[:5]
 MEAN_ROWS = ("mean (objects)", "mean (textures)", "mean (all)")
@@ -53,8 +55,16 @@ def _metric_table(frame: pd.DataFrame, metric: str, runs: list[str], categories:
         index=categories, columns=runs)
     groups = (values.loc[~values["is_texture"].astype(bool)],
               values.loc[values["is_texture"].astype(bool)], values)
+    finite = values.loc[values["value"].notna()]
+    incomplete = [run for run in runs
+                  if not set(CATEGORIES).issubset(set(finite.loc[finite["run"] == run, "category"]))]
+    notes = {}
     for name, group in zip(MEAN_ROWS, groups):
         table.loc[name] = group.groupby("run")["value"].mean().reindex(runs)
+        counts = group.groupby("run")["value"].count().reindex(runs, fill_value=0)
+        notes[name] = {run: f"{'*' if run in incomplete else ''} [n={counts[run]}]" for run in runs}
+    table.attrs["cell_notes"] = notes
+    table.attrs["incomplete_runs"] = incomplete
     return table
 
 
@@ -66,8 +76,13 @@ def _markdown(table: pd.DataFrame, index_name: str = "category") -> str:
     lines = ["| " + " | ".join([index_name, *(escape(column) for column in table.columns)]) + " |",
              "| " + " | ".join(["---", *(["---:"] * len(table.columns))]) + " |"]
     for name, row in table.iterrows():
-        formatted = [f"{value:.4f}" if pd.notna(value) and math.isfinite(value) else "—" for value in row]
+        notes = table.attrs.get("cell_notes", {}).get(name, {})
+        formatted = [(f"{value:.4f}" if pd.notna(value) and math.isfinite(value) else "—")
+                     + notes.get(column, "") for column, value in row.items()]
         lines.append("| " + " | ".join([escape(name), *formatted]) + " |")
+    if table.attrs.get("incomplete_runs"):
+        lines.append("\n\\* Incomplete mean: at least one of the six standard categories lacks a finite result; "
+                     "only available categories are averaged.")
     return "\n".join(lines) + "\n"
 
 
@@ -120,9 +135,14 @@ def main(argv: list[str] | None = None) -> None:
             _bar_chart(table, metric, categories, figures / f"bar_{metric}.png")
 
     summary = ["# Experiment comparison\n",
-               "Means use available categories; missing results are shown as —.\n",
+               "Mean cells show category counts [n=...]; missing results are shown as —.\n",
                "image_f1 uses normal-validation thresholds; image_f1_max_oracle is an oracle reference.\n"]
     overall = pd.DataFrame({metric: tables[metric].loc["mean (all)"] for metric in KEY_METRICS})
+    overall.attrs["cell_notes"] = {
+        run: {metric: tables[metric].attrs["cell_notes"]["mean (all)"][run] for metric in KEY_METRICS}
+        for run in runs}
+    overall.attrs["incomplete_runs"] = sorted({run for table in tables.values()
+                                              for run in table.attrs["incomplete_runs"]})
     summary.extend(["## Run means\n", _markdown(overall, "run")])
     for metric in MAIN_METRICS:
         summary.extend([f"## {metric}\n", _markdown(tables[metric])])

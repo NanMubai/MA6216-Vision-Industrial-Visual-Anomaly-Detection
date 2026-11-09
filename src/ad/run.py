@@ -11,11 +11,17 @@ Per category, writes results/<name>/<category>/:
                  val_image_scores (M,)
     maps.npz     maps (N,H,W) float16 post-processed test maps, masks (N,H,W) uint8
     metrics.json ad.metrics.evaluate(...) + image_threshold, pixel_threshold,
-                 fit_seconds, infer_ms_per_image, peak_gpu_mem_gb, model_stats, config,
-                 category, is_texture
+                 fit_seconds, infer_ms_per_image, infer_ms_per_image_e2e,
+                 peak_gpu_mem_gb, model_stats, config, category, is_texture
+    error.json   category, error_type, error, traceback, config (on category failure)
     figs/        overlay panels (ad.visualize.save_category_figures)
-Also writes results/<name>/summary.json with categories and their numeric mean.
-Inference timing includes test prediction and shared score post-processing, not evaluation.
+Also writes results/<name>/summary.json with successful categories, errors, and numeric
+means excluding thresholds. A category failure is logged and later categories continue;
+the command exits nonzero after writing the summary if any category failed.
+infer_ms_per_image times only model.predict plus upsampling/smoothing on preloaded
+test batches, with CUDA synchronisation. infer_ms_per_image_e2e also includes loading
+those batches (including worker startup). Both exclude evaluation and image-score
+aggregation. The preloaded CPU batches are released after their masks are collected.
 Thresholds come only from the normal validation split (ad.threshold).
 Run GPU experiments under scripts/gpu_run.sh; this module does not acquire the GPU lock.
 """
@@ -28,6 +34,7 @@ import json
 import logging
 import math
 import time
+import traceback
 from pathlib import Path
 
 import numpy as np
@@ -73,19 +80,24 @@ def _write_json(path: Path, value) -> None:
     path.write_text(json.dumps(serializable(value), indent=2, allow_nan=False) + "\n")
 
 
-def _postprocess(pred: Prediction, cfg: dict, device: str) -> tuple[np.ndarray, np.ndarray]:
+class _PreloadedBatches(list):
+    """A reusable batch iterable retaining the dataset metadata expected by loaders."""
+
+    def __init__(self, loader):
+        super().__init__(loader)
+        self.dataset = loader.dataset
+
+
+def _image_scores(pred: Prediction, maps: np.ndarray, cfg: dict, mode: str) -> np.ndarray:
     options = cfg["scoring"]
-    maps = scoring.upsample_and_smooth(
-        pred.patch_maps, size=cfg["data"]["crop"], sigma=options["sigma"], device=device)
-    mode = options["image_score"]
-    if mode == "model" and pred.image_scores is not None:
+    if mode == "model":
         scores = np.asarray(pred.image_scores, dtype=np.float32)
     else:
         scores = scoring.image_scores_from_maps(
-            maps, mode="max" if mode == "model" else mode, topk_ratio=options["topk_ratio"])
+            maps, mode=mode, topk_ratio=options["topk_ratio"])
     if scores.shape != (len(maps),):
         raise ValueError("model image_scores must have shape (N,)")
-    return maps, scores
+    return scores
 
 
 def _run_category(category: str, cfg: dict, result_dir: Path, no_figs: bool) -> dict:
@@ -127,37 +139,54 @@ def _run_category(category: str, cfg: dict, result_dir: Path, no_figs: bool) -> 
         synchronize()
         fit_seconds = time.perf_counter() - started
 
-        val_maps, val_scores = _postprocess(model.predict(loaders["val"]), cfg, str(device))
+        val_pred = model.predict(loaders["val"])
+        model_scores_available = val_pred.image_scores is not None
+        score_mode = cfg["scoring"]["image_score"]
+        if score_mode == "model" and not model_scores_available:
+            score_mode = "max"
+        val_maps = scoring.upsample_and_smooth(
+            val_pred.patch_maps, size=data["crop"], sigma=cfg["scoring"]["sigma"], device=str(device))
+        val_scores = _image_scores(val_pred, val_maps, cfg, score_mode)
         if len(val_maps) != len(datasets["val"]):
             raise ValueError("validation predictions do not match the dataset length")
         image_thr = threshold.image_threshold(val_scores, cfg["threshold"]["image_quantile"])
         pixel_thr = threshold.pixel_threshold(val_maps, cfg["threshold"]["pixel_quantile"])
-        del val_maps
+        del val_maps, val_pred
 
         synchronize()
-        started = time.perf_counter()
-        maps, image_scores = _postprocess(model.predict(loaders["test"]), cfg, str(device))
+        e2e_started = time.perf_counter()
+        test_batches = _PreloadedBatches(loaders["test"])
         synchronize()
-        infer_ms = 1000 * (time.perf_counter() - started) / len(datasets["test"])
+        started = time.perf_counter()
+        test_pred = model.predict(test_batches)
+        maps = scoring.upsample_and_smooth(
+            test_pred.patch_maps, size=data["crop"], sigma=cfg["scoring"]["sigma"], device=str(device))
+        synchronize()
+        stopped = time.perf_counter()
+        infer_ms = 1000 * (stopped - started) / len(datasets["test"])
+        infer_ms_e2e = 1000 * (stopped - e2e_started) / len(datasets["test"])
         peak_gb = torch.cuda.max_memory_allocated(device) / 1024 ** 3 if use_cuda else 0.0
+        if (test_pred.image_scores is not None) != model_scores_available:
+            raise ValueError("model image_scores availability differs between validation and test")
+        image_scores = _image_scores(test_pred, maps, cfg, score_mode)
         if len(maps) != len(datasets["test"]):
             raise ValueError("test predictions do not match the dataset length")
 
-        # Annotations are collected only after prediction and calibration, for
-        # evaluation and output. Sequential loading preserves prediction order.
-        labels, masks, defect_types, paths = [], [], [], []
-        for batch in loaders["test"]:
-            labels.append(batch["label"].numpy())
-            masks.append(batch["mask"][:, 0].numpy().astype(np.uint8))
-            defect_types.extend(batch["defect_type"])
-            paths.extend(batch["path"])
-        labels, masks = np.concatenate(labels), np.concatenate(masks)
+        # Metadata comes directly from the sequential dataset samples. Reuse
+        # cached masks after prediction, without another image-loading pass.
+        samples = datasets["test"].samples
+        labels = np.asarray([sample[2] for sample in samples], dtype=np.uint8)
+        defect_types = np.asarray([sample[3] for sample in samples])
+        paths = np.asarray([str(sample[0]) for sample in samples])
+        masks = np.concatenate([batch["mask"][:, 0].numpy().astype(np.uint8) for batch in test_batches])
+        del test_batches, test_pred
         result = metrics.evaluate(labels, image_scores, masks, maps, image_thr, pixel_thr)
         result.update({
             "image_threshold": image_thr,
             "pixel_threshold": pixel_thr,
             "fit_seconds": fit_seconds,
             "infer_ms_per_image": infer_ms,
+            "infer_ms_per_image_e2e": infer_ms_e2e,
             "peak_gpu_mem_gb": peak_gb,
             "model_stats": model.stats(),
             "category": category,
@@ -214,17 +243,32 @@ def main(argv: list[str] | None = None) -> None:
     cfg["model"].setdefault("seed", cfg["seed"])
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
     run_dir = args.out / cfg["name"]
-    categories = {}
+    categories, errors = {}, {}
     for category in cfg["categories"]:
-        categories[category] = _run_category(category, cfg, run_dir / category, args.no_figs)
+        result_dir = run_dir / category
+        try:
+            categories[category] = _run_category(category, cfg, result_dir, args.no_figs)
+            (result_dir / "error.json").unlink(missing_ok=True)
+        except Exception as error:
+            LOGGER.exception("Category %s failed", category)
+            errors[category] = {"category": category, "error_type": type(error).__name__,
+                                "error": str(error), "traceback": traceback.format_exc(), "config": cfg}
+            result_dir.mkdir(parents=True, exist_ok=True)
+            # A failed rerun must not expose old successful metrics to aggregation.
+            (result_dir / "metrics.json").unlink(missing_ok=True)
+            _write_json(result_dir / "error.json", errors[category])
     numeric_keys = {key for result in categories.values() for key, value in result.items()
-                    if isinstance(value, (int, float)) and not isinstance(value, bool)}
+                    if isinstance(value, (int, float)) and not isinstance(value, bool)
+                    and key not in ("image_threshold", "pixel_threshold")}
     mean = {}
     for key in sorted(numeric_keys):
         values = [result[key] for result in categories.values()
-                  if key in result and math.isfinite(result[key])]
+                  if isinstance(result.get(key), (int, float)) and math.isfinite(result[key])]
         mean[key] = float(np.mean(values)) if values else None
-    _write_json(run_dir / "summary.json", {"name": cfg["name"], "categories": categories, "mean": mean})
+    _write_json(run_dir / "summary.json", {"name": cfg["name"], "categories": categories,
+                                           "errors": errors, "mean": mean})
+    if errors:
+        raise SystemExit(1)
 
 
 if __name__ == "__main__":
