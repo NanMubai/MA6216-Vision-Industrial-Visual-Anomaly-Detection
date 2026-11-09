@@ -3,7 +3,7 @@
 
 \begin{table*}[t]
   \centering
-  \caption{Main results, PaDiM vs PatchCore (WRN50, 224\,px, seed 0). Image F1 uses the threshold set on the normal validation split. \oracle{} selects its threshold with test labels and is shown \emph{for reference only}. The better value of each pair is in bold.}
+  \caption{Main results, PaDiM vs PatchCore (WRN50, 224\,px, seed 0). Image F1 uses the threshold set on the normal validation split. \oracle{} selects its threshold with test labels and is shown for reference only. The better value of each pair is in bold.}
   \label{tab:main}
   \footnotesize
   \input{generated/tables/tab_main.tex}
@@ -25,7 +25,7 @@ PaDiM's peak GPU figure understates its real footprint, because its 3.8\,GB of i
 
 \begin{table}[t]
   \centering
-  \caption{Cost, six-category means on an RTX~5080. \emph{Infer} excludes and \emph{e2e} includes data loading.}
+  \caption{Cost, six-category means on an RTX~5080. Infer excludes and e2e includes data loading.}
   \label{tab:cost}
   \footnotesize
   \input{generated/tables/tab_cost.tex}
@@ -69,11 +69,10 @@ Second, with only 21--32 validation scores, the interpolated 99\% quantile lies 
 The result is near-perfect precision at a recall of 0.13--0.17.
 PatchCore suffers less but also loses calibration: its mean F1 is \pcImgFoneAll{} against an oracle reference of \pcImgFmaxAll{}.
 
-\begin{table}[t]
+\begin{table*}[t]
   \centering
   \caption{Calibration on screw and tile. All statistics are image scores; the threshold is the 99\% quantile of the normal validation scores.}
   \label{tab:calib}
   \footnotesize
-  \setlength{\tabcolsep}{2pt}
   \input{generated/tables/tab_calibration.tex}
-\end{table}
+\end{table*}
