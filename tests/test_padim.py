@@ -157,6 +157,10 @@ def test_bottle_smoke():
     model = padim.PaDiM(device="cuda")
     torch.cuda.reset_peak_memory_stats()
     model.fit(DataLoader(train, batch_size=4, num_workers=0))
+    assert model.stats()["full_feature_dim"] == 1792
+    assert model.stats()["map_size"] == (56, 56)
+    assert model.mean.is_pinned()
+    assert model.inv_covariance.is_pinned()
     prediction = model.predict(DataLoader(Subset(test, good + defect), batch_size=2, num_workers=0))
     assert prediction.patch_maps.shape == (10, 56, 56)
     assert prediction.patch_maps.dtype == np.float32
@@ -164,4 +168,4 @@ def test_bottle_smoke():
     assert np.isfinite(prediction.patch_maps).all()
     scores = prediction.patch_maps.max(axis=(1, 2))
     assert scores[5:].mean() > scores[:5].mean()
-    assert torch.cuda.max_memory_allocated() < 12 * 1024**3
+    assert torch.cuda.max_memory_allocated() < 4 * 1024**3
