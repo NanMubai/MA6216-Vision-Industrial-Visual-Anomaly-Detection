@@ -218,7 +218,7 @@ def save_category_figures(result_dir: str, k: int = 3) -> list[str]:
     data_cfg = (meta.get("config") or {}).get("data") or {}
     resize = int(data_cfg.get("resize", 256))
     crop = int(data_cfg.get("crop", 224))
-    category = (meta.get("config") or {}).get("category") or rdir.name
+    category = meta.get("category") or rdir.name
 
     cases = select_cases(labels, scores, image_thr, masks, maps, pixel_thr, k=k)
     vmin, vmax = _color_range(maps, pixel_thr)
