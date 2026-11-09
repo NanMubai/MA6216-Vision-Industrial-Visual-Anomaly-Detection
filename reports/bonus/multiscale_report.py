@@ -36,7 +36,7 @@ def main():
 
     suite_summary = Path("reports/bonus/multiscale_pytest.txt").read_text().strip().splitlines()[-1]
     means = {}
-    lines = [REPORT.read_text().split("Results, costs, analysis, and validation")[0].split("## Results")[0],
+    lines = [REPORT.read_text().split("Results, costs, analysis, and validation")[0].split("## Results")[0].rstrip() + "\n",
              "## Results\n",
              "Every mean is an unweighted category mean: objects = bottle/capsule/screw; "
              "textures = carpet/tile/leather. All 36 run/category combinations are present. "
@@ -97,40 +97,73 @@ def main():
                  f"{overall(l123, 'fit_seconds') / overall(baseline, 'fit_seconds'):.2f}x and "
                  f"{overall(l123, 'infer_ms_per_image') / overall(baseline, 'infer_ms_per_image'):.2f}x "
                  "the baseline, respectively; feature extraction and fixed overheads make total costs "
-                 "scale differently from the coreset scan bound.\n")
+                 "scale differently from the coreset scan bound; mean peak allocation rose "
+                 f"{overall(l123, 'peak_gpu_mem_gb') / overall(baseline, 'peak_gpu_mem_gb'):.2f}x "
+                 f"({overall(l123, 'peak_gpu_mem_gb'):.2f} versus "
+                 f"{overall(baseline, 'peak_gpu_mem_gb'):.2f} GiB).\n")
+    lines.append(f"Raw pyramid mean used "
+                 f"{overall(mean, 'infer_ms_per_image') / overall(maximum, 'infer_ms_per_image'):.2f} "
+                 f"times the max control's mean inference time and "
+                 f"{overall(mean, 'peak_gpu_mem_gb') / overall(maximum, 'peak_gpu_mem_gb'):.2f} "
+                 f"times its mean peak allocation; zmean fit took "
+                 f"{overall(zmean, 'fit_seconds') / overall(mean, 'fit_seconds'):.2f} "
+                 "times raw-mean fit because calibration performs an additional full-bank search.\n")
     def category_delta(run, reference, category, metric):
         return records[run][category][metric] - records[reference][category][metric]
+    std_ratios = [record["model_stats"]["scales"][1]["normalization"][1]
+                  / record["model_stats"]["scales"][0]["normalization"][1]
+                  for record in records[zmean].values()]
     lines.extend(["## Analysis\n",
         f"Adding layer1 changed overall pixel AUROC by {delta(l123, baseline, 'pixel_auroc'):+.4f} "
         f"and AU-PRO by {delta(l123, baseline, 'aupro'):+.4f} relative to the Eq. 7 baseline, "
-        "consistent with a finer grid changing the balance between local detail and semantic context.",
-        f"For the small-defect categories screw and capsule, layer1 changed AU-PRO by "
-        f"{category_delta(l123, baseline, 'screw', 'aupro'):+.4f} and "
-        f"{category_delta(l123, baseline, 'capsule', 'aupro'):+.4f}, respectively; these are "
-        "whole-category measurements and do not isolate capsule scratches.",
-        f"On carpet and tile, the corresponding layer1 AU-PRO changes were "
-        f"{category_delta(l123, baseline, 'carpet', 'aupro'):+.4f} and "
-        f"{category_delta(l123, baseline, 'tile', 'aupro'):+.4f}, showing that extra fine-scale "
-        "features do not have a uniform effect across textures.",
+        "but these localisation gains come with image-level detection losses.",
+        "The localisation-versus-detection trade-off is clearest on capsule: image AUROC fell "
+        f"from {records[baseline]['capsule']['image_auroc']:.3f} to {records[l123]['capsule']['image_auroc']:.3f} "
+        f"and F1 from {records[baseline]['capsule']['image_f1']:.3f} to {records[l123]['capsule']['image_f1']:.3f}; "
+        f"tile F1 fell from {records[baseline]['tile']['image_f1']:.3f} to {records[l123]['tile']['image_f1']:.3f}, "
+        f"and mean F1 from {overall(baseline, 'image_f1'):.3f} to {overall(l123, 'image_f1'):.3f}.",
+        f"Layer1's AU-PRO gains were {category_delta(l123, baseline, 'screw', 'aupro'):+.4f} on screw, "
+        f"{category_delta(l123, baseline, 'capsule', 'aupro'):+.4f} on capsule, "
+        f"{category_delta(l123, baseline, 'carpet', 'aupro'):+.4f} on carpet and "
+        f"{category_delta(l123, baseline, 'tile', 'aupro'):+.4f} on tile, so both of these textures "
+        "also benefited in localisation.",
         f"Adding layer4 instead changed overall image AUROC by {delta(l234, baseline, 'image_auroc'):+.4f} "
         f"and AU-PRO by {delta(l234, baseline, 'aupro'):+.4f}; a possible explanation is that "
         "its coarse 7x7 layer4 features dilute fine defect evidence when the fused embedding "
         "is pooled back to 1024 dimensions.",
         f"Relative to the max-scoring control, raw pyramid mean changed image AUROC by "
         f"{delta(mean, maximum, 'image_auroc'):+.4f}, pixel AUROC by "
-        f"{delta(mean, maximum, 'pixel_auroc'):+.4f}, and AU-PRO by {delta(mean, maximum, 'aupro'):+.4f}.",
-        f"Training-only zmean changed AU-PRO by {delta(zmean, mean, 'aupro'):+.4f} compared with raw "
-        "pyramid mean: it changes the relative weight of the two score distributions, while the "
-        "self-excluded patch reference can still be optimistic because same-image neighbours remain.",
-        f"Raw pyramid mean used {overall(mean, 'infer_ms_per_image') / overall(maximum, 'infer_ms_per_image'):.2f} "
-        f"times the max control's mean inference time and {overall(mean, 'peak_gpu_mem_gb') / overall(maximum, 'peak_gpu_mem_gb'):.2f} "
-        f"times its mean peak allocation; zmean fit took {overall(zmean, 'fit_seconds') / overall(mean, 'fit_seconds'):.2f} "
-        "times raw-mean fit because calibration performs an additional full-bank search.",
-        "Magnifying an already cropped 224-pixel image cannot recover removed source detail, and "
-        "downsampling the 42x42 map to 28x28 can weaken the localisation benefit for very small defects.",
-        "Image F1 also depends on the normal-validation score tail, so changes in F1 need not follow "
-        "changes in threshold-free AUROC; all predefined variants are reported without selecting "
-        "per-category winners or tuning on test results.\n",
+        f"{delta(mean, maximum, 'pixel_auroc'):+.4f}, and AU-PRO by {delta(mean, maximum, 'aupro'):+.4f}.\n",
+        "Original-resolution median GT areas from the [dataset analysis on main]"
+        "(../dataset/dataset_stats.md), compared with the fixed pyramid's category-level results\n",
+        "| Category | Median defect area | Max-control AU-PRO | Pyramid mean AU-PRO | Change |",
+        "| --- | ---: | ---: | ---: | ---: |"])
+    area_medians = {"screw": 0.29, "capsule": 0.43, "carpet": 1.48, "tile": 7.93}
+    for category, area in area_medians.items():
+        lines.append(f"| {category} | {area:.2f}% | {records[maximum][category]['aupro']:.4f} | "
+                     f"{records[mean][category]['aupro']:.4f} | "
+                     f"{category_delta(mean, maximum, category, 'aupro'):+.4f} |")
+    lines.extend(["",
+        "These gains are not concentrated in the smallest-defect categories: carpet and tile "
+        "improve at least as much as screw and capsule, although whole-category metrics do not "
+        "isolate capsule scratches (median original defect area 0.64%) or control for other "
+        "category differences.",
+        "Within each category, zmean is a positive affine transform of `r*d1.0 + d1.5`, where "
+        "the `d` terms are aligned raw distance maps and `r = std1.5 / std1.0`: subtracting "
+        "the scale means adds only a uniform offset, so only "
+        "the std ratio can change rankings and hence AUROC or AU-PRO.",
+        "That ratio is about 1.03–1.09 in the reviewer's bottle/screw/tile diagnostic "
+        f"({min(std_ratios):.2f}–{max(std_ratios):.2f} across all six categories), making zmean "
+        "effectively equivalent to mean here: image AUROC and F1 are identical, and mean AU-PRO "
+        f"changes by only {delta(zmean, mean, 'aupro'):+.4f}.",
+        "The reviewer's held-out normal-validation diagnostic found biased absolute proxy "
+        "statistics (tile mean 0.75 versus 1.24 held-out; screw std 0.18 versus 0.10), while "
+        "the std ratio is roughly right with up to about 11% relative error, including tile's "
+        "proxy ratio 1.09 versus held-out 0.98 in the opposite direction from unity.",
+        "The mismatch arises because calibration queries k-center-selected coreset patches "
+        "against the full training bank with same-image spatial neighbours retained, whereas "
+        "prediction queries all patches against the coreset; the validation diagnostic was "
+        "used only to explain the existing result and never for fitting, calibration or tuning.\n",
         "## Reproduction and validation\n",
         "Run `bash reports/bonus/multiscale_reproduce.sh` from the worktree root, then "
         "`PYTHONPATH=src /home/eva/code/ma6216/industrial-visual-anomaly-detection/.venv/bin/python "
@@ -139,9 +172,10 @@ def main():
         "temporary directory before copying to these task-specific report paths.\n",
         "- Full suite, with `HF_HUB_OFFLINE=1`, `MVTEC_ROOT` set and `scripts/gpu_run.sh`: "
         f"**{suite_summary}**.\n"
-        "- Focused CPU multi-scale tests: **15 passed, 1 deselected in 0.71s**.\n"
+        "- Focused CPU multi-scale tests: **18 passed, 1 deselected in 0.62s**.\n"
         "- Twenty-training-image bottle GPU/data smoke: **1 passed in 2.40s**.\n"
-        "- Tests cover map/grid alignment, identical-scale raw-map equivalence, source-row exclusion, "
+        "- Tests cover map/grid alignment, exact 1.0-scale memory-bank equivalence to plain PatchCore "
+        "for mean and zmean, identical-scale raw and standardised map equivalence, source-row exclusion, "
         "fit-only frozen z statistics, constant references, invalid scales, and first-layer hierarchy grids.\n",
         "Aggregate tables and the labelled oracle reference are in [multiscale_tables/summary.md]"
         "(multiscale_tables/summary.md); all numeric resource tables and per-category values are in "

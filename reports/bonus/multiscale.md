@@ -37,11 +37,11 @@ excluding that patch's own original row. The population mean and standard
 deviation of these distances are frozen after fit; zero standard deviation
 uses a unit divisor. This is the permitted coreset-to-full-bank approximation,
 not leave-one-image-out calibration: adjacent patches from the same training
-image can be neighbours, so the reference can underestimate held-out normal
-scores. No validation or test images contribute to these statistics. Each
+image can be neighbours, and the query/reference-bank roles differ from
+prediction, so these statistics need not match held-out normal scores. No
+validation or test images contribute to these statistics. Each
 scale retains its own backbone and bank; full training features are discarded
 after fitting and calibration.
-
 
 ## Results
 
@@ -164,28 +164,41 @@ Pyramid timings below include input resizing, feature extraction and PatchCore's
 
 At fixed training-image count, layer1 gives four times as many patches/bank entries as layer2; with a 10% greedy coreset the projected scan work grows roughly 16-fold (candidate count times selection count). The 1.5 input scale has 2.25 times as many patches, giving a combined 3.25 times baseline bank storage; its own greedy selection work is roughly 5.06 times baseline. Calibrating zmean additionally searches each coreset against the full training bank; the full bank is discarded after fit.
 
-Measured layer1 mean fit and inference costs were 9.26x and 9.30x the baseline, respectively; feature extraction and fixed overheads make total costs scale differently from the coreset scan bound.
+Measured layer1 mean fit and inference costs were 9.26x and 9.30x the baseline, respectively; feature extraction and fixed overheads make total costs scale differently from the coreset scan bound; mean peak allocation rose 3.69x (5.55 versus 1.50 GiB).
+
+Raw pyramid mean used 4.60 times the max control's mean inference time and 2.31 times its mean peak allocation; zmean fit took 1.14 times raw-mean fit because calibration performs an additional full-bank search.
 
 ## Analysis
 
-Adding layer1 changed overall pixel AUROC by +0.0021 and AU-PRO by +0.0146 relative to the Eq. 7 baseline, consistent with a finer grid changing the balance between local detail and semantic context.
-For the small-defect categories screw and capsule, layer1 changed AU-PRO by +0.0194 and +0.0096, respectively; these are whole-category measurements and do not isolate capsule scratches.
-On carpet and tile, the corresponding layer1 AU-PRO changes were +0.0122 and +0.0253, showing that extra fine-scale features do not have a uniform effect across textures.
+Adding layer1 changed overall pixel AUROC by +0.0021 and AU-PRO by +0.0146 relative to the Eq. 7 baseline, but these localisation gains come with image-level detection losses.
+The localisation-versus-detection trade-off is clearest on capsule: image AUROC fell from 0.978 to 0.955 and F1 from 0.836 to 0.764; tile F1 fell from 0.895 to 0.817, and mean F1 from 0.919 to 0.898.
+Layer1's AU-PRO gains were +0.0194 on screw, +0.0096 on capsule, +0.0122 on carpet and +0.0253 on tile, so both of these textures also benefited in localisation.
 Adding layer4 instead changed overall image AUROC by -0.0653 and AU-PRO by -0.2250; a possible explanation is that its coarse 7x7 layer4 features dilute fine defect evidence when the fused embedding is pooled back to 1024 dimensions.
 Relative to the max-scoring control, raw pyramid mean changed image AUROC by +0.0021, pixel AUROC by +0.0014, and AU-PRO by +0.0092.
-Training-only zmean changed AU-PRO by -0.0001 compared with raw pyramid mean: it changes the relative weight of the two score distributions, while the self-excluded patch reference can still be optimistic because same-image neighbours remain.
-Raw pyramid mean used 4.60 times the max control's mean inference time and 2.31 times its mean peak allocation; zmean fit took 1.14 times raw-mean fit because calibration performs an additional full-bank search.
-Magnifying an already cropped 224-pixel image cannot recover removed source detail, and downsampling the 42x42 map to 28x28 can weaken the localisation benefit for very small defects.
-Image F1 also depends on the normal-validation score tail, so changes in F1 need not follow changes in threshold-free AUROC; all predefined variants are reported without selecting per-category winners or tuning on test results.
+
+Original-resolution median GT areas from the [dataset analysis on main](../dataset/dataset_stats.md), compared with the fixed pyramid's category-level results
+
+| Category | Median defect area | Max-control AU-PRO | Pyramid mean AU-PRO | Change |
+| --- | ---: | ---: | ---: | ---: |
+| screw | 0.29% | 0.9627 | 0.9725 | +0.0098 |
+| capsule | 0.43% | 0.9313 | 0.9392 | +0.0079 |
+| carpet | 1.48% | 0.9503 | 0.9612 | +0.0109 |
+| tile | 7.93% | 0.8192 | 0.8334 | +0.0142 |
+
+These gains are not concentrated in the smallest-defect categories: carpet and tile improve at least as much as screw and capsule, although whole-category metrics do not isolate capsule scratches (median original defect area 0.64%) or control for other category differences.
+Within each category, zmean is a positive affine transform of `r*d1.0 + d1.5`, where the `d` terms are aligned raw distance maps and `r = std1.5 / std1.0`: subtracting the scale means adds only a uniform offset, so only the std ratio can change rankings and hence AUROC or AU-PRO.
+That ratio is about 1.03–1.09 in the reviewer's bottle/screw/tile diagnostic (0.93–1.09 across all six categories), making zmean effectively equivalent to mean here: image AUROC and F1 are identical, and mean AU-PRO changes by only -0.0001.
+The reviewer's held-out normal-validation diagnostic found biased absolute proxy statistics (tile mean 0.75 versus 1.24 held-out; screw std 0.18 versus 0.10), while the std ratio is roughly right with up to about 11% relative error, including tile's proxy ratio 1.09 versus held-out 0.98 in the opposite direction from unity.
+The mismatch arises because calibration queries k-center-selected coreset patches against the full training bank with same-image spatial neighbours retained, whereas prediction queries all patches against the coreset; the validation diagnostic was used only to explain the existing result and never for fitting, calibration or tuning.
 
 ## Reproduction and validation
 
 Run `bash reports/bonus/multiscale_reproduce.sh` from the worktree root, then `PYTHONPATH=src /home/eva/code/ma6216/industrial-visual-anomaly-detection/.venv/bin/python reports/bonus/multiscale_report.py`. The reproduction script runs every category through the shared GPU lock and preserves baseline preprocessing; aggregate is generated in a temporary directory before copying to these task-specific report paths.
 
-- Full suite, with `HF_HUB_OFFLINE=1`, `MVTEC_ROOT` set and `scripts/gpu_run.sh`: **127 passed in 20.28s**.
-- Focused CPU multi-scale tests: **15 passed, 1 deselected in 0.71s**.
+- Full suite, with `HF_HUB_OFFLINE=1`, `MVTEC_ROOT` set and `scripts/gpu_run.sh`: **130 passed in 20.17s**.
+- Focused CPU multi-scale tests: **18 passed, 1 deselected in 0.62s**.
 - Twenty-training-image bottle GPU/data smoke: **1 passed in 2.40s**.
-- Tests cover map/grid alignment, identical-scale raw-map equivalence, source-row exclusion, fit-only frozen z statistics, constant references, invalid scales, and first-layer hierarchy grids.
+- Tests cover map/grid alignment, exact 1.0-scale memory-bank equivalence to plain PatchCore for mean and zmean, identical-scale raw and standardised map equivalence, source-row exclusion, fit-only frozen z statistics, constant references, invalid scales, and first-layer hierarchy grids.
 
 Aggregate tables and the labelled oracle reference are in [multiscale_tables/summary.md](multiscale_tables/summary.md); all numeric resource tables and per-category values are in [metrics_long.csv](multiscale_tables/metrics_long.csv).
 
