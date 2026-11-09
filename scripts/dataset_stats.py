@@ -47,8 +47,9 @@ N_VAR_IMAGES = 60  # normal images used for the variation proxies
 # {placeholders} are filled with the measured statistics.
 DISCUSSION = {
     "bottle": (
-        "**bottle (object).** Bottles are photographed top-down, centred on a uniform dark "
-        "background with no rotation of note (align_corr = {align_corr:.2f}). Because of the "
+        "**bottle (object).** Bottles are photographed top-down, looking into the opening. The "
+        "bottle fills most of the frame, is centred on a white background and shows no rotation "
+        "of note (align_corr = {align_corr:.3f}). Because of the "
         "radial symmetry, normal appearance at a given image position is almost the same in every "
         "image. This favours per-position Gaussian models like PaDiM, and also suits PatchCore's "
         "memory bank. Defects (broken_large, broken_small, contamination) are mid-sized: the median "
@@ -57,24 +58,30 @@ DISCUSSION = {
         "glossy rim, where specular highlights can raise false positives."
     ),
     "capsule": (
-        "**capsule (object).** A single pill lies horizontally on a plain background, with small "
-        "translation jitter and two possible orientations of the printed '500' "
-        "(align_corr = {align_corr:.2f}). Defects are small and subtle: cracks, pokes, scratches, "
-        "squeeze and faulty imprints. The median defect area is only {area_med:.2%} of the image "
-        "(min {area_min:.3%}). At 224x224 with a stride-8 feature map, many of these defects cover "
-        "only one or two feature cells. So capsule tests the spatial resolution of the features, and "
-        "the Gaussian smoothing sigma can wash small defects out. The imprint creates normal "
-        "high-frequency structure that a weak model may flag."
+        "**capsule (object).** A single pill lies horizontally on a plain light background, in the "
+        "same orientation every time: black cap on the left, '500' imprint on the right. Normal "
+        "images are as well aligned as bottle (align_corr = {align_corr:.3f}), so per-position "
+        "models such as PaDiM apply directly. Defects are small and subtle: cracks, pokes, "
+        "scratches, faulty imprints and squeeze. The median defect area is only {area_med:.2%} of "
+        "the image (min {area_min:.3%}). On the 28x28 stride-8 feature grid at 224x224 input, that "
+        "is about 3 of 784 cells, and the smallest cracks cover less than one cell. So capsule "
+        "tests the spatial resolution of the features, and Gaussian smoothing can wash small "
+        "defects out. Squeeze is the exception: a large shape change (median 2.8%) that only shows "
+        "as a slightly deformed outline. The imprint and logo are normal high-frequency structure, "
+        "and a faulty_imprint differs from a correct one only in fine detail."
     ),
     "screw": (
         "**screw (object).** The screw lies at an arbitrary in-plane rotation and position on a "
-        "bright, slightly textured background. Its normal images are the least aligned of the "
-        "objects (align_corr = {align_corr:.2f}). This breaks PaDiM's assumption that the same "
+        "light grey background with a mild illumination gradient. Its normal images are by far the "
+        "least aligned of the objects (align_corr = {align_corr:.2f} vs about 1.00 for bottle and "
+        "capsule; pix_std = {pix_std:.3f}). This breaks PaDiM's assumption that the same "
         "position looks the same in every image, because each position sees thread, head or "
         "background depending on the rotation. PatchCore's position-agnostic nearest-neighbour "
         "memory copes better. Defects such as manipulated_front, scratch_head, scratch_neck, "
-        "thread_side and thread_top are tiny: the median area is {area_med:.2%}. Screw is "
-        "historically the hardest of the six categories in this study."
+        "thread_side and thread_top are uniformly tiny: median {area_med:.2%}, max {area_max:.2%}, "
+        "the narrowest size range of the six. thread_side defects are often split into several "
+        "small regions. Screw is reported in the PaDiM and PatchCore papers as one of the hardest "
+        "MVTec AD categories, and we expect it to be the hardest of the six here."
     ),
     "carpet": (
         "**carpet (texture).** A woven, stationary texture fills the whole frame. There is no "
@@ -82,22 +89,28 @@ DISCUSSION = {
         "only shows that the texture is stochastic). Every patch is statistically alike, so a "
         "memory of normal patches generalises well and PatchCore can sub-sample it aggressively. "
         "Defects (color, cut, hole, metal_contamination, thread) vary in size, with a median of "
-        "{area_med:.2%}. Colour defects with low contrast are the main risk. Threads that extend "
-        "beyond the mask can make pixel metrics look worse than the detection really is."
+        "{area_med:.2%}. cut defects are the largest (median about 4%), while "
+        "metal_contamination is the smallest (median about 0.4%) and is easy to miss after "
+        "downsampling. color defects keep the weave structure intact and change only the hue, "
+        "so they rely on how well the backbone features encode colour."
     ),
     "tile": (
-        "**tile (texture).** Ceramic tile with irregular grey/white speckles. Like carpet it is "
-        "stationary with no meaningful alignment (align_corr = {align_corr:.2f}). The texture also "
-        "has more natural variability than carpet. Defects (crack, glue_strip, gray_stroke, oil, "
+        "**tile (texture).** Ceramic tile with irregular dark-grey blotches on a light grey-green base. Like carpet it is "
+        "stationary with no meaningful alignment (align_corr = {align_corr:.2f}). Its normal images "
+        "also vary the most of all six categories (pix_std = {pix_std:.3f}), so the normal "
+        "distribution is broad and normal speckle clusters can produce false positives. Defects (crack, glue_strip, gray_stroke, oil, "
         "rough) are the largest in this study: median {area_med:.1%}, max {area_max:.0%}. That "
         "makes image-level detection easy. Localisation must still capture the whole extent of "
         "oil and glue stains, which are low-contrast at their borders and pull pixel AUPRO down."
     ),
     "leather": (
-        "**leather (texture).** Fine, fairly uniform grain under even lighting, with no "
-        "geometry (align_corr = {align_corr:.2f}). Normal variation is low, so most defects "
-        "(color, cut, fold, glue, poke) stand out clearly against the grain. Defects are small to "
-        "medium (median {area_med:.2%}), and pokes are tiny. Leather is usually close to "
+        "**leather (texture).** Fine, uniform grain with no object geometry. Its align_corr is "
+        "high for a texture ({align_corr:.2f}) because every image shares the same smooth "
+        "illumination fall-off towards the corners, not because the grain is aligned. Pixel "
+        "variation between normal images is the lowest of the textures (pix_std = {pix_std:.3f}), "
+        "so most defects (color, cut, fold, glue, poke) stand out clearly against the grain. "
+        "Defects are small (median {area_med:.2%}, min {area_min:.3%}). Pokes and colour spots are "
+        "the smallest, with medians of about 0.2%. Leather is usually close to "
         "saturated for pretrained-feature methods. The main failure mode is a slight colour "
         "change, which mid-level CNN features are less sensitive to than to structural changes."
     ),
@@ -221,7 +234,7 @@ def samples_figure(cat_dir: Path, out: Path, disp: int = 256) -> None:
         ax.set_xticks([])
         ax.set_yticks([])
     fig.suptitle(f"{cat}: normal vs one example per defect type (GT mask in red)", fontsize=10)
-    fig.savefig(out, dpi=150)
+    fig.savefig(out, dpi=110)  # keeps the committed sample sheets small
 
 
 def area_hist_figure(img_df: pd.DataFrame, summaries: list[dict], out: Path) -> None:
@@ -282,7 +295,7 @@ def write_markdown(summaries: list[dict], type_df: pd.DataFrame, out: Path, root
         "test good": s["n_test_good"], "test defect": s["n_test_defect"],
         "defect types": s["n_defect_types"],
         "pix_std": s["pix_std"].map(lambda x: f"{x:.3f}"),
-        "align_corr": s["align_corr"].map(lambda x: f"{x:.2f}"),
+        "align_corr": s["align_corr"].map(lambda x: f"{x:.3f}"),
     })
     area = pd.DataFrame({
         "category": s["category"],
@@ -314,9 +327,10 @@ def write_markdown(summaries: list[dict], type_df: pd.DataFrame, out: Path, root
         "`fit / val` is our fixed-seed split of train/good: 90% to fit the model, 10% as the "
         "normal-only validation set for thresholds (`ad.data.split_train_val`, seed 0). "
         "`pix_std` is the mean per-pixel std over 64x64 grey normal images. "
-        "`align_corr` is the mean correlation of a normal image with the mean normal image: "
-        "high means aligned, fixed-geometry images, and low means rotation/pose variation or a "
-        "stochastic texture. Both proxies use train/good only.",
+        "`align_corr` is the mean correlation of a normal image with the mean normal image. "
+        "For objects, high means aligned images with fixed geometry, and low means pose or "
+        "rotation variation. For textures it mostly reflects shared low-frequency illumination, "
+        "because the stochastic texture itself is uncorrelated. Both proxies use train/good only.",
         "",
         _md_table(overview),
         "",
@@ -347,12 +361,18 @@ def write_markdown(summaries: list[dict], type_df: pd.DataFrame, out: Path, root
         "patch can be compared with any normal patch, so position-agnostic methods (PatchCore) "
         "and position-specific ones (PaDiM) both work, and alignment does not matter. Object "
         "categories need consistent geometry for PaDiM's per-position statistics. That holds for "
-        "bottle, partly for capsule, and not for screw, where rotation is free.",
-        "- **Background variation.** All six categories have a controlled, uniform background. "
-        "For objects, most of the image is background, so image scores come from a small "
-        "foreground area and background noise (dust, illumination) can cause false positives.",
-        "- **Defect size.** Defect area spans more than three orders of magnitude, from below 0.1% "
-        "of the image (screw, capsule) to tens of percent (tile, bottle). At 224x224 input, one "
+        "bottle and capsule, which are both consistently posed, but not for screw, where rotation "
+        "and position are free.",
+        "- **Background variation.** The three object categories are shot on a controlled, uniform "
+        "background, and the textures fill the frame with no background at all. For objects, most "
+        "of the image is background, so the decision rests on a small foreground area, and "
+        "background noise (dust, illumination gradients on screw) can cause false positives. "
+        "Normal variation is highest for tile and screw (pix_std about 0.1), which makes the "
+        "learned normal distribution broader and subtle defects harder to separate.",
+        "- **Defect size.** Defect area spans about three orders of magnitude, from about 0.04% "
+        "of the image (smallest capsule crack; leather and screw also go below 0.1%) to 35% "
+        "(tile glue_strip). Screw, capsule and leather have medians below 0.5%, whereas tile and "
+        "bottle defects are mostly above 2%. At 224x224 input, one "
         "stride-8 WRN50 feature cell covers about 0.13% of the image. Defects near or below that "
         "size are diluted by bilinear upsampling and Gaussian smoothing, which lowers both "
         "image-level recall and pixel-level overlap. Large defects are easy to detect, but they "
