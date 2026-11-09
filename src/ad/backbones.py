@@ -10,6 +10,7 @@ from __future__ import annotations
 import timm
 import torch
 from torch import nn
+from torch.nn import functional as F
 
 WRN50_LAYER_INDEX = {"layer1": 1, "layer2": 2, "layer3": 3, "layer4": 4}
 # feature channels / stride for WRN50 at each layer
@@ -40,7 +41,95 @@ class WRN50Features(nn.Module):
         return [feats[i] for i in self._reorder]
 
 
+DINOV2_MODELS = {
+    "dinov2_vitb14": "vit_base_patch14_dinov2.lvd142m",
+    "dinov2_vits14": "vit_small_patch14_dinov2.lvd142m",
+}
+DINOV2_LAYERS = ("block5", "block8", "block11")
+
+
+class DINOv2Features(nn.Module):
+    """Frozen, final-LayerNorm-normalised DINOv2 patch maps in requested order.
+
+    ``blockN`` names are zero-indexed. Input tensors already have ImageNet
+    normalisation; bilinear resizing changes only their spatial size. timm's
+    NCHW intermediate API removes *all* prefix tokens (CLS and any registers)
+    before reshaping the patch tokens, including for register-equipped models.
+    """
+
+    def __init__(self, model_name: str = "vit_base_patch14_dinov2.lvd142m",
+                 layers: tuple[str, ...] = DINOV2_LAYERS,
+                 input_size: int = 448, pretrained: bool = True):
+        super().__init__()
+        self.layers = tuple(layers)
+        if (not isinstance(input_size, int) or input_size < 14
+                or input_size % 14):
+            raise ValueError("input_size must be a positive multiple of 14")
+        if not self.layers or any(
+                not isinstance(layer, str) or not layer.startswith("block")
+                or not layer[5:].isdigit() for layer in self.layers):
+            raise ValueError("DINOv2 layers must be nonempty zero-indexed blockN names")
+        indices = [int(layer[5:]) for layer in self.layers]
+        self.input_size = input_size
+        self.model = timm.create_model(model_name, pretrained=pretrained,
+                                       img_size=input_size)
+        if any(index >= len(self.model.blocks) for index in indices):
+            raise ValueError(f"DINOv2 block index must be below {len(self.model.blocks)}")
+        self._indices = sorted(set(indices))
+        self._reorder = [self._indices.index(index) for index in indices]
+        self.model.eval().requires_grad_(False)
+
+    @property
+    def channels(self) -> list[int]:
+        return [self.model.num_features] * len(self.layers)
+
+    @torch.no_grad()
+    def forward(self, x: torch.Tensor) -> list[torch.Tensor]:
+        x = F.interpolate(x, size=(self.input_size, self.input_size),
+                          mode="bilinear", align_corners=False)
+        features = self.model.forward_intermediates(
+            x, indices=self._indices, norm=True, return_prefix_tokens=False,
+            output_fmt="NCHW", intermediates_only=True, stop_early=True)
+        return [features[index] for index in self._reorder]
+
+
+class WRN50DINOv2Concat(nn.Module):
+    """WRN50 layer2+3 followed by DINOv2 blocks, on one bilinear grid.
+
+    ``layers`` selects DINOv2 blocks; the WRN50 branch always uses layer2+3.
+    The default 28x28 grid preserves the baseline PatchCore patch count.
+    Maps remain separate so PatchCore's unchanged per-layer MeanMapper and
+    Aggregator perform the feature fusion. Neither branch is reweighted.
+    """
+
+    def __init__(self, layers: tuple[str, ...] = DINOV2_LAYERS,
+                 input_size: int = 448, grid_size: int = 28,
+                 pretrained: bool = True):
+        super().__init__()
+        if not isinstance(grid_size, int) or grid_size < 1:
+            raise ValueError("grid_size must be a positive integer")
+        self.grid_size = grid_size
+        self.wrn50 = WRN50Features(layers=("layer2", "layer3"), pretrained=pretrained)
+        self.dinov2 = DINOv2Features(layers=layers, input_size=input_size,
+                                    pretrained=pretrained)
+
+    @property
+    def channels(self) -> list[int]:
+        return self.wrn50.channels + self.dinov2.channels
+
+    @torch.no_grad()
+    def forward(self, x: torch.Tensor) -> list[torch.Tensor]:
+        features = self.wrn50(x) + self.dinov2(x)
+        return [F.interpolate(feature, size=(self.grid_size, self.grid_size),
+                              mode="bilinear", align_corners=False)
+                for feature in features]
+
+
 def build_backbone(name: str = "wrn50", **kwargs) -> nn.Module:
     if name == "wrn50":
         return WRN50Features(**kwargs)
-    raise ValueError(f"unknown backbone {name!r} (DINOv2 is added on branch exp/dinov2)")
+    if name in DINOV2_MODELS:
+        return DINOv2Features(model_name=DINOV2_MODELS[name], **kwargs)
+    if name == "wrn50+dinov2_vitb14":
+        return WRN50DINOv2Concat(**kwargs)
+    raise ValueError(f"unknown backbone {name!r}")
