@@ -82,3 +82,141 @@ image_f1 uses normal-validation thresholds; image_f1_max_oracle is an oracle ref
 | mean (objects) | 0.9478 [n=3] | 0.9175 [n=3] | 0.9135 [n=3] | 0.8878 [n=3] |
 | mean (textures) | 0.9139 [n=3] | 0.9452 [n=3] | 0.9446 [n=3] | 0.9405 [n=3] |
 | mean (all) | 0.9308 [n=6] | 0.9314 [n=6] | 0.9290 [n=6] | 0.9141 [n=6] |
+
+## Post-hoc sensitivity (not used for selection)
+
+**patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic)**
+
+### Run means
+
+| run | image_auroc | image_f1 | image_f1_max_oracle | pixel_auroc | aupro | fit_seconds | infer_ms_per_image | infer_ms_per_image_e2e | peak_gpu_mem_gb |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic) | 0.9863 [n=6] | 0.9052 [n=6] | 0.9852 [n=6] | 0.9773 [n=6] | 0.9077 [n=6] | 6.6450 [n=6] | 12.8758 [n=6] | 19.4570 [n=6] | 3.3305 [n=6] |
+
+### image_auroc
+
+| category | patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic) |
+| --- | ---: |
+| bottle | 1.0000 |
+| capsule | 0.9601 |
+| screw | 0.9604 |
+| carpet | 0.9972 |
+| tile | 1.0000 |
+| leather | 1.0000 |
+| mean (objects) | 0.9735 [n=3] |
+| mean (textures) | 0.9991 [n=3] |
+| mean (all) | 0.9863 [n=6] |
+
+### image_f1
+
+| category | patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic) |
+| --- | ---: |
+| bottle | 1.0000 |
+| capsule | 0.7135 |
+| screw | 0.7668 |
+| carpet | 0.9617 |
+| tile | 1.0000 |
+| leather | 0.9892 |
+| mean (objects) | 0.8268 [n=3] |
+| mean (textures) | 0.9837 [n=3] |
+| mean (all) | 0.9052 [n=6] |
+
+### image_f1_max_oracle
+
+| category | patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic) |
+| --- | ---: |
+| bottle | 1.0000 |
+| capsule | 0.9727 |
+| screw | 0.9442 |
+| carpet | 0.9944 |
+| tile | 1.0000 |
+| leather | 1.0000 |
+| mean (objects) | 0.9723 [n=3] |
+| mean (textures) | 0.9981 [n=3] |
+| mean (all) | 0.9852 [n=6] |
+
+Oracle reference only; not a selection criterion.
+
+### pixel_auroc
+
+| category | patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic) |
+| --- | ---: |
+| bottle | 0.9827 |
+| capsule | 0.9876 |
+| screw | 0.9753 |
+| carpet | 0.9880 |
+| tile | 0.9518 |
+| leather | 0.9784 |
+| mean (objects) | 0.9819 [n=3] |
+| mean (textures) | 0.9727 [n=3] |
+| mean (all) | 0.9773 [n=6] |
+
+### aupro
+
+| category | patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic) |
+| --- | ---: |
+| bottle | 0.9256 |
+| capsule | 0.9417 |
+| screw | 0.8902 |
+| carpet | 0.9436 |
+| tile | 0.7995 |
+| leather | 0.9455 |
+| mean (objects) | 0.9192 [n=3] |
+| mean (textures) | 0.8962 [n=3] |
+| mean (all) | 0.9077 [n=6] |
+
+### fit_seconds
+
+| category | patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic) |
+| --- | ---: |
+| bottle | 5.1794 |
+| capsule | 5.6561 |
+| screw | 9.0506 |
+| carpet | 7.8010 |
+| tile | 5.8118 |
+| leather | 6.3710 |
+| mean (objects) | 6.6287 [n=3] |
+| mean (textures) | 6.6612 [n=3] |
+| mean (all) | 6.6450 [n=6] |
+
+### infer_ms_per_image
+
+| category | patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic) |
+| --- | ---: |
+| bottle | 12.4128 |
+| capsule | 12.4925 |
+| screw | 13.6009 |
+| carpet | 13.2002 |
+| tile | 12.7161 |
+| leather | 12.8324 |
+| mean (objects) | 12.8354 [n=3] |
+| mean (textures) | 12.9162 [n=3] |
+| mean (all) | 12.8758 [n=6] |
+
+### infer_ms_per_image_e2e
+
+| category | patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic) |
+| --- | ---: |
+| bottle | 19.3182 |
+| capsule | 20.0862 |
+| screw | 18.9067 |
+| carpet | 20.7091 |
+| tile | 18.3824 |
+| leather | 19.3393 |
+| mean (objects) | 19.4371 [n=3] |
+| mean (textures) | 19.4769 [n=3] |
+| mean (all) | 19.4570 [n=6] |
+
+### peak_gpu_mem_gb
+
+| category | patchcore_dinov2_vitb14_noln — post-hoc, test-informed (added after a screw diagnostic) |
+| --- | ---: |
+| bottle | 3.1432 |
+| capsule | 3.2680 |
+| screw | 3.6431 |
+| carpet | 3.3930 |
+| tile | 3.2680 |
+| leather | 3.2680 |
+| mean (objects) | 3.3514 [n=3] |
+| mean (textures) | 3.3096 [n=3] |
+| mean (all) | 3.3305 [n=6] |
