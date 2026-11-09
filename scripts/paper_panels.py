@@ -173,7 +173,9 @@ def place_decision_label(ax, text, gt, predicted, renderer):
 def render(output, name, cases, category=None):
     """One case per column; rows are RGB, PaDiM and PatchCore, at final size."""
     qualitative=category is not None
-    width,height=(5.6,4.4) if qualitative else (DOUBLE,3.85)
+    # Two qualitative figures must fit below the appendix introduction as well
+    # as on float-only pages, with captions and IEEEtran's float separation.
+    width,height=(5.6,3.45) if qualitative else (DOUBLE,3.85)
     ncols=len(cases)
     assert ncols == (4 if qualitative else 6)
     fig=plt.figure(figsize=(width,height),layout='constrained')
