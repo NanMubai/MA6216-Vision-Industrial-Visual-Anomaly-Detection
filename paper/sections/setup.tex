@@ -13,6 +13,6 @@ Category means are unweighted.
 \textbf{Implementation.}
 The pipeline uses PyTorch with \texttt{timm} weights and runs on a single NVIDIA RTX~5080 (16\,GB).
 \emph{Infer} is model prediction plus upsampling and smoothing on preloaded batches, measured with CUDA synchronisation.
-\emph{e2e} additionally includes data loading.
+\emph{e2e} (end-to-end) additionally includes data loading.
 Memory is reported as peak allocated CUDA memory.
 All runs use seed~0.
