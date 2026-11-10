@@ -6,7 +6,7 @@ Test labels are used here only to describe predictions that are already fixed, a
 Of \nAnomTest{} anomalous test images, PaDiM detects \pdDetected{} and PatchCore \pcDetected{}.
 Of \nGoodTest{} normal test images, PaDiM falsely flags \pdFP{} and PatchCore \pcFP{}.
 Fig.~\ref{fig:failures} shows representative cases.
-Full per-defect-type recall and all twelve curated panels are in the appendix.
+Full per-defect-type recall and all twelve curated panels are in Appendices~\ref{app:recall} and~\ref{app:failures}.
 
 \begin{figure*}[t]
   \centering
@@ -27,7 +27,7 @@ In 83\% of PatchCore's false negatives, some pixel inside the GT exceeds the \em
 The map does see these defects; they are lost at the image decision, because the image threshold is an extreme-value statistic of only a few dozen normal images.
 
 \textbf{By size.}
-We count a GT region as detected if at least 30\% of its pixels exceed the pixel threshold (Fig.~\ref{fig:regionsize}; counts in Table~\ref{tab:regionsize} in the appendix).
+We count a GT region as detected if at least 30\% of its pixels exceed the pixel threshold (Fig.~\ref{fig:regionsize}; counts in Appendix~\ref{app:recall}).
 Regions smaller than one stride-8 feature cell are the hard limit for PatchCore: only 27 of 50 are found (54\%, 95\% Wilson interval 40--67\%), against at least 94\% in every larger bin. PaDiM finds 17 of 50 (34\%, 22--48\%).
 These regions come mainly from capsule, screw and tile.
 PaDiM's lower rate on large regions is a calibration effect rather than a size effect: it ranks the large tile stains well but thresholds them badly (Section~\ref{sec:calib}).
@@ -44,7 +44,7 @@ The centre crop removes part of some defects.
 Five anomalous images keep less than half of their GT, and three of them are tile gray\_strokes.
 One gray\_stroke keeps only about 10\% of its defect, and it is among PatchCore's two lowest-scoring tile misses.
 
-\textbf{Shared vs method-specific misses} (Table~\ref{tab:missoverlap} in the appendix).
+\textbf{Shared vs method-specific misses} (Appendix~\ref{app:recall}).
 PaDiM-only misses (\missPdOnly{}) arise from two mechanisms: pose on screw and calibration on tile.
 The \missBoth{} images missed by both methods mark the limits of frozen WRN50 features at 224\,px.
 They are the tiny, thin, low-contrast and semantic types listed above, plus the crop-truncated tiles.
