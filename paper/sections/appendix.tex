@@ -1,7 +1,7 @@
 \onecolumn
 \section{Reproducibility}
 \label{app:repro}
-All code, configurations and result tables are in the project repository, \url{https://github.com/NanMubai/MA6216-Vision-Industrial-Visual-Anomaly-Detection}. The results in this report correspond to the git tag \texttt{report-v1}.
+All code, configurations and result tables are in the project repository, \url{https://github.com/NanMubai/MA6216-Vision-Industrial-Visual-Anomaly-Detection}.
 Each run is defined by a YAML file in \texttt{configs/} (e.g.\ \texttt{padim\_wrn50.yaml}, \texttt{patchcore\_wrn50.yaml}) and executed with \texttt{python -m ad.run --config <file>}.
 Tables are aggregated with \texttt{python -m ad.aggregate}, and the failure analysis is reproduced by \texttt{scripts/analysis\_failures.py} and \texttt{scripts/analysis\_failure\_panels.py}.
 The tables and figures in this report are generated from the committed CSV files by \texttt{scripts/paper\_tables.py} and \texttt{scripts/paper\_figures.py}.
