@@ -13,6 +13,7 @@ Unit tests check these contracts.
 
 \section{Recall by Defect Type and Region Size}
 \label{app:recall}
+Table~\ref{tab:regionsize} gives the counts behind Fig.~\ref{fig:regionsize}, Table~\ref{tab:missoverlap} splits the missed anomalous images into shared and method-specific misses, and Table~\ref{tab:app_recall} gives image recall by defect type.
 \begin{table}[!htbp]
   \centering
   \caption{GT region detection rate by region size, pooled over the six categories (data of Fig.~\ref{fig:regionsize}).}
@@ -41,6 +42,7 @@ Unit tests check these contracts.
 \clearpage
 \section{Per-Category Results of the Enhancements}
 \label{app:bonus}
+Tables~\ref{tab:app_dino}--\ref{tab:app_pp} give the per-category results behind the six-category means of Table~\ref{tab:bonus}.
 \begin{table*}[!htbp]
   \centering
   \caption{DINOv2 variants per category. \posthoc{}Post-hoc and test-informed.}
@@ -68,7 +70,7 @@ Unit tests check these contracts.
 \clearpage
 \section{All Curated Failure Cases}
 \label{app:failures}
-As in Fig.~\ref{fig:failures}, each column is one case; the rows show the image with the GT outlined by a dashed yellow line, then the PaDiM and PatchCore maps on a greyscale copy of the image. Maps are divided by each method's normal-validation pixel threshold and drawn on a diverging scale centred at the threshold (white $=1$, red above, blue below), and solid black contours mark the predicted region (map $\geq$ threshold), which also identifies the threshold in greyscale print. The label in each map gives the image score divided by the image threshold and the resulting decision.
+Figs.~\ref{fig:app_fail1} and~\ref{fig:app_fail2} show all twelve curated cases. As in Fig.~\ref{fig:failures}, each column is one case; the rows show the image with the GT outlined by a dashed yellow line, then the PaDiM and PatchCore maps on a greyscale copy of the image. Maps are divided by each method's normal-validation pixel threshold and drawn on a diverging scale centred at the threshold (white $=1$, red above, blue below), and solid black contours mark the predicted region (map $\geq$ threshold), which also identifies the threshold in greyscale print. The label in each map gives the image score divided by the image threshold and the resulting decision.
 
 \begin{figure*}[!htbp]
   \centering

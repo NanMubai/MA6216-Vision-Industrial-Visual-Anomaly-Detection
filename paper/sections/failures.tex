@@ -6,12 +6,12 @@ Test labels are used here only to describe predictions that are already fixed, a
 Of \nAnomTest{} anomalous test images, PaDiM detects \pdDetected{} and PatchCore \pcDetected{}.
 Of \nGoodTest{} normal test images, PaDiM falsely flags \pdFP{} and PatchCore \pcFP{}.
 Fig.~\ref{fig:failures} shows representative cases.
-Full per-defect-type recall and all twelve curated panels are in the appendix.
+Full per-defect-type recall and all twelve curated panels are in Appendices~\ref{app:recall} and~\ref{app:failures}.
 
 \begin{figure*}[t]
   \centering
   \includegraphics[width=\textwidth]{fig_failures.pdf}
-  \caption{Curated failure cases. Each column is one case; the rows show the image with the GT outlined by a dashed yellow line, then the PaDiM and PatchCore maps on a greyscale copy of the image. Maps are divided by each method's normal-validation pixel threshold and drawn on a diverging scale centred at the threshold (white $=1$, red above, blue below), and solid black contours mark the predicted region (map $\geq$ threshold), which also identifies the threshold in greyscale print. The label in each map gives the image score divided by the image threshold and the resulting decision. (a)~Screw thread\_top: missed only by PaDiM, because of pose. (b)~Capsule crack: missed by both, with both peaks on dark specks. (c)~Capsule faulty imprint: PatchCore localises the defect (IoU 0.45) but its image score reaches only $0.83\times$ the image threshold. (d)~Tile oil: PaDiM highlights the stain at $1.55\times$ its pixel threshold, yet the image is not flagged (calibration). (e)~Normal carpet: PatchCore false positive with 42\% of the pixels above threshold and no local cause. (f)~Leather colour: a true positive whose thin streak is blurred into a wide blob (IoU 0.07 for both methods).}
+  \caption{Curated failure cases. Each column is one case; the rows show the image with the GT outlined by a dashed yellow line, then the PaDiM and PatchCore maps on a greyscale copy of the image. Maps are divided by each method's normal-validation pixel threshold and drawn on a diverging scale centred at the threshold (white $=1$, red above, blue below), and solid black contours mark the predicted region (map $\geq$ threshold), which also identifies the threshold in greyscale print. The label in each map gives the image score divided by the image threshold and the resulting decision. (a)~Screw thread\_top: missed only by PaDiM, because of pose. (b)~Capsule crack: missed by both, with both peaks on dark specks. (c)~Capsule faulty imprint: PatchCore localises the defect with an intersection over union (IoU) of 0.45, but its image score reaches only $0.83\times$ the image threshold. (d)~Tile oil: PaDiM highlights the stain at $1.55\times$ its pixel threshold, yet the image is not flagged (calibration). (e)~Normal carpet: PatchCore false positive with 42\% of the pixels above threshold and no local cause. (f)~Leather colour: a true positive whose thin streak is blurred into a wide blob (IoU 0.07 for both methods).}
   \label{fig:failures}
 \end{figure*}
 
@@ -27,7 +27,7 @@ In 83\% of PatchCore's false negatives, some pixel inside the GT exceeds the \em
 The map does see these defects; they are lost at the image decision, because the image threshold is an extreme-value statistic of only a few dozen normal images.
 
 \textbf{By size.}
-We count a GT region as detected if at least 30\% of its pixels exceed the pixel threshold (Fig.~\ref{fig:regionsize}; counts in Table~\ref{tab:regionsize} in the appendix).
+We count a GT region as detected if at least 30\% of its pixels exceed the pixel threshold (Fig.~\ref{fig:regionsize}; counts in Appendix~\ref{app:recall}).
 Regions smaller than one stride-8 feature cell are the hard limit for PatchCore: only 27 of 50 are found (54\%, 95\% Wilson interval 40--67\%), against at least 94\% in every larger bin. PaDiM finds 17 of 50 (34\%, 22--48\%).
 These regions come mainly from capsule, screw and tile.
 PaDiM's lower rate on large regions is a calibration effect rather than a size effect: it ranks the large tile stains well but thresholds them badly (Section~\ref{sec:calib}).
@@ -44,7 +44,7 @@ The centre crop removes part of some defects.
 Five anomalous images keep less than half of their GT, and three of them are tile gray\_strokes.
 One gray\_stroke keeps only about 10\% of its defect, and it is among PatchCore's two lowest-scoring tile misses.
 
-\textbf{Shared vs method-specific misses} (Table~\ref{tab:missoverlap} in the appendix).
+\textbf{Shared vs method-specific misses} (Appendix~\ref{app:recall}).
 PaDiM-only misses (\missPdOnly{}) arise from two mechanisms: pose on screw and calibration on tile.
 The \missBoth{} images missed by both methods mark the limits of frozen WRN50 features at 224\,px.
 They are the tiny, thin, low-contrast and semantic types listed above, plus the crop-truncated tiles.

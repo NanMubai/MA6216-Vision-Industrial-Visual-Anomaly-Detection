@@ -5,12 +5,6 @@ Both methods take features from the same frozen WideResNet-50-2 backbone and lea
 Each method returns a \emph{raw} patch-level anomaly map at feature resolution.
 Upsampling, smoothing, thresholding and evaluation are shared (Fig.~\ref{fig:pipeline}), so the two methods differ only in how they model normality.
 
-\begin{figure*}[t]
-  \centering
-  \input{figures/pipeline.tex}
-  \caption{Shared pipeline. Both models are fitted on 90\% of \texttt{train/good}. The held-out 10\% normal validation split supplies only scores, from which the image and pixel thresholds are derived. Test labels and masks are read exclusively by the evaluator.}
-  \label{fig:pipeline}
-\end{figure*}
 
 \subsection{PaDiM: per-position Gaussian}
 Features from \texttt{layer1} (56$\times$56 at a 224-pixel input), \texttt{layer2} and \texttt{layer3} are upsampled to the \texttt{layer1} grid and concatenated into 1{,}792 channels.

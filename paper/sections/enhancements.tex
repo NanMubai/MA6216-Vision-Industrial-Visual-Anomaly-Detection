@@ -14,12 +14,12 @@ Table~\ref{tab:bonus} reports six-category means, and Fig.~\ref{fig:tradeoff} pl
 \end{table*}
 
 \textbf{DINOv2 backbone.}
-We replace WRN50 by self-supervised DINOv2 ViT-B/14 or ViT-S/14 features~\cite{oquab2024dinov2}, or concatenate the two backbones, motivated by the strong few-shot results of AnomalyDINO~\cite{damm2025anomalydino}.
+We replace WRN50 by features of the self-supervised DINOv2 Vision Transformers (ViT) ViT-B/14 or ViT-S/14~\cite{oquab2024dinov2}, or concatenate the two backbones, motivated by the strong few-shot results of AnomalyDINO~\cite{damm2025anomalydino}.
 Textures improve: mean texture F1 rises from 0.931 to 0.987--0.993 and texture AU-PRO from 0.914 to 0.941--0.945.
 However, all three a-priori variants \emph{lower} mean image AUROC (\bnDinoBImgAuroc{}, \bnDinoSImgAuroc{}, \bnWrnDinoImgAuroc{} vs \bnBaseImgAuroc{}), driven by screw (0.971$\to$0.809--0.879), at 2.3--4.9$\times$ the inference time.
 A post-hoc diagnostic on screw traced the regression mainly to processing rather than to the features themselves.
-Applying DINOv2's \emph{final} LayerNorm to intermediate blocks concentrates about 40\% of the token variance in 5 of 768 channels, which then dominate Euclidean nearest-neighbour distances.
-The CNN-oriented 3$\times$3 patch aggregation also hurts.
+Applying DINOv2's \emph{final} layer normalisation (LayerNorm) to intermediate blocks concentrates about 40\% of the token variance in 5 of 768 channels, which then dominate Euclidean nearest-neighbour distances.
+The 3$\times$3 patch aggregation, designed for convolutional features, also hurts.
 Removing the LayerNorm recovers mean image AUROC to \bnDinoNoLNImgAuroc{} but lowers texture AU-PRO.
 Because this variant was chosen after inspecting test results, we report it only as a sensitivity check.
 
